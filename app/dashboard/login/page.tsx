@@ -21,7 +21,6 @@ export default function DashboardLogin() {
         body: JSON.stringify({ password }),
       })
       if (res.ok) {
-        localStorage.setItem("dashboard_auth", "true")
         router.push("/dashboard")
       } else {
         setError(true)

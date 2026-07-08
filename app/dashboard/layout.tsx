@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { LayoutDashboard, Package, Calendar, Mail, Users, ShoppingBag, ChevronLeft, FileText } from "lucide-react"
+import { LayoutDashboard, Package, Calendar, Mail, Users, ShoppingBag, ChevronLeft, FileText, LogOut } from "lucide-react"
 import { useI18n } from "@/lib/i18n-context"
 
 const sidebarIcons = {
@@ -27,16 +27,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [checking, setChecking] = useState(true)
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const ok = localStorage.getItem("dashboard_auth") === "true"
-      if (!ok) {
-        router.replace("/dashboard/login")
-      } else {
-        setAuthed(true)
-      }
-      setChecking(false)
-    }
+    fetch("/api/auth").then(r => {
+      if (r.ok) setAuthed(true)
+      else router.replace("/dashboard/login")
+    }).catch(() => router.replace("/dashboard/login"))
+    .finally(() => setChecking(false))
   }, [router])
+
+  async function handleLogout() {
+    await fetch("/api/auth/logout", { method: "POST" })
+    router.push("/dashboard/login")
+  }
 
   if (checking) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>
   if (!authed) return null
@@ -72,7 +73,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           })}
         </nav>
 
-        <div className="p-4 border-t border-primary-foreground/20">
+        <div className="p-4 border-t border-primary-foreground/20 space-y-1">
           <Link
             href="/"
             className="flex items-center gap-3 px-4 py-3 text-sm tracking-wider text-primary-foreground/70 hover:bg-primary-foreground/10 transition-all duration-200"
@@ -80,6 +81,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <ChevronLeft className="w-4 h-4" />
             {d.nav.backToSite}
           </Link>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-4 py-3 w-full text-sm tracking-wider text-primary-foreground/70 hover:bg-primary-foreground/10 transition-all duration-200"
+          >
+            <LogOut className="w-4 h-4" />
+            Sign Out
+          </button>
         </div>
       </aside>
 

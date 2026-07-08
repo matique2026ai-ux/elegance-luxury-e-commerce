@@ -70,14 +70,8 @@ function initSchema() {
     CREATE TABLE IF NOT EXISTS page_content (
       page TEXT PRIMARY KEY,
       title TEXT,
-      title_fr TEXT,
-      title_ar TEXT,
       subtitle TEXT,
-      subtitle_fr TEXT,
-      subtitle_ar TEXT,
       description TEXT,
-      description_fr TEXT,
-      description_ar TEXT,
       images TEXT,
       published INTEGER DEFAULT 1
     );
@@ -101,6 +95,22 @@ function initSchema() {
       status TEXT DEFAULT 'pending'
     );
   `)
+
+  // Migrate: add multilingual columns to page_content if missing
+  const cols = ["title_fr", "title_ar", "subtitle_fr", "subtitle_ar", "description_fr", "description_ar"]
+  for (const col of cols) {
+    try {
+      db.exec(`ALTER TABLE page_content ADD COLUMN ${col} TEXT`)
+    } catch { /* column already exists */ }
+  }
+
+  // Update existing page_content with localized seed data
+  const existing = db.prepare("SELECT COUNT(*) as c FROM page_content WHERE title_fr IS NOT NULL").get() as { c: number }
+  if (existing.c === 0) {
+    db.prepare("UPDATE page_content SET title_fr = 'Notre Héritage', title_ar = 'إرثنا', subtitle_fr = 'Un savoir-faire transmis de génération en génération', subtitle_ar = 'حرفية تنتقل عبر الأجيال', description_fr = 'Depuis 1847, notre maison perpétue l''excellence artisanale française.', description_ar = 'منذ 1847، ودارنا تواصل التميز الحرفي الفرنسي.' WHERE page = 'heritage'").run()
+    db.prepare("UPDATE page_content SET title_fr = 'Service Exceptionnel', title_ar = 'خدمة استثنائية', subtitle_fr = 'Une Expérience Au-Delà de l''Achat', subtitle_ar = 'تجربة تتجاوز الشراء', description_fr = 'Du moment où vous découvrez nos pièces jusqu''à des années après.', description_ar = 'من لحظة اكتشافك لقطعنا إلى سنوات من الاقتناء.' WHERE page = 'services'").run()
+    db.prepare("UPDATE page_content SET title_fr = 'Nos Boutiques', title_ar = 'متاجرنا', subtitle_fr = 'Vivez le Luxe dans le Monde Entier', subtitle_ar = 'اختبر الفخامة في جميع أنحاء العالم', description_fr = 'Découvrez nos boutiques dans les destinations les plus prestigieuses du monde.', description_ar = 'اكتشف متاجرنا في أرقى وجهات العالم.' WHERE page = 'boutiques'").run()
+  }
 }
 
 function seedData() {

@@ -240,6 +240,7 @@ export const ar = {
     paymentMethod: "طريقة الدفع",
     cashOnDelivery: "الدفع عند الاستلام",
     placeOrder: "تأكيد الطلب",
+    proceed: "الدفع",
     emptyCart: "سلتك فارغة",
     browseProducts: "تصفح المنتجات",
     thankYou: "شكراً!",

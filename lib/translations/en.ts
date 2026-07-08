@@ -240,6 +240,7 @@ export const en = {
     paymentMethod: "Payment Method",
     cashOnDelivery: "Cash on delivery — Pay in cash when your order arrives.",
     placeOrder: "Place Order",
+    proceed: "Checkout",
     emptyCart: "Your cart is empty",
     browseProducts: "Browse Products",
     thankYou: "Thank You!",

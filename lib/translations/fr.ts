@@ -240,6 +240,7 @@ export const fr = {
     paymentMethod: "Moyen de Paiement",
     cashOnDelivery: "Paiement à la livraison — Payez en espèces à la réception.",
     placeOrder: "Passer la commande",
+    proceed: "Commander",
     emptyCart: "Votre panier est vide",
     browseProducts: "Voir les produits",
     thankYou: "Merci !",

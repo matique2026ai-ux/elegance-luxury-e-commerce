@@ -15,13 +15,14 @@ export default function CheckoutPage() {
   const c = t.checkout
 
   const [form, setForm] = useState({
-    name: "", phone: "", wilayaCode: "16", commune: "", address: "",
+    name: "", phone: "", wilayaCode: "", commune: "", address: "",
   })
-  const [shippingPrice, setShippingPrice] = useState(400)
+  const [shippingPrice, setShippingPrice] = useState(0)
+  const [wilayaSelected, setWilayaSelected] = useState(false)
 
   useEffect(() => {
     const w = wilayas.find(x => x.code === Number(form.wilayaCode))
-    if (w) setShippingPrice(w.shippingPrice)
+    if (w) { setShippingPrice(w.shippingPrice); setWilayaSelected(true) }
   }, [form.wilayaCode])
 
   const grandTotal = totalPrice + shippingPrice
@@ -97,11 +98,11 @@ export default function CheckoutPage() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">{c.shipping}</span>
-                      <span>{shippingPrice.toLocaleString()} {t.products.currency}</span>
+                      <span>{wilayaSelected ? `${shippingPrice.toLocaleString()} ${t.products.currency}` : "—"}</span>
                     </div>
                     <div className="flex justify-between font-serif text-xl pt-2 border-t border-border">
                       <span>{c.total}</span>
-                      <span className="text-accent">{grandTotal.toLocaleString()} {t.products.currency}</span>
+                      <span className="text-accent">{wilayaSelected ? `${grandTotal.toLocaleString()} ${t.products.currency}` : `${totalPrice.toLocaleString()} ${t.products.currency} + ${c.shipping}`}</span>
                     </div>
                   </div>
                 </div>
@@ -134,6 +135,7 @@ export default function CheckoutPage() {
                     <div className="flex border border-border">
                       <span className="flex items-center px-4 bg-secondary/50 border-r border-border"><MapPin className="w-4 h-4 text-muted-foreground" /></span>
                       <select value={form.wilayaCode} onChange={e => setForm({ ...form, wilayaCode: e.target.value })} className="flex-1 px-4 py-3 bg-transparent focus:outline-none text-sm">
+                        <option value="">{c.form.selectWilaya}</option>
                         {wilayas.map(w => (
                           <option key={w.code} value={w.code}>
                             {w.code} - {w.nameAr} / {w.nameFr} — {w.shippingPrice} {t.products.currency}
@@ -162,8 +164,8 @@ export default function CheckoutPage() {
                     <p className="text-muted-foreground">{c.cashOnDelivery}</p>
                   </div>
 
-                  <button type="submit" className="w-full bg-primary text-primary-foreground py-4 text-sm tracking-[0.2em] uppercase hover:bg-primary/90 transition-all flex items-center justify-center gap-3">
-                    {c.placeOrder} — {grandTotal.toLocaleString()} {t.products.currency}
+                  <button type="submit" disabled={!wilayaSelected} className="w-full bg-primary text-primary-foreground py-4 text-sm tracking-[0.2em] uppercase hover:bg-primary/90 transition-all flex items-center justify-center gap-3 disabled:opacity-40">
+                    {wilayaSelected ? `${c.placeOrder} — ${grandTotal.toLocaleString()} ${t.products.currency}` : c.form.selectWilaya}
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </form>

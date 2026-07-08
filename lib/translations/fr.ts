@@ -345,7 +345,8 @@ export const fr = {
       table: {
         item: "Article",
         category: "Catégorie",
-        qty: "Qté",
+      qty: "Qté",
+      selectWilaya: "— Sélectionnez votre wilaya —",
         price: "Prix",
       },
       shipping: "Livraison",

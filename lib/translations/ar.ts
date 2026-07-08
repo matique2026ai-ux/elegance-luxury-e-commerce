@@ -345,7 +345,8 @@ export const ar = {
       table: {
         item: "المنتج",
         category: "الفئة",
-        qty: "العدد",
+      qty: "العدد",
+      selectWilaya: "— اختر ولايتك —",
         price: "السعر",
       },
       shipping: "الشحن",

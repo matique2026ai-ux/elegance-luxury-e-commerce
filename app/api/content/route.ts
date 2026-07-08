@@ -4,8 +4,9 @@ import { store } from "@/lib/data-store"
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const page = searchParams.get("page")
-  if (page) return NextResponse.json(store.getContent(page))
-  return NextResponse.json(store.getAllContent())
+  const lang = searchParams.get("lang")
+  if (page) return NextResponse.json(store.getContent(page, lang || undefined))
+  return NextResponse.json(store.getAllContent(lang || undefined))
 }
 
 export async function POST(request: Request) {

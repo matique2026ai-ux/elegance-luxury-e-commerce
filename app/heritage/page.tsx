@@ -7,12 +7,12 @@ import { Footer } from "@/components/footer"
 import { useI18n } from "@/lib/i18n-context"
 
 export default function HeritagePage() {
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
   const [content, setContent] = useState<{ title: string; subtitle: string; description: string; images: string[] } | null>(null)
 
   useEffect(() => {
-    fetch("/api/content?page=heritage").then(r => r.json()).then(setContent)
-  }, [])
+    fetch(`/api/content?page=heritage&lang=${lang}`).then(r => r.json()).then(setContent)
+  }, [lang])
 
   return (
     <div className="min-h-screen pt-28">

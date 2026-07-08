@@ -9,12 +9,12 @@ import { useI18n } from "@/lib/i18n-context"
 const icons: LucideIcon[] = [Truck, Package, RotateCcw, Headphones]
 
 export default function ServicesPage() {
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
   const [content, setContent] = useState<{ title: string; subtitle: string; description: string; images: string[] } | null>(null)
 
   useEffect(() => {
-    fetch("/api/content?page=services").then(r => r.json()).then(setContent)
-  }, [])
+    fetch(`/api/content?page=services&lang=${lang}`).then(r => r.json()).then(setContent)
+  }, [lang])
 
   return (
     <div className="min-h-screen pt-28">

@@ -70,10 +70,24 @@ function initSchema() {
     CREATE TABLE IF NOT EXISTS page_content (
       page TEXT PRIMARY KEY,
       title TEXT,
+      title_fr TEXT,
+      title_ar TEXT,
       subtitle TEXT,
+      subtitle_fr TEXT,
+      subtitle_ar TEXT,
       description TEXT,
+      description_fr TEXT,
+      description_ar TEXT,
       images TEXT,
       published INTEGER DEFAULT 1
+    );
+
+    CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL UNIQUE,
+      password TEXT NOT NULL,
+      createdAt TEXT DEFAULT (datetime('now'))
     );
 
     CREATE TABLE IF NOT EXISTS orders (
@@ -114,12 +128,12 @@ function seedData() {
     ["Velvet Party Dress", "Robe de Fête en Velours", "فستان حفلة مخملي", "children", "Clothing", "Vêtements", "ملابس", 650, 8, "https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=500&h=600&fit=crop", 1],
   ]
 
-  const seedContent = db.prepare(`INSERT OR IGNORE INTO page_content (page, title, subtitle, description, images, published) VALUES (?, ?, ?, ?, ?, ?)`)
+  const seedContent = db.prepare(`INSERT OR IGNORE INTO page_content (page, title, title_fr, title_ar, subtitle, subtitle_fr, subtitle_ar, description, description_fr, description_ar, images, published) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
 
   const pages = [
-    ["heritage", "Our Heritage", "A Legacy of Excellence", "For over a century, Maison Herahima has defined luxury through unparalleled craftsmanship and timeless elegance.", '["https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=600&fit=crop"]', 1],
-    ["services", "Our Services", "Bespoke Excellence", "From haute couture to personalized styling, we offer a range of exclusive services tailored to your desires.", '["https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=800&h=600&fit=crop"]', 1],
-    ["boutiques", "Our Boutiques", "Experience Luxury Worldwide", "Discover our boutiques in the world's most prestigious destinations.", '["https://images.unsplash.com/photo-1519567241046-7f570eee3ce6?w=800&h=600&fit=crop"]', 1],
+    ["heritage", "Our Heritage", "Notre Héritage", "إرثنا", "A craftsmanship passed down through generations", "Un savoir-faire transmis de génération en génération", "حرفية تنتقل عبر الأجيال", "Since 1847, our house has perpetuated French artisanal excellence. Each piece is the result of a dialogue between tradition and modernity.", "Depuis 1847, notre maison perpétue l'excellence artisanale française. Chaque pièce est le fruit d'un dialogue entre tradition et modernité.", "منذ 1847، ودارنا تواصل التميز الحرفي الفرنسي. كل قطعة هي نتاج حوار بين التقاليد والحداثة.", '["https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=600&fit=crop"]', 1],
+    ["services", "Exceptional Service", "Service Exceptionnel", "خدمة استثنائية", "An Experience Beyond Purchase", "Une Expérience Au-Delà de l'Achat", "تجربة تتجاوز الشراء", "From the moment you discover our pieces to years of ownership, we ensure every interaction reflects our commitment to excellence.", "Du moment où vous découvrez nos pièces jusqu'à des années après, chaque interaction reflète notre engagement envers l'excellence.", "من لحظة اكتشافك لقطعنا إلى سنوات من الاقتناء، نضمن أن كل تفاعل يعكس التزامنا بالتميز.", '["https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=800&h=600&fit=crop"]', 1],
+    ["boutiques", "Our Boutiques", "Nos Boutiques", "متاجرنا", "Experience Luxury Worldwide", "Vivez le Luxe dans le Monde Entier", "اختبر الفخامة في جميع أنحاء العالم", "Discover our boutiques in the world's most prestigious destinations.", "Découvrez nos boutiques dans les destinations les plus prestigieuses du monde.", "اكتشف متاجرنا في أرقى وجهات العالم.", '["https://images.unsplash.com/photo-1519567241046-7f570eee3ce6?w=800&h=600&fit=crop"]', 1],
   ]
 
   const tx = db.transaction(() => {

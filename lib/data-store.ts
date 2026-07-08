@@ -89,8 +89,8 @@ function rowToProduct(row: any, lang?: string): Product {
   return p
 }
 
-function rowToContent(row: any): PageContent {
-  return {
+function rowToContent(row: any, lang?: string): PageContent {
+  const c: PageContent = {
     page: row.page,
     title: row.title,
     subtitle: row.subtitle,
@@ -98,6 +98,12 @@ function rowToContent(row: any): PageContent {
     images: JSON.parse(row.images || "[]"),
     published: row.published === 1,
   }
+  if (lang && lang !== "en") {
+    c.title = lang === "fr" ? (row.title_fr || row.title) : (row.title_ar || row.title)
+    c.subtitle = lang === "fr" ? (row.subtitle_fr || row.subtitle) : (row.subtitle_ar || row.subtitle)
+    c.description = lang === "fr" ? (row.description_fr || row.description) : (row.description_ar || row.description)
+  }
+  return c
 }
 
 function rowToOrder(row: any): Order {
@@ -222,14 +228,14 @@ class DataStore {
   }
 
   // Content
-  getAllContent() {
+  getAllContent(lang?: string) {
     const rows = getDb().prepare("SELECT * FROM page_content").all() as any[]
-    return rows.map(rowToContent)
+    return rows.map(r => rowToContent(r, lang))
   }
 
-  getContent(page: string) {
+  getContent(page: string, lang?: string) {
     const row = getDb().prepare("SELECT * FROM page_content WHERE page = ?").get(page) as any
-    return row ? rowToContent(row) : null
+    return row ? rowToContent(row, lang) : null
   }
 
   updateContent(page: string, data: Partial<PageContent>) {
@@ -268,6 +274,25 @@ class DataStore {
 
   updateOrderStatus(id: string, status: Order["status"]) {
     getDb().prepare("UPDATE orders SET status = ? WHERE id = ?").run(status, id)
+  }
+
+  // Users
+  createUser(name: string, email: string, password: string) {
+    const db = getDb()
+    try {
+      const result = db.prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)").run(name, email, password)
+      return { id: Number(result.lastInsertRowid), name, email }
+    } catch {
+      return null
+    }
+  }
+
+  getUserByEmail(email: string) {
+    return getDb().prepare("SELECT * FROM users WHERE email = ?").get(email) as { id: number; name: string; email: string; password: string } | undefined
+  }
+
+  getUserById(id: number) {
+    return getDb().prepare("SELECT id, name, email, createdAt FROM users WHERE id = ?").get(id) as { id: number; name: string; email: string; createdAt: string } | undefined
   }
 
   // Stats

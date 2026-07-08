@@ -51,7 +51,7 @@ export default function DashboardOrders() {
                 <span className={`inline-block px-3 py-1 text-[10px] tracking-[0.1em] uppercase ${statusColors[o.status]}`}>
                   {o.status}
                 </span>
-                <span className="font-serif text-xl text-accent">${o.grandTotal.toLocaleString()}</span>
+                <span className="font-serif text-xl text-accent">{o.grandTotal.toLocaleString()} DZD</span>
               </div>
             </div>
 
@@ -71,18 +71,18 @@ export default function DashboardOrders() {
                       <td className="py-2">{item.name}</td>
                       <td className="py-2 text-muted-foreground">{item.category}</td>
                       <td className="py-2">{item.quantity}</td>
-                      <td className="py-2 text-right">${(item.price * item.quantity).toLocaleString()}</td>
+                      <td className="py-2 text-right">{(item.price * item.quantity).toLocaleString()} DZD</td>
                     </tr>
                   ))}
                 </tbody>
                 <tfoot>
                   <tr className="border-t border-border">
                     <td colSpan={3} className="py-2 text-right text-muted-foreground">{d.shipping}</td>
-                    <td className="py-2 text-right">${o.shippingPrice.toLocaleString()}</td>
+                    <td className="py-2 text-right">{o.shippingPrice.toLocaleString()} DZD</td>
                   </tr>
                   <tr>
                     <td colSpan={3} className="py-2 text-right font-medium">{d.total}</td>
-                    <td className="py-2 text-right font-serif text-lg text-accent">${o.grandTotal.toLocaleString()}</td>
+                    <td className="py-2 text-right font-serif text-lg text-accent">{o.grandTotal.toLocaleString()} DZD</td>
                   </tr>
                 </tfoot>
               </table>

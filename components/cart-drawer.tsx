@@ -51,7 +51,7 @@ export function CartDrawer() {
           ) : (
             <div className="p-4 space-y-3">
               {items.map((item) => (
-                <div key={item.id} className={`flex gap-3 bg-card border border-border/60 p-3 ${isRtl ? "flex-row-reverse" : ""}`}>
+                <div key={item.id} className={`flex gap-3 bg-secondary/10 border border-border/80 p-3 ${isRtl ? "flex-row-reverse" : ""}`}>
                   <div className="w-20 h-24 bg-secondary/10 shrink-0 overflow-hidden">
                     <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                   </div>

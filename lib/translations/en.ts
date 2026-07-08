@@ -56,6 +56,7 @@ export const en = {
     shopWomen: "Shop Women",
     shopChildren: "Shop Children",
     addToFavorites: "Add to favorites",
+    removeFromFavorites: "Remove from favorites",
   },
   heritage: {
     label: "Our Heritage",

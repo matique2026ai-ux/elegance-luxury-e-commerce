@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Heart, ShoppingBag } from "lucide-react"
 import { useI18n } from "@/lib/i18n-context"
 import { useCart } from "@/context/cart-context"
+import { useFavorites } from "@/context/favorites-context"
 
 interface Product {
   id: number; name: string; category: string; sub: string; price: number; image: string; isNew: boolean
@@ -14,9 +15,10 @@ export default function FemmesPage() {
   const [hoveredId, setHoveredId] = useState<number | null>(null)
   const { t, lang } = useI18n()
   const { addItem } = useCart()
+  const { isFavorite, toggleFavorite } = useFavorites()
 
   useEffect(() => {
-    fetch(`/api/products?category=women&lang=${lang}`).then(r => r.json()).then(setProducts)
+    fetch(`/api/products?category=women&lang=${lang}`).then(r => r.ok ? r.json() : []).then(setProducts).catch(() => setProducts([]))
   }, [lang])
 
   const subs = [...new Set(products.map(p => p.sub))]
@@ -51,7 +53,7 @@ export default function FemmesPage() {
                 <img src={p.image} alt={p.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className={`absolute inset-0 bg-black/40 flex items-center justify-center gap-4 transition-opacity duration-300 ${hoveredId === p.id ? "opacity-100" : "opacity-0"}`}>
                   <button onClick={() => addItem({ id: p.id, name: p.name, price: p.price, image: p.image, quantity: 1, category: p.category })} className="bg-white text-black p-3 hover:bg-accent transition-colors"><ShoppingBag className="w-5 h-5" /></button>
-                  <button className="bg-white text-black p-3 hover:bg-accent transition-colors"><Heart className="w-5 h-5" /></button>
+                  <button onClick={() => toggleFavorite({ id: p.id, name: p.name, price: p.price, image: p.image, category: p.category })} className="bg-white text-black p-3 hover:bg-accent transition-colors" aria-label={isFavorite(p.id) ? t.featured.removeFromFavorites : t.featured.addToFavorites}><Heart className={`w-5 h-5 ${isFavorite(p.id) ? "fill-accent text-accent" : ""}`} /></button>
                 </div>
                 {p.isNew && <span className="absolute top-4 left-4 bg-accent text-accent-foreground text-xs px-3 py-1 tracking-wider uppercase">{t.featured.new}</span>}
               </div>

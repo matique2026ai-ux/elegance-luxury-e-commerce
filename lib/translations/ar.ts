@@ -56,6 +56,7 @@ export const ar = {
     shopWomen: "نساء",
     shopChildren: "أطفال",
     addToFavorites: "أضف إلى المفضلة",
+    removeFromFavorites: "إزالة من المفضلة",
   },
   heritage: {
     label: "إرثنا",

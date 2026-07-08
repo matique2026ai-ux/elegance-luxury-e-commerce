@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Heart, ShoppingBag } from "lucide-react";
 import { useI18n } from "@/lib/i18n-context";
 import { useCart } from "@/context/cart-context";
+import { useFavorites } from "@/context/favorites-context";
 
 interface Product {
   id: number; name: string; category: string; sub: string; price: number; image: string; isNew: boolean
@@ -16,9 +17,10 @@ export function FeaturedProducts() {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const { t, lang } = useI18n();
   const { addItem } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   useEffect(() => {
-    fetch(`/api/products?lang=${lang}`).then(r => r.json()).then(setAllProducts);
+    fetch(`/api/products?lang=${lang}`).then(r => r.ok ? r.json() : []).then(setAllProducts).catch(() => setAllProducts([]));
   }, [lang]);
 
   const filtered = activeCategory === "all" ? allProducts : allProducts.filter(p => p.category === activeCategory);
@@ -102,10 +104,11 @@ export function FeaturedProducts() {
                   </button>
                   <button
                     type="button"
+                    onClick={() => toggleFavorite({ id: product.id, name: product.name, price: product.price, image: product.image, category: product.category })}
                     className="w-11 h-11 bg-background/90 backdrop-blur-sm flex items-center justify-center hover:bg-background transition-colors duration-200"
-                    aria-label={t.featured.addToFavorites}
+                    aria-label={isFavorite(product.id) ? t.featured.removeFromFavorites : t.featured.addToFavorites}
                   >
-                    <Heart className="w-4 h-4" />
+                    <Heart className={`w-4 h-4 ${isFavorite(product.id) ? "fill-accent text-accent" : ""}`} />
                   </button>
                 </div>
               </div>

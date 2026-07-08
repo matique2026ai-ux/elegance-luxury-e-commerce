@@ -4,6 +4,7 @@ import { DM_Sans, Playfair_Display, Noto_Kufi_Arabic } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { I18nProvider } from "@/lib/i18n-context";
 import { CartProvider } from "@/context/cart-context";
+import { FavoritesProvider } from "@/context/favorites-context";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -64,7 +65,9 @@ export default function RootLayout({
       >
         <I18nProvider>
           <CartProvider>
-            {children}
+            <FavoritesProvider>
+              {children}
+            </FavoritesProvider>
           </CartProvider>
         </I18nProvider>
         <Analytics />

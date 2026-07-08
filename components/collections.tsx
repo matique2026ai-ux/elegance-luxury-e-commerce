@@ -59,7 +59,7 @@ export function Collections() {
             return (
               <Link
                 key={cat.id}
-                href={`/products?category=${cat.id}`}
+                href={`/${cat.id === "men" ? "hommes" : cat.id === "women" ? "femmes" : "enfants"}`}
                 className={`group relative overflow-hidden ${index === 1 ? "md:translate-y-12" : ""}`}
               >
                 <div className="relative overflow-hidden aspect-[3/4]">

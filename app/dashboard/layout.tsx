@@ -3,12 +3,13 @@
 import React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, Package, Calendar, Mail, Users, ShoppingBag, ChevronLeft } from "lucide-react"
+import { LayoutDashboard, Package, Calendar, Mail, Users, ShoppingBag, ChevronLeft, FileText } from "lucide-react"
 
 const sidebarLinks = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
   { href: "/dashboard/orders", label: "Orders", icon: ShoppingBag },
   { href: "/dashboard/products", label: "Products", icon: Package },
+  { href: "/dashboard/content", label: "Content", icon: FileText },
   { href: "/dashboard/appointments", label: "Appointments", icon: Calendar },
   { href: "/dashboard/messages", label: "Messages", icon: Mail },
   { href: "/dashboard/subscribers", label: "Subscribers", icon: Users },

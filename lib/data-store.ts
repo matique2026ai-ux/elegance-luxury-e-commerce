@@ -27,6 +27,25 @@ export interface ContactMessage {
   read: boolean
 }
 
+export interface Product {
+  id: number
+  name: string
+  category: "men" | "women" | "children"
+  sub: string
+  price: number
+  image: string
+  isNew: boolean
+}
+
+export interface PageContent {
+  page: string
+  title: string
+  subtitle: string
+  description: string
+  images: string[]
+  published: boolean
+}
+
 export interface Order {
   id: string
   items: { id: number; name: string; price: number; quantity: number; category: string }[]
@@ -60,6 +79,43 @@ class DataStore {
     { id: "1", name: "Isabelle Moreau", email: "isabelle@example.com", subject: "Product inquiry", message: "I was wondering if the Duchess Bag is available in burgundy leather.", createdAt: new Date().toISOString(), read: false },
     { id: "2", name: "James Wilson", email: "james@example.com", subject: "Shipping question", message: "How long does shipping to the US typically take?", createdAt: new Date(Date.now() - 172800000).toISOString(), read: true },
   ]
+
+  private products: Product[] = [
+    { id: 1, name: "Wool Tailored Suit", category: "men", sub: "Clothing", price: 3200, image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&h=600&fit=crop", isNew: true },
+    { id: 2, name: "Linen Blazer", category: "men", sub: "Clothing", price: 1800, image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=600&fit=crop", isNew: false },
+    { id: 3, name: "Leather Oxford Shoes", category: "men", sub: "Shoes", price: 1450, image: "https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=500&h=600&fit=crop", isNew: false },
+    { id: 4, name: "Cashmere Scarf", category: "men", sub: "Accessories", price: 680, image: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=500&h=600&fit=crop", isNew: true },
+    { id: 5, name: "Eau de Parfum", category: "men", sub: "Fragrances", price: 320, image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=500&h=600&fit=crop", isNew: true },
+    { id: 6, name: "Silk Evening Gown", category: "women", sub: "Clothing", price: 8750, image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&h=600&fit=crop", isNew: true },
+    { id: 7, name: "Pearl Necklace", category: "women", sub: "Accessories", price: 4890, image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=600&fit=crop", isNew: true },
+    { id: 8, name: "Leather Duchess Bag", category: "women", sub: "Accessories", price: 2450, image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&h=600&fit=crop", isNew: false },
+    { id: 9, name: "Floral Summer Dress", category: "women", sub: "Clothing", price: 1200, image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92b1?w=500&h=600&fit=crop", isNew: false },
+    { id: 10, name: "Sapphire Ring", category: "women", sub: "Accessories", price: 12500, image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500&h=600&fit=crop", isNew: false },
+    { id: 11, name: "Stiletto Heels", category: "women", sub: "Shoes", price: 980, image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500&h=600&fit=crop", isNew: true },
+    { id: 12, name: "Eau de Parfum Rose", category: "women", sub: "Fragrances", price: 380, image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=500&h=600&fit=crop", isNew: false },
+    { id: 13, name: "Cashmere Cardigan", category: "children", sub: "Clothing", price: 480, image: "https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=500&h=600&fit=crop", isNew: false },
+    { id: 14, name: "Mini Leather Sneakers", category: "children", sub: "Shoes", price: 280, image: "https://images.unsplash.com/photo-1514989940723-e8e51635b782?w=500&h=600&fit=crop", isNew: true },
+    { id: 15, name: "Kids Silk Bow Tie", category: "children", sub: "Accessories", price: 150, image: "https://images.unsplash.com/photo-1602173211822-8347a13dc5ad?w=500&h=600&fit=crop", isNew: true },
+    { id: 16, name: "Velvet Party Dress", category: "children", sub: "Clothing", price: 650, image: "https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=500&h=600&fit=crop", isNew: true },
+  ]
+
+  private content: Record<string, PageContent> = {
+    heritage: {
+      page: "heritage", title: "Our Heritage", subtitle: "A craftsmanship passed down through generations",
+      description: "Since 1847, our house has perpetuated French artisanal excellence. Each piece is the result of a dialogue between tradition and modernity.",
+      images: ["https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Upscaled%20Image%20%282%29-qsHmoJIZtkh9Zw7PIDspOZVh50aE2F.png"], published: true,
+    },
+    services: {
+      page: "services", title: "Exceptional Service", subtitle: "An Experience Beyond Purchase",
+      description: "From the moment you discover our pieces to years of ownership, we ensure every interaction reflects our commitment to excellence.",
+      images: ["https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Emballage%20Luxe%203-O7x3bwTICrWOx8qXrukiyPtc260H9T.png"], published: true,
+    },
+    boutiques: {
+      page: "boutiques", title: "Our Boutiques", subtitle: "Visit Us",
+      description: "Discover our collections in an exceptional setting and benefit from personalized advice from our experts.",
+      images: ["https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Boutique%20Paris-Ds9XeWSdUztVjHSz6JYUMoW4pz7kHM.png"], published: true,
+    },
+  }
 
   private orders: Order[] = [
     {
@@ -111,6 +167,40 @@ class DataStore {
   }
   deleteMessage(id: string) {
     this.messages = this.messages.filter(m => m.id !== id)
+  }
+
+  // Products
+  getProducts(category?: string, sub?: string) {
+    let result = [...this.products]
+    if (category) result = result.filter(p => p.category === category)
+    if (sub) result = result.filter(p => p.sub === sub)
+    return result
+  }
+  addProduct(data: Omit<Product, "id">) {
+    const id = Math.max(...this.products.map(p => p.id), 0) + 1
+    const product = { ...data, id }
+    this.products.push(product)
+    return product
+  }
+  updateProduct(id: number, data: Partial<Product>) {
+    const idx = this.products.findIndex(p => p.id === id)
+    if (idx === -1) return null
+    this.products[idx] = { ...this.products[idx], ...data }
+    return this.products[idx]
+  }
+  deleteProduct(id: number) {
+    this.products = this.products.filter(p => p.id !== id)
+  }
+
+  // Content
+  getAllContent() { return Object.values(this.content) }
+  getContent(page: string) { return this.content[page] || null }
+  updateContent(page: string, data: Partial<PageContent>) {
+    if (this.content[page]) {
+      this.content[page] = { ...this.content[page], ...data }
+    } else {
+      this.content[page] = { page, title: data.title || "", subtitle: data.subtitle || "", description: data.description || "", images: data.images || [], published: data.published ?? false }
+    }
   }
 
   // Orders

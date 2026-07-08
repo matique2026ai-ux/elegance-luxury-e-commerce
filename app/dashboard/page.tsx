@@ -5,14 +5,14 @@ import { Users, Calendar, Mail, ShoppingBag } from "lucide-react"
 
 interface Stats {
   totalSubscribers: number
-  pendingOrders: number
+  pendingAppointments: number
   unreadMessages: number
-  totalOrders: number
+  totalAppointments: number
 }
 
 const statCards = [
-  { key: "totalOrders" as const, label: "Total Orders", icon: ShoppingBag, color: "text-blue-600 bg-blue-100" },
-  { key: "pendingOrders" as const, label: "Pending Orders", icon: Calendar, color: "text-amber-600 bg-amber-100" },
+  { key: "totalAppointments" as const, label: "Appointments", icon: Calendar, color: "text-blue-600 bg-blue-100" },
+  { key: "pendingAppointments" as const, label: "Pending", icon: ShoppingBag, color: "text-amber-600 bg-amber-100" },
   { key: "unreadMessages" as const, label: "Unread Messages", icon: Mail, color: "text-rose-600 bg-rose-100" },
   { key: "totalSubscribers" as const, label: "Subscribers", icon: Users, color: "text-emerald-600 bg-emerald-100" },
 ]

@@ -1,33 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Heart, ShoppingBag } from "lucide-react";
 import { useI18n } from "@/lib/i18n-context";
+import { useCart } from "@/context/cart-context";
 
-const products = [
-  { id: 1, name: "Wool Tailored Suit", category: "men", sub: "Clothing", price: 3200, image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&h=600&fit=crop", isNew: true },
-  { id: 2, name: "Silk Evening Gown", category: "women", sub: "Clothing", price: 8750, image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&h=600&fit=crop", isNew: true },
-  { id: 3, name: "Cashmere Cardigan", category: "children", sub: "Clothing", price: 480, image: "https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=500&h=600&fit=crop", isNew: false },
-  { id: 4, name: "Leather Oxford Shoes", category: "men", sub: "Shoes", price: 1450, image: "https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=500&h=600&fit=crop", isNew: false },
-  { id: 5, name: "Pearl Necklace", category: "women", sub: "Accessories", price: 4890, image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=600&fit=crop", isNew: true },
-  { id: 6, name: "Leather Duchess Bag", category: "women", sub: "Accessories", price: 2450, image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&h=600&fit=crop", isNew: false },
-  { id: 7, name: "Eau de Parfum", category: "men", sub: "Fragrances", price: 320, image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=500&h=600&fit=crop", isNew: true },
-  { id: 8, name: "Mini Leather Sneakers", category: "children", sub: "Shoes", price: 280, image: "https://images.unsplash.com/photo-1514989940723-e8e51635b782?w=500&h=600&fit=crop", isNew: true },
-];
+interface Product {
+  id: number; name: string; category: string; sub: string; price: number; image: string; isNew: boolean
+}
 
 export function FeaturedProducts() {
   const [hoveredId, setHoveredId] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
   const { t } = useI18n();
+  const { addItem } = useCart();
 
-  const filtered = activeCategory === "all" ? products : products.filter(p => p.category === activeCategory);
+  useEffect(() => {
+    fetch("/api/products").then(r => r.json()).then(setAllProducts);
+  }, []);
+
+  const filtered = activeCategory === "all" ? allProducts : allProducts.filter(p => p.category === activeCategory);
   const tabs = [
     { id: "all", label: t.products.categories.all },
     { id: "men", label: t.featured.shopMen },
     { id: "women", label: t.featured.shopWomen },
     { id: "children", label: t.featured.shopChildren },
   ];
+
+  if (allProducts.length === 0) return null;
 
   return (
     <section id="selection" className="py-24 md:py-32">
@@ -92,6 +94,7 @@ export function FeaturedProducts() {
                 >
                   <button
                     type="button"
+                    onClick={() => addItem({ id: product.id, name: product.name, price: product.price, image: product.image, quantity: 1, category: product.category })}
                     className="flex-1 bg-background/90 backdrop-blur-sm py-3 flex items-center justify-center gap-2 text-sm tracking-[0.1em] uppercase hover:bg-background transition-colors duration-200 min-h-11"
                   >
                     <ShoppingBag className="w-4 h-4" />
@@ -109,7 +112,7 @@ export function FeaturedProducts() {
               <div className="space-y-1">
                 <p className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground">{product.sub}</p>
                 <h3 className="font-serif text-xl group-hover:text-accent transition-colors duration-300">{product.name}</h3>
-                <p className="text-lg">${product.price.toLocaleString("en-US")}</p>
+                <p className="text-lg">{product.price.toLocaleString()} DZD</p>
               </div>
             </div>
           ))}

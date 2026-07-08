@@ -32,54 +32,12 @@ export function Header() {
           </Link>
 
           <div className="hidden md:flex items-center gap-8">
-            <Link
-              href="/products?category=men"
-              className="text-sm tracking-[0.2em] uppercase hover:text-accent transition-colors duration-300"
-            >
-              {t.header.men}
-            </Link>
-            <Link
-              href="/products?category=women"
-              className="text-sm tracking-[0.2em] uppercase hover:text-accent transition-colors duration-300"
-            >
-              {t.header.women}
-            </Link>
-            <Link
-              href="/products?category=children"
-              className="text-sm tracking-[0.2em] uppercase hover:text-accent transition-colors duration-300"
-            >
-              {t.header.children}
-            </Link>
-            <a
-              href="#heritage"
-              className="text-sm tracking-[0.2em] uppercase hover:text-accent transition-colors duration-300"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById('heritage')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              {t.header.heritage}
-            </a>
-            <a
-              href="#services"
-              className="text-sm tracking-[0.2em] uppercase hover:text-accent transition-colors duration-300"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              {t.header.services}
-            </a>
-            <a
-              href="#boutiques"
-              className="text-sm tracking-[0.2em] uppercase hover:text-accent transition-colors duration-300"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById('boutiques')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              {t.header.boutiques}
-            </a>
+            <Link href="/hommes" className="text-sm tracking-[0.2em] uppercase hover:text-accent transition-colors duration-300">{t.header.men}</Link>
+            <Link href="/femmes" className="text-sm tracking-[0.2em] uppercase hover:text-accent transition-colors duration-300">{t.header.women}</Link>
+            <Link href="/enfants" className="text-sm tracking-[0.2em] uppercase hover:text-accent transition-colors duration-300">{t.header.children}</Link>
+            <Link href="/heritage" className="text-sm tracking-[0.2em] uppercase hover:text-accent transition-colors duration-300">{t.header.heritage}</Link>
+            <Link href="/services" className="text-sm tracking-[0.2em] uppercase hover:text-accent transition-colors duration-300">{t.header.services}</Link>
+            <Link href="/boutiques" className="text-sm tracking-[0.2em] uppercase hover:text-accent transition-colors duration-300">{t.header.boutiques}</Link>
 
             <div className="flex items-center gap-4 ml-4 pl-4 border-l border-border/50">
               <div className="relative">
@@ -197,24 +155,12 @@ export function Header() {
         {isMenuOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-background border-b border-border py-8 px-6 animate-in fade-in slide-in-from-top-2 duration-300">
             <div className="flex flex-col gap-6">
-              <Link href="/products?category=men" className="text-sm tracking-[0.2em] uppercase" onClick={() => setIsMenuOpen(false)}>
-                {t.header.men}
-              </Link>
-              <Link href="/products?category=women" className="text-sm tracking-[0.2em] uppercase" onClick={() => setIsMenuOpen(false)}>
-                {t.header.women}
-              </Link>
-              <Link href="/products?category=children" className="text-sm tracking-[0.2em] uppercase" onClick={() => setIsMenuOpen(false)}>
-                {t.header.children}
-              </Link>
-              <a href="#heritage" className="text-sm tracking-[0.2em] uppercase" onClick={(e) => { e.preventDefault(); setIsMenuOpen(false); document.getElementById('heritage')?.scrollIntoView({ behavior: 'smooth' }); }}>
-                {t.header.heritage}
-              </a>
-              <a href="#services" className="text-sm tracking-[0.2em] uppercase" onClick={(e) => { e.preventDefault(); setIsMenuOpen(false); document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' }); }}>
-                {t.header.services}
-              </a>
-              <a href="#boutiques" className="text-sm tracking-[0.2em] uppercase" onClick={(e) => { e.preventDefault(); setIsMenuOpen(false); document.getElementById('boutiques')?.scrollIntoView({ behavior: 'smooth' }); }}>
-                {t.header.boutiques}
-              </a>
+              <Link href="/hommes" className="text-sm tracking-[0.2em] uppercase" onClick={() => setIsMenuOpen(false)}>{t.header.men}</Link>
+              <Link href="/femmes" className="text-sm tracking-[0.2em] uppercase" onClick={() => setIsMenuOpen(false)}>{t.header.women}</Link>
+              <Link href="/enfants" className="text-sm tracking-[0.2em] uppercase" onClick={() => setIsMenuOpen(false)}>{t.header.children}</Link>
+              <Link href="/heritage" className="text-sm tracking-[0.2em] uppercase" onClick={() => setIsMenuOpen(false)}>{t.header.heritage}</Link>
+              <Link href="/services" className="text-sm tracking-[0.2em] uppercase" onClick={() => setIsMenuOpen(false)}>{t.header.services}</Link>
+              <Link href="/boutiques" className="text-sm tracking-[0.2em] uppercase" onClick={() => setIsMenuOpen(false)}>{t.header.boutiques}</Link>
             </div>
           </div>
         )}

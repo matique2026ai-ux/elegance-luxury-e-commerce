@@ -34,46 +34,48 @@ export function CartDrawer() {
           @keyframes slideInRtl { from { transform: translateX(-100%); } to { transform: translateX(0); } }
         `}</style>
 
-        <div className="flex items-center justify-between px-5 h-12 shrink-0 border-b border-border">
-          <h2 className="font-serif text-base">
-            {t.header.cart}
-            <span className="text-muted-foreground text-sm font-sans ml-1.5">({totalItems})</span>
+        <div className="flex items-center justify-between px-5 h-14 shrink-0 border-b border-border">
+          <h2 className="font-serif text-lg">
+            {t.header.cart} <span className="text-muted-foreground text-sm font-sans ml-1">({totalItems})</span>
           </h2>
-          <button onClick={closeCart} className="w-7 h-7 flex items-center justify-center hover:bg-secondary/40 transition-colors">
+          <button onClick={closeCart} className="w-8 h-8 flex items-center justify-center hover:bg-secondary/30 transition-colors">
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto min-h-0">
           {items.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full px-6 text-center">
-              <p className="text-sm text-muted-foreground">{t.header.cartEmpty}</p>
+            <div className="flex items-center justify-center h-full px-6">
+              <p className="text-sm text-muted-foreground text-center">{t.header.cartEmpty}</p>
             </div>
           ) : (
-            <div className="p-3 space-y-3">
+            <div className="p-4 space-y-3">
               {items.map((item) => (
                 <div key={item.id} className={`flex gap-3 bg-card border border-border/60 p-3 ${isRtl ? "flex-row-reverse" : ""}`}>
-                  <div className="w-[84px] h-[104px] bg-secondary/10 shrink-0 overflow-hidden">
+                  <div className="w-20 h-24 bg-secondary/10 shrink-0 overflow-hidden">
                     <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                   </div>
-                  <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
-                    <div className="flex items-start justify-between gap-1">
-                      <h3 className="text-sm font-medium leading-snug flex-1 min-w-0">{item.name}</h3>
-                      <button onClick={() => removeItem(item.id)} className="w-5 h-5 flex items-center justify-center hover:bg-secondary/40 transition-colors shrink-0" aria-label="Remove">
+                  <div className="flex-1 min-w-0 flex flex-col justify-between">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium leading-snug">{item.name}</p>
+                        <p className="text-[11px] text-muted-foreground mt-0.5 uppercase tracking-wider">{catKey(item.category)}</p>
+                      </div>
+                      <button onClick={() => removeItem(item.id)} className="w-6 h-6 flex items-center justify-center hover:bg-secondary/40 transition-colors shrink-0" aria-label="Remove">
                         <X className="w-3.5 h-3.5 text-muted-foreground/60" />
                       </button>
                     </div>
-                    <div className="space-y-2">
-                      <p className="text-xs font-serif">{(item.price * item.quantity).toLocaleString()} <span className="text-[10px] text-muted-foreground">{t.products.currency}</span></p>
-                      <div className="flex items-center border border-border/60 w-fit">
+                    <div className="flex items-center justify-between mt-2">
+                      <div className="flex items-center border border-border/60">
                         <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="w-7 h-7 flex items-center justify-center hover:bg-secondary/30 transition-colors">
                           <Minus className="w-3 h-3" />
                         </button>
-                        <span className="w-8 h-7 flex items-center justify-center text-xs border-x border-border/60">{item.quantity}</span>
+                        <span className="w-8 h-7 flex items-center justify-center text-xs tabular-nums border-x border-border/60">{item.quantity}</span>
                         <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="w-7 h-7 flex items-center justify-center hover:bg-secondary/30 transition-colors">
                           <Plus className="w-3 h-3" />
                         </button>
                       </div>
+                      <p className="text-sm font-serif font-medium">{(item.price * item.quantity).toLocaleString()} <span className="text-xs text-muted-foreground font-sans">{t.products.currency}</span></p>
                     </div>
                   </div>
                 </div>
@@ -82,21 +84,31 @@ export function CartDrawer() {
           )}
         </div>
 
-        {items.length > 0 && (
-          <div className="border-t border-border px-5 py-4 shrink-0">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-sm text-muted-foreground">{t.checkout.total}</span>
-              <span className="font-serif text-base">{totalPrice.toLocaleString()} {t.products.currency}</span>
-            </div>
+        <div className="border-t border-border px-5 py-4 shrink-0">
+          {items.length === 0 ? (
             <Link
-              href="/checkout"
+              href="/products"
               onClick={closeCart}
-              className="flex items-center justify-center w-full bg-primary text-primary-foreground h-10 text-sm tracking-wider uppercase hover:bg-primary/90 transition-colors"
+              className="flex items-center justify-center w-full bg-primary text-primary-foreground h-11 text-sm tracking-wider uppercase hover:bg-primary/90 transition-colors"
             >
-              {t.checkout.proceed}
+              {t.checkout.browseProducts}
             </Link>
-          </div>
-        )}
+          ) : (
+            <>
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-sm text-muted-foreground font-medium">{t.checkout.total}</span>
+                <span className="font-serif text-lg font-medium">{totalPrice.toLocaleString()} <span className="text-sm text-muted-foreground font-sans">{t.products.currency}</span></span>
+              </div>
+              <Link
+                href="/checkout"
+                onClick={closeCart}
+                className="flex items-center justify-center w-full bg-primary text-primary-foreground h-11 text-sm tracking-wider uppercase hover:bg-primary/90 transition-colors"
+              >
+                {t.checkout.proceed}
+              </Link>
+            </>
+          )}
+        </div>
       </div>
     </>
   )

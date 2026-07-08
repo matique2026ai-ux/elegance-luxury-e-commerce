@@ -21,6 +21,14 @@ export default function EnfantsPage() {
 
   const subs = [...new Set(products.map(p => p.sub))]
   const [activeSub, setActiveSub] = useState<string>("all")
+
+  const subLabels: Record<string, string> = {
+    Clothing: t.products.categories.clothing,
+    Shoes: t.products.categories.shoes,
+    Accessories: t.products.categories.accessories,
+    Fragrances: t.products.categories.fragrances,
+  }
+
   const filtered = activeSub === "all" ? products : products.filter(p => p.sub === activeSub)
 
   return (
@@ -32,7 +40,7 @@ export default function EnfantsPage() {
           <div className="flex flex-wrap justify-center gap-3">
             <button onClick={() => setActiveSub("all")} className={`px-6 py-2 text-sm tracking-wider uppercase transition-colors ${activeSub === "all" ? "bg-primary text-primary-foreground" : "bg-secondary/50 hover:bg-secondary"}`}>{t.products.categories.all}</button>
             {subs.map(s => (
-              <button key={s} onClick={() => setActiveSub(s)} className={`px-6 py-2 text-sm tracking-wider uppercase transition-colors ${activeSub === s ? "bg-primary text-primary-foreground" : "bg-secondary/50 hover:bg-secondary"}`}>{s}</button>
+              <button key={s} onClick={() => setActiveSub(s)} className={`px-6 py-2 text-sm tracking-wider uppercase transition-colors ${activeSub === s ? "bg-primary text-primary-foreground" : "bg-secondary/50 hover:bg-secondary"}`}>{subLabels[s] || s}</button>
             ))}
           </div>
         </div>
@@ -48,7 +56,7 @@ export default function EnfantsPage() {
                 {p.isNew && <span className="absolute top-4 left-4 bg-accent text-accent-foreground text-xs px-3 py-1 tracking-wider uppercase">{t.featured.new}</span>}
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground tracking-wider uppercase">{p.sub}</p>
+                <p className="text-xs text-muted-foreground tracking-wider uppercase">{subLabels[p.sub] || p.sub}</p>
                 <h3 className="font-serif text-lg">{p.name}</h3>
                 <p className="font-medium">{p.price.toLocaleString()} {t.products.currency}</p>
               </div>

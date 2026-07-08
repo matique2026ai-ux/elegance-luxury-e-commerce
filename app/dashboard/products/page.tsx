@@ -4,11 +4,11 @@ import { useState, useEffect } from "react"
 import { Plus, Pencil, Trash2, X } from "lucide-react"
 
 interface Product {
-  id: number; name: string; category: string; sub: string; price: number; image: string; isNew: boolean
+  id: number; name: string; category: string; sub: string; price: number; stock: number; image: string; isNew: boolean
 }
 
 const categoryLabels: Record<string, string> = { men: "Men", women: "Women", children: "Children" }
-const emptyForm = { name: "", category: "men" as const, sub: "Clothing", price: 0, image: "", isNew: false }
+const emptyForm = { name: "", category: "men" as const, sub: "Clothing", price: 0, stock: 0, image: "", isNew: false }
 
 export default function DashboardProducts() {
   const [products, setProducts] = useState<Product[]>([])
@@ -19,7 +19,7 @@ export default function DashboardProducts() {
   useEffect(() => { fetch("/api/products").then(r => r.json()).then(setProducts) }, [])
 
   function openAdd() { setForm(emptyForm); setEditingId(null); setShowForm(true) }
-  function openEdit(p: Product) { setForm({ name: p.name, category: p.category as typeof form.category, sub: p.sub, price: p.price, image: p.image, isNew: p.isNew }); setEditingId(p.id); setShowForm(true) }
+  function openEdit(p: Product) { setForm({ name: p.name, category: p.category as typeof form.category, sub: p.sub, price: p.price, stock: p.stock, image: p.image, isNew: p.isNew }); setEditingId(p.id); setShowForm(true) }
 
   async function save() {
     if (editingId) {
@@ -79,6 +79,10 @@ export default function DashboardProducts() {
                 <input type="number" value={form.price} onChange={e => setForm(prev => ({ ...prev, price: Number(e.target.value) }))} className="w-full bg-secondary/50 border border-border px-4 py-2 text-sm focus:outline-none focus:border-accent" />
               </div>
               <div>
+                <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">Stock</label>
+                <input type="number" value={form.stock} onChange={e => setForm(prev => ({ ...prev, stock: Number(e.target.value) }))} className="w-full bg-secondary/50 border border-border px-4 py-2 text-sm focus:outline-none focus:border-accent" />
+              </div>
+              <div>
                 <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">Image URL</label>
                 <input type="text" value={form.image} onChange={e => setForm(prev => ({ ...prev, image: e.target.value }))} className="w-full bg-secondary/50 border border-border px-4 py-2 text-sm focus:outline-none focus:border-accent" />
               </div>
@@ -103,6 +107,7 @@ export default function DashboardProducts() {
               <th className="text-left px-6 py-4 tracking-[0.1em] uppercase text-muted-foreground font-medium">Category</th>
               <th className="text-left px-6 py-4 tracking-[0.1em] uppercase text-muted-foreground font-medium">Subcategory</th>
               <th className="text-left px-6 py-4 tracking-[0.1em] uppercase text-muted-foreground font-medium">Price</th>
+              <th className="text-left px-6 py-4 tracking-[0.1em] uppercase text-muted-foreground font-medium">Stock</th>
               <th className="text-left px-6 py-4 tracking-[0.1em] uppercase text-muted-foreground font-medium">Status</th>
               <th className="text-right px-6 py-4 tracking-[0.1em] uppercase text-muted-foreground font-medium">Actions</th>
             </tr>
@@ -116,6 +121,9 @@ export default function DashboardProducts() {
                 </td>
                 <td className="px-6 py-4 text-muted-foreground">{p.sub}</td>
                 <td className="px-6 py-4">{p.price.toLocaleString()} DZD</td>
+                <td className="px-6 py-4">
+                  <span className={`px-3 py-1 text-[10px] tracking-[0.1em] uppercase ${p.stock > 0 ? "bg-secondary text-muted-foreground" : "bg-destructive/10 text-destructive"}`}>{p.stock}</span>
+                </td>
                 <td className="px-6 py-4">
                   {p.isNew ? (
                     <span className="bg-accent/20 text-accent-foreground px-3 py-1 text-[10px] tracking-[0.1em] uppercase">New</span>

@@ -11,6 +11,8 @@ export function CartDrawer() {
 
   if (!isOpen) return null
 
+  const isRtl = lang === "ar"
+
   const catKey = (cat: string): string => {
     const map: Record<string, string> = {
       men: t.products.categories.men,
@@ -23,8 +25,14 @@ export function CartDrawer() {
   return (
     <>
       <div className="fixed inset-0 bg-black/50 z-50 transition-opacity duration-300" onClick={closeCart} />
-      <div className="fixed top-0 right-0 h-full w-full max-w-md bg-background z-50 shadow-2xl flex flex-col" style={{ animation: "slideIn 0.3s ease-out" }}>
-        <style>{`@keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }`}</style>
+      <div
+        className={`fixed top-0 h-full w-full max-w-md bg-background z-50 shadow-2xl flex flex-col ${isRtl ? "left-0" : "right-0"}`}
+        style={{ animation: `${isRtl ? "slideInRtl" : "slideInLtr"} 0.3s ease-out` }}
+      >
+        <style>{`
+          @keyframes slideInLtr { from { transform: translateX(100%); } to { transform: translateX(0); } }
+          @keyframes slideInRtl { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+        `}</style>
         <div className="flex items-center justify-between px-6 py-5 border-b border-border">
           <h2 className="font-serif text-lg">{t.header.cart} <span className="text-muted-foreground text-sm">({totalItems})</span></h2>
           <button onClick={closeCart} className="p-2 hover:bg-secondary/50 transition-colors rounded-sm">
@@ -43,7 +51,7 @@ export function CartDrawer() {
           ) : (
             <div className="divide-y divide-border">
               {items.map((item) => (
-                <div key={item.id} className="flex gap-3 px-6 py-4">
+                <div key={item.id} className={`flex gap-3 px-6 py-4 ${isRtl ? "flex-row-reverse" : ""}`}>
                   <div className="w-16 h-20 bg-secondary/20 shrink-0 overflow-hidden rounded-sm">
                     <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                   </div>
@@ -53,7 +61,7 @@ export function CartDrawer() {
                         <h3 className="text-sm font-medium leading-tight">{item.name}</h3>
                         <p className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wider">{catKey(item.category)}</p>
                       </div>
-                      <button onClick={() => removeItem(item.id)} className="p-1 -mr-1 hover:bg-destructive/10 hover:text-destructive transition-colors rounded-sm shrink-0">
+                      <button onClick={() => removeItem(item.id)} className="p-1 hover:bg-destructive/10 hover:text-destructive transition-colors rounded-sm shrink-0">
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>

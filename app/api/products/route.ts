@@ -5,7 +5,8 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const category = searchParams.get("category")
   const sub = searchParams.get("sub")
-  return NextResponse.json(store.getProducts(category || undefined, sub || undefined))
+  const lang = searchParams.get("lang")
+  return NextResponse.json(store.getProducts(category || undefined, sub || undefined, lang || undefined))
 }
 
 export async function POST(request: Request) {

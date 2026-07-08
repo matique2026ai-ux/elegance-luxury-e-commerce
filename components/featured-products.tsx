@@ -14,12 +14,12 @@ export function FeaturedProducts() {
   const [hoveredId, setHoveredId] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [allProducts, setAllProducts] = useState<Product[]>([]);
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { addItem } = useCart();
 
   useEffect(() => {
-    fetch("/api/products").then(r => r.json()).then(setAllProducts);
-  }, []);
+    fetch(`/api/products?lang=${lang}`).then(r => r.json()).then(setAllProducts);
+  }, [lang]);
 
   const filtered = activeCategory === "all" ? allProducts : allProducts.filter(p => p.category === activeCategory);
   const tabs = [

@@ -12,12 +12,12 @@ interface Product {
 export default function EnfantsPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [hoveredId, setHoveredId] = useState<number | null>(null)
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
   const { addItem } = useCart()
 
   useEffect(() => {
-    fetch("/api/products?category=children").then(r => r.json()).then(setProducts)
-  }, [])
+    fetch(`/api/products?category=children&lang=${lang}`).then(r => r.json()).then(setProducts)
+  }, [lang])
 
   const subs = [...new Set(products.map(p => p.sub))]
   const [activeSub, setActiveSub] = useState<string>("all")

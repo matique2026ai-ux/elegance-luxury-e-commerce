@@ -65,7 +65,7 @@ export function Hero() {
               </div>
 
               <h1
-                className={`${isAr ? "font-arabic" : "font-serif"} text-4xl md:text-5xl lg:text-6xl xl:text-[6rem] ${isAr ? "leading-[1.2]" : "leading-[0.88]"} tracking-tight text-white animate-in fade-in slide-in-from-bottom-8 duration-1000`}
+                className={`${isAr ? "font-arabic" : "font-serif"} text-4xl md:text-5xl lg:text-6xl xl:text-[5.5rem] ${isAr ? "leading-[1.2]" : "leading-[0.88]"} tracking-tight text-white animate-in fade-in slide-in-from-bottom-8 duration-1000`}
                 style={{ animationDelay: "500ms", animationFillMode: "both" }}
               >
                 {t.hero.title1}

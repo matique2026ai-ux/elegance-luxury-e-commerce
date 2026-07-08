@@ -103,7 +103,7 @@ export function FeaturedProducts() {
                   <button
                     type="button"
                     className="w-11 h-11 bg-background/90 backdrop-blur-sm flex items-center justify-center hover:bg-background transition-colors duration-200"
-                    aria-label="Add to favorites"
+                    aria-label={t.featured.addToFavorites}
                   >
                     <Heart className="w-4 h-4" />
                   </button>
@@ -112,7 +112,7 @@ export function FeaturedProducts() {
               <div className="space-y-1">
                 <p className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground">{product.sub}</p>
                 <h3 className="font-serif text-xl group-hover:text-accent transition-colors duration-300">{product.name}</h3>
-                <p className="text-lg">{product.price.toLocaleString()} DZD</p>
+                <p className="text-lg">{product.price.toLocaleString()} {t.products.currency}</p>
               </div>
             </div>
           ))}

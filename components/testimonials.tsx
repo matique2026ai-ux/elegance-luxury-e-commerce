@@ -4,43 +4,20 @@ import { useState } from "react";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { useI18n } from "@/lib/i18n-context";
 
-const testimonials = [
-  {
-    id: 1,
-    quote: "Exceptional quality that you feel from the first touch. Maison Herahima pieces have become my essentials.",
-    author: "Isabelle Laurent",
-    title: "Art Director",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
-  },
-  {
-    id: 2,
-    quote: "The artisanal craftsmanship shows in every detail. It's this attention to detail that makes all the difference.",
-    author: "Alexander Dubois",
-    title: "Interior Architect",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop",
-  },
-  {
-    id: 3,
-    quote: "I discovered Maison Herahima 10 years ago. Since then, I have never been disappointed. A house that honors its promises.",
-    author: "Sophie Marchand",
-    title: "Gallery Owner",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop",
-  },
+const images = [
+  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
+  "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop",
+  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop",
 ];
 
 export function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const { t } = useI18n();
+  const items = t.testimonials.items;
+  const current = items[currentIndex];
 
-  const next = () => {
-    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-  };
-
-  const prev = () => {
-    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-  };
-
-  const current = testimonials[currentIndex];
+  const next = () => setCurrentIndex((prev) => (prev + 1) % items.length);
+  const prev = () => setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
 
   return (
     <section className="py-24 md:py-32 bg-secondary/30">
@@ -57,22 +34,11 @@ export function Testimonials() {
             <p className="text-muted-foreground leading-relaxed">
               {t.testimonials.desc}
             </p>
-
             <div className="flex gap-3 pt-4">
-              <button
-                type="button"
-                onClick={prev}
-                className="w-12 h-12 border border-border flex items-center justify-center hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors duration-300"
-                aria-label="Previous testimonial"
-              >
+              <button type="button" onClick={prev} className="w-12 h-12 border border-border flex items-center justify-center hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors duration-300" aria-label={t.testimonials.prev}>
                 <ChevronLeft className="w-5 h-5" />
               </button>
-              <button
-                type="button"
-                onClick={next}
-                className="w-12 h-12 border border-border flex items-center justify-center hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors duration-300"
-                aria-label="Next testimonial"
-              >
+              <button type="button" onClick={next} className="w-12 h-12 border border-border flex items-center justify-center hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors duration-300" aria-label={t.testimonials.next}>
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>
@@ -80,40 +46,24 @@ export function Testimonials() {
 
           <div className="relative">
             <Quote className="absolute -top-4 -left-4 w-16 h-16 text-accent/20" />
-
             <div className="bg-card p-8 md:p-12 relative">
               <div className="space-y-8">
                 <p className="font-serif text-2xl md:text-3xl lg:text-4xl leading-snug text-balance">
                   &ldquo;{current.quote}&rdquo;
                 </p>
-
                 <div className="flex items-center gap-4 pt-4 border-t border-border">
-                  <img
-                    src={current.image || "/placeholder.svg"}
-                    alt={current.author}
-                    className="w-14 h-14 object-cover"
-                  />
+                  <img src={images[currentIndex]} alt={current.author} className="w-14 h-14 object-cover" />
                   <div>
                     <p className="font-medium">{current.author}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {current.title}
-                    </p>
+                    <p className="text-sm text-muted-foreground">{current.title}</p>
                   </div>
                 </div>
               </div>
-
               <div className="absolute bottom-8 right-8 flex gap-2">
-                {testimonials.map((_, index) => (
-                  <button
-                    key={`indicator-${index}`}
-                    type="button"
-                    onClick={() => setCurrentIndex(index)}
-                    className={`w-2 h-2 transition-all duration-300 ${
-                      index === currentIndex
-                        ? "bg-accent w-8"
-                        : "bg-border hover:bg-muted-foreground"
-                    }`}
-                    aria-label={`Go to testimonial ${index + 1}`}
+                {items.map((_, index) => (
+                  <button key={index} type="button" onClick={() => setCurrentIndex(index)}
+                    className={`w-2 h-2 transition-all duration-300 ${index === currentIndex ? "bg-accent w-8" : "bg-border hover:bg-muted-foreground"}`}
+                    aria-label={`${t.testimonials.goTo} ${index + 1}`}
                   />
                 ))}
               </div>

@@ -15,6 +15,8 @@ export const en = {
     search: "Search",
     account: "Account",
     cart: "Cart",
+    switchLang: "Switch language",
+    toggleMenu: "Toggle menu",
   },
   hero: {
     season: "Spring Collection 2026",
@@ -40,6 +42,7 @@ export const en = {
     womenDesc: "Timeless sophistication for every woman",
     childrenDesc: "Petite luxury for little ones",
     cta: "View All Collections",
+    items: "items",
   },
   featured: {
     label: "Selection",
@@ -52,6 +55,7 @@ export const en = {
     shopMen: "Shop Men",
     shopWomen: "Shop Women",
     shopChildren: "Shop Children",
+    addToFavorites: "Add to favorites",
   },
   heritage: {
     label: "Our Heritage",
@@ -65,6 +69,8 @@ export const en = {
     cta: "Discover Our Story",
     quote: "Excellence is not an act, but a habit.",
     quoteAuthor: "— Henri Herahima, Founder",
+    altImage: "Haute couture elegance in palace setting",
+    playVideo: "Play video",
   },
   personalization: {
     label: "Bespoke Services",
@@ -80,6 +86,7 @@ export const en = {
     bespokeTitle: "Bespoke Creation",
     bespokeDesc: "Commission a one-of-a-kind piece designed exclusively for you. From concept to completion in 12-16 weeks.",
     bespokeCta: "Start Your Project",
+    altMonogram: "Monogram engraving",
   },
   sustainability: {
     label: "Our Commitments",
@@ -126,18 +133,33 @@ export const en = {
     ],
     countries: "Countries Served",
     concierge: "Global Concierge Support",
+    altPackaging: "Luxury packaging",
+    altDelivery: "Luxury delivery",
   },
   testimonials: {
     label: "Testimonials",
     title1: "What Our",
     title2: "Clients Say",
     desc: "For nearly two centuries, we have built precious relationships with our clientele. Here are their testimonials.",
+    prev: "Previous testimonial",
+    next: "Next testimonial",
+    goTo: "Go to testimonial",
+    items: [
+      { quote: "Exceptional quality and craftsmanship. Every piece tells a story of dedication and passion.", author: "Isabelle Laurent", title: "Art Director, Paris" },
+      { quote: "The attention to detail is unparalleled. Wearing Herahima is an experience in itself.", author: "James Whitfield", title: "Collector, London" },
+      { quote: "A true maison de couture that respects tradition while embracing the future. Magnificent.", author: "Aiko Tanaka", title: "Designer, Tokyo" },
+    ],
   },
   journal: {
     label: "The Journal",
     title1: "News &",
     title2: "Inspirations",
     cta: "View All Articles",
+    articles: [
+      { title: "The Art of Leather: A Journey to the Heart of Our Atelier", category: "Craftsmanship", date: "Jan 15, 2026", excerpt: "Discover the secrets of our master artisans who have perpetuated unique expertise since 1847." },
+      { title: "Spring Collection: The Colors of Renaissance", category: "Collections", date: "Jan 10, 2026", excerpt: "This season, our creations are inspired by Florentine gardens and their delicate palette." },
+      { title: "Meet Marie Deschamps, Our Creative Director", category: "Portraits", date: "Jan 5, 2026", excerpt: "An exclusive interview about her vision for fashion and the future of the house." },
+    ],
   },
   boutiques: {
     label: "Our Boutiques",
@@ -146,6 +168,7 @@ export const en = {
     desc: "Discover our collections in an exceptional setting and benefit from personalized advice from our experts.",
     flagship: "Flagship",
     book: "Book Appointment",
+    alt: "Boutique",
   },
   newsletter: {
     label: "Newsletter",
@@ -157,6 +180,8 @@ export const en = {
     privacy: "By subscribing, you agree to our",
     privacyLink: "privacy policy",
     success: "Thank you for subscribing!",
+    error: "Something went wrong. Please try again.",
+    emailLabel: "Email address",
   },
   footer: {
     collections: "Collections",
@@ -176,6 +201,11 @@ export const en = {
     privacy: "Privacy Policy",
     cookies: "Cookies",
     rights: "All rights reserved.",
+    hauteCouture: "Haute Couture",
+    fineJewelry: "Fine Jewelry",
+    leatherGoods: "Leather Goods",
+    fragrances: "Fragrances",
+    accessories: "Accessories",
   },
   language: {
     en: "English",
@@ -186,6 +216,7 @@ export const en = {
     title: "Our Products",
     filter: "Filter",
     sort: "Sort",
+    currency: "DZD",
     categories: {
       men: "Men",
       women: "Women",

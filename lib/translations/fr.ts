@@ -15,6 +15,8 @@ export const fr = {
     search: "Rechercher",
     account: "Compte",
     cart: "Panier",
+    switchLang: "Changer de langue",
+    toggleMenu: "Menu",
   },
   hero: {
     season: "Collection Printemps 2026",
@@ -40,6 +42,7 @@ export const fr = {
     womenDesc: "Une sophistication intemporelle pour chaque femme",
     childrenDesc: "Le petit luxe pour les tout-petits",
     cta: "Voir Toutes les Collections",
+    items: "articles",
   },
   featured: {
     label: "Sélection",
@@ -52,6 +55,7 @@ export const fr = {
     shopMen: "Hommes",
     shopWomen: "Femmes",
     shopChildren: "Enfants",
+    addToFavorites: "Ajouter aux favoris",
   },
   heritage: {
     label: "Notre Patrimoine",
@@ -65,6 +69,8 @@ export const fr = {
     cta: "Découvrir Notre Histoire",
     quote: "L'excellence n'est pas un acte, mais une habitude.",
     quoteAuthor: "— Henri Herahima, Fondateur",
+    altImage: "Élégance haute couture dans un cadre palatial",
+    playVideo: "Lire la vidéo",
   },
   personalization: {
     label: "Services Sur Mesure",
@@ -80,6 +86,7 @@ export const fr = {
     bespokeTitle: "Création Sur Mesure",
     bespokeDesc: "Commandez une pièce unique conçue exclusivement pour vous. De l'esquisse à la réalisation en 12 à 16 semaines.",
     bespokeCta: "Lancer Votre Projet",
+    altMonogram: "Gravure de monogramme",
   },
   sustainability: {
     label: "Nos Engagements",
@@ -126,18 +133,33 @@ export const fr = {
     ],
     countries: "Pays Desservis",
     concierge: "Conciergerie Mondiale 24h/24",
+    altPackaging: "Emballage de luxe",
+    altDelivery: "Livraison de luxe",
   },
   testimonials: {
     label: "Témoignages",
     title1: "Ce que Nos",
     title2: "Clients Disent",
     desc: "Depuis près de deux siècles, nous construisons des relations précieuses avec notre clientèle. Voici leurs témoignages.",
+    prev: "Témoignage précédent",
+    next: "Témoignage suivant",
+    goTo: "Aller au témoignage",
+    items: [
+      { quote: "Une qualité et un savoir-faire exceptionnels. Chaque pièce raconte une histoire de dévouement et de passion.", author: "Isabelle Laurent", title: "Directrice Artistique, Paris" },
+      { quote: "L'attention aux détails est inégalée. Porter Herahima est une expérience en soi.", author: "James Whitfield", title: "Collectionneur, Londres" },
+      { quote: "Une véritable maison de couture qui respecte la tradition tout en embrassant l'avenir. Magnifique.", author: "Aiko Tanaka", title: "Designer, Tokyo" },
+    ],
   },
   journal: {
     label: "Le Journal",
     title1: "Actualités &",
     title2: "Inspirations",
     cta: "Voir Tous les Articles",
+    articles: [
+      { title: "L'Art du Cuir : Voyage au Cœur de Notre Atelier", category: "Savoir-Faire", date: "15 Jan 2026", excerpt: "Découvrez les secrets de nos maîtres artisans qui perpétuent un savoir-faire unique depuis 1847." },
+      { title: "Collection Printemps : Les Couleurs de la Renaissance", category: "Collections", date: "10 Jan 2026", excerpt: "Cette saison, nos créations s'inspirent des jardins florentins et de leur palette délicate." },
+      { title: "Rencontre avec Marie Deschamps, Notre Directrice de Création", category: "Portraits", date: "5 Jan 2026", excerpt: "Un entretien exclusif sur sa vision de la mode et l'avenir de la maison." },
+    ],
   },
   boutiques: {
     label: "Nos Boutiques",
@@ -146,6 +168,7 @@ export const fr = {
     desc: "Découvrez nos collections dans un cadre exceptionnel et bénéficiez de conseils personnalisés de nos experts.",
     flagship: "Phare",
     book: "Prendre Rendez-Vous",
+    alt: "Boutique",
   },
   newsletter: {
     label: "Newsletter",
@@ -157,6 +180,8 @@ export const fr = {
     privacy: "En vous abonnant, vous acceptez notre",
     privacyLink: "politique de confidentialité",
     success: "Merci de votre abonnement !",
+    error: "Une erreur s'est produite. Veuillez réessayer.",
+    emailLabel: "Adresse email",
   },
   footer: {
     collections: "Collections",
@@ -176,6 +201,11 @@ export const fr = {
     privacy: "Confidentialité",
     cookies: "Cookies",
     rights: "Tous droits réservés.",
+    hauteCouture: "Haute Couture",
+    fineJewelry: "Bijouterie Fine",
+    leatherGoods: "Maroquinerie",
+    fragrances: "Parfums",
+    accessories: "Accessoires",
   },
   language: {
     en: "English",
@@ -186,6 +216,7 @@ export const fr = {
     title: "Nos Produits",
     filter: "Filtrer",
     sort: "Trier",
+    currency: "DZD",
     categories: {
       men: "Hommes",
       women: "Femmes",

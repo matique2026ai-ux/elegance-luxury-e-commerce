@@ -3,41 +3,15 @@
 import { ArrowUpRight } from "lucide-react";
 import { useI18n } from "@/lib/i18n-context";
 
-const articles = [
-  {
-    id: 1,
-    title: "The Art of Leather: A Journey to the Heart of Our Atelier",
-    category: "Craftsmanship",
-    date: "Jan 15, 2026",
-    image:
-      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Atelier%20de%20Cuir-CqVgWtJir9DMfqI20dyiHs7hbTe2hG.png",
-    excerpt:
-      "Discover the secrets of our master artisans who have perpetuated unique expertise since 1847.",
-  },
-  {
-    id: 2,
-    title: "Spring Collection: The Colors of Renaissance",
-    category: "Collections",
-    date: "Jan 10, 2026",
-    image:
-      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Collection%20Printemps%20Renaissance-FCjMUb7yRDP99VcIUq2mBLbVOIwaob.png",
-    excerpt:
-      "This season, our creations are inspired by Florentine gardens and their delicate palette.",
-  },
-  {
-    id: 3,
-    title: "Meet Marie Deschamps, Our Creative Director",
-    category: "Portraits",
-    date: "Jan 5, 2026",
-    image:
-      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Portrait%20Directrice%20Cr_ative-1QPQ0NqF2EBtjhlFqoPIoynq4lN3SI.png",
-    excerpt:
-      "An exclusive interview about her vision for fashion and the future of the house.",
-  },
+const images = [
+  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Atelier%20de%20Cuir-CqVgWtJir9DMfqI20dyiHs7hbTe2hG.png",
+  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Collection%20Printemps%20Renaissance-FCjMUb7yRDP99VcIUq2mBLbVOIwaob.png",
+  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Portrait%20Directrice%20Cr_ative-1QPQ0NqF2EBtjhlFqoPIoynq4lN3SI.png",
 ];
 
 export function Journal() {
   const { t } = useI18n();
+  const articles = t.journal.articles;
 
   return (
     <section id="journal" className="py-24 md:py-32">
@@ -65,7 +39,7 @@ export function Journal() {
             <div className="relative overflow-hidden mb-6">
               <div className="aspect-[4/3] lg:aspect-[3/4]">
                 <img
-                  src={articles[0].image || "/placeholder.svg"}
+                  src={images[0]}
                   alt={articles[0].title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
@@ -88,15 +62,15 @@ export function Journal() {
           </article>
 
           <div className="flex flex-col gap-6 md:gap-8">
-            {articles.slice(1).map((article) => (
+            {articles.slice(1).map((article, i) => (
               <article
-                key={article.id}
+                key={i}
                 className="group cursor-pointer grid md:grid-cols-[1fr,1.5fr] gap-4 md:gap-6"
               >
                 <div className="relative overflow-hidden">
                   <div className="aspect-[4/3]">
                     <img
-                      src={article.image || "/placeholder.svg"}
+                      src={images[i + 1]}
                       alt={article.title}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />

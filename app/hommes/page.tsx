@@ -52,7 +52,7 @@ export default function HommesPage() {
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground tracking-wider uppercase">{p.sub}</p>
                 <h3 className="font-serif text-lg">{p.name}</h3>
-                <p className="font-medium">{p.price.toLocaleString()} DZD</p>
+                <p className="font-medium">{p.price.toLocaleString()} {t.products.currency}</p>
               </div>
             </div>
           ))}

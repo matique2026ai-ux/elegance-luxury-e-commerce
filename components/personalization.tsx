@@ -27,7 +27,7 @@ export function Personalization() {
             <div className="aspect-[16/9] lg:aspect-auto lg:h-full relative">
               <img
                 src="https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=900&h=600&fit=crop"
-                alt="Monogram engraving"
+                alt={t.personalization.altMonogram}
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-foreground/90 via-foreground/40 to-transparent" />

@@ -65,7 +65,7 @@ export function Boutiques() {
                 <div className="aspect-[3/2]">
                   <img
                     src={boutique.image || "/placeholder.svg"}
-                    alt={`Boutique ${boutique.city}`}
+                    alt={`${t.boutiques.alt} ${boutique.city}`}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>

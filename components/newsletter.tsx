@@ -55,7 +55,7 @@ export function Newsletter() {
             <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
               <div className="flex-1">
                 <label htmlFor="newsletter-email" className="sr-only">
-                  Email address
+                  {t.newsletter.emailLabel}
                 </label>
                 <input
                   id="newsletter-email"
@@ -79,7 +79,7 @@ export function Newsletter() {
           )}
 
           {status === "error" && (
-            <p className="text-sm text-destructive mt-2">Something went wrong. Please try again.</p>
+            <p className="text-sm text-destructive mt-2">{t.newsletter.error}</p>
           )}
 
           <p className="text-sm text-muted-foreground mt-6">

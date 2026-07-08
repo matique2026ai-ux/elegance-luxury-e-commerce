@@ -15,6 +15,8 @@ export const ar = {
     search: "بحث",
     account: "الحساب",
     cart: "السلة",
+    switchLang: "تغيير اللغة",
+    toggleMenu: "القائمة",
   },
   hero: {
     season: "مجموعة الربيع 2026",
@@ -40,6 +42,7 @@ export const ar = {
     womenDesc: "سحر خالد لكل امرأة",
     childrenDesc: "فخامة مصغرة للصغار",
     cta: "عرض كل المجموعات",
+    items: "قطعة",
   },
   featured: {
     label: "الاختيار",
@@ -52,6 +55,7 @@ export const ar = {
     shopMen: "رجال",
     shopWomen: "نساء",
     shopChildren: "أطفال",
+    addToFavorites: "أضف إلى المفضلة",
   },
   heritage: {
     label: "إرثنا",
@@ -65,6 +69,8 @@ export const ar = {
     cta: "اكتشف قصتنا",
     quote: "التميز ليس فعلًا، بل عادة.",
     quoteAuthor: "— هنري هراهيمـا، المؤسس",
+    altImage: "أناقة haute couture في قصر فخم",
+    playVideo: "تشغيل الفيديو",
   },
   personalization: {
     label: "خدمات حسب الطلب",
@@ -80,6 +86,7 @@ export const ar = {
     bespokeTitle: "تصميم حسب الطلب",
     bespokeDesc: "اطلب قطعة فريدة مصممة خصيصًا لك. من الفكرة إلى الإنجاز في 12-16 أسبوعًا.",
     bespokeCta: "ابدأ مشروعك",
+    altMonogram: "نقش الأحرف الأولى",
   },
   sustainability: {
     label: "التزاماتنا",
@@ -126,18 +133,33 @@ export const ar = {
     ],
     countries: "دولة مخدومة",
     concierge: "دعم كونسيرج عالمي 24/7",
+    altPackaging: "تغليف فاخر",
+    altDelivery: "توصيل فاخر",
   },
   testimonials: {
     label: "شهادات",
     title1: "ماذا يقول",
     title2: "عملاؤنا",
     desc: "على مدار ما يقرب من قرنين، بنينا علاقات ثمينة مع عملائنا. هذه شهاداتهم.",
+    prev: "الشهادة السابقة",
+    next: "الشهادة التالية",
+    goTo: "انتقل إلى الشهادة",
+    items: [
+      { quote: "جودة وحرفية استثنائية. كل قطعة تروي قصة من التفاني والشغف.", author: "إيزابيل لوران", title: "مخرجة فنية، باريس" },
+      { quote: "الاهتمام بالتفاصيل لا مثيل له. ارتداء هراهيمـا تجربة بحد ذاتها.", author: "جيمس وايتفيلد", title: "جامع تحف، لندن" },
+      { quote: "دار أزياء حقيقية تحترم التقاليد وتحتضن المستقبل. رائع.", author: "آيكو تاناكا", title: "مصممة، طوكيو" },
+    ],
   },
   journal: {
     label: "المجلة",
     title1: "أخبار",
     title2: "وإلهام",
     cta: "عرض كل المقالات",
+    articles: [
+      { title: "فن الجلد: رحلة إلى قلب مشغلنا", category: "حرفية", date: "15 يناير 2026", excerpt: "اكتشف أسرار حرفيينا المتمرسين الذين يواصلون خبرتهم الفريدة منذ 1847." },
+      { title: "مجموعة الربيع: ألوان النهضة", category: "مجموعات", date: "10 يناير 2026", excerpt: "هذا الموسم، إبداعاتنا مستوحاة من الحدائق الفلورنسية ولوحاتها الرقيقة." },
+      { title: "لقاء مع ماري ديشام، مخرجتنا الإبداعية", category: "بورتريهات", date: "5 يناير 2026", excerpt: "مقابلة حصرية حول رؤيتها للموضة ومستقبل الدار." },
+    ],
   },
   boutiques: {
     label: "متاجرنا",
@@ -146,6 +168,7 @@ export const ar = {
     desc: "اكتشف مجموعاتنا في أجواء استثنائية واستفد من النصائح الشخصية من خبرائنا.",
     flagship: "الرئيسي",
     book: "احجز موعدًا",
+    alt: "متجر",
   },
   newsletter: {
     label: "النشرة البريدية",
@@ -157,6 +180,8 @@ export const ar = {
     privacy: "بالاشتراك، أنت توافق على",
     privacyLink: "سياسة الخصوصية",
     success: "شكرًا لاشتراكك!",
+    error: "حدث خطأ. الرجاء المحاولة مرة أخرى.",
+    emailLabel: "البريد الإلكتروني",
   },
   footer: {
     collections: "المجموعات",
@@ -176,6 +201,11 @@ export const ar = {
     privacy: "سياسة الخصوصية",
     cookies: "ملفات تعريف الارتباط",
     rights: "جميع الحقوق محفوظة.",
+    hauteCouture: "الأزياء الراقية",
+    fineJewelry: "المجوهرات الفاخرة",
+    leatherGoods: "المنتجات الجلدية",
+    fragrances: "العطور",
+    accessories: "الإكسسوارات",
   },
   language: {
     en: "English",
@@ -186,6 +216,7 @@ export const ar = {
     title: "منتجاتنا",
     filter: "تصفية",
     sort: "ترتيب",
+    currency: "د.ج",
     categories: {
       men: "رجال",
       women: "نساء",

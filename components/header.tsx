@@ -45,7 +45,7 @@ export function Header() {
                   type="button"
                   onClick={() => setLangOpen(!langOpen)}
                   className="p-2 min-h-11 min-w-11 flex items-center justify-center gap-1 hover:text-accent transition-colors duration-300 text-xs tracking-widest uppercase"
-                  aria-label="Switch language"
+                  aria-label={t.header.switchLang}
                 >
                   <Globe className="w-4 h-4" />
                   <span>{lang.toUpperCase()}</span>
@@ -145,7 +145,7 @@ export function Header() {
               type="button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="p-2 min-h-11 min-w-11 flex items-center justify-center"
-              aria-label="Toggle menu"
+              aria-label={t.header.toggleMenu}
             >
               {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>

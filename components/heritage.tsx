@@ -59,14 +59,14 @@ export function Heritage() {
             <div className="relative aspect-[4/5] lg:aspect-[3/4]">
               <img
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Upscaled%20Image%20%282%29-qsHmoJIZtkh9Zw7PIDspOZVh50aE2F.png"
-                alt="Haute couture elegance in palace setting"
+                alt={t.heritage.altImage}
                 className="w-full h-full object-cover"
               />
 
               <button
                 type="button"
                 className="absolute inset-0 flex items-center justify-center group"
-                aria-label="Play video"
+                aria-label={t.heritage.playVideo}
               >
                 <div className="w-20 h-20 md:w-24 md:h-24 border-2 border-background/80 flex items-center justify-center group-hover:bg-background/20 transition-colors duration-300">
                   <Play className="w-8 h-8 text-background ml-1" />

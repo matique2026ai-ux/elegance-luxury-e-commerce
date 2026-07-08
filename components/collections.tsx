@@ -71,7 +71,7 @@ export function Collections() {
                   <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent" />
                   <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
                     <p className="text-[10px] tracking-[0.3em] uppercase text-background/70 mb-2">
-                      {cat.count} items
+                      {cat.count} {t.collections.items}
                     </p>
                     <h3 className="font-serif text-3xl md:text-4xl text-background mb-2">
                       {info.name}

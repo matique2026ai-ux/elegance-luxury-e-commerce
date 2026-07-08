@@ -63,11 +63,11 @@ export function Footer() {
           <div className="space-y-6">
             <h3 className="text-sm tracking-[0.2em] uppercase">{t.footer.collections}</h3>
             <ul className="space-y-3 text-sm text-primary-foreground/70">
-              <li><Link href="#" className="hover:text-primary-foreground transition-colors duration-300">Haute Couture</Link></li>
-              <li><Link href="#" className="hover:text-primary-foreground transition-colors duration-300">Fine Jewelry</Link></li>
-              <li><Link href="#" className="hover:text-primary-foreground transition-colors duration-300">Leather Goods</Link></li>
-              <li><Link href="#" className="hover:text-primary-foreground transition-colors duration-300">Fragrances</Link></li>
-              <li><Link href="#" className="hover:text-primary-foreground transition-colors duration-300">Accessories</Link></li>
+              <li><Link href="#" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.hauteCouture}</Link></li>
+              <li><Link href="#" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.fineJewelry}</Link></li>
+              <li><Link href="#" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.leatherGoods}</Link></li>
+              <li><Link href="#" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.fragrances}</Link></li>
+              <li><Link href="#" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.accessories}</Link></li>
             </ul>
           </div>
 

@@ -6,7 +6,8 @@ import { useI18n } from "@/lib/i18n-context";
 
 export function Hero() {
   const [scrollY, setScrollY] = useState(0);
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const isAr = lang === "ar";
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -15,9 +16,9 @@ export function Hero() {
   }, []);
 
   return (
-    <section className="relative h-screen overflow-hidden">
+    <section className="relative h-screen">
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 overflow-hidden"
         style={{ transform: `translateY(${scrollY * 0.3}px)` }}
       >
         <video
@@ -29,6 +30,7 @@ export function Hero() {
           className="absolute inset-0 w-full h-[120%] object-cover"
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/hero-jYfS4M6jRWnwCXxBXYxycBc7Ke4IOr.mp4"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/30" />
       </div>
 
       <div className="absolute inset-0 hidden lg:flex justify-between px-12 pointer-events-none">
@@ -48,7 +50,7 @@ export function Hero() {
         }}
       />
 
-      <div className="relative z-10 h-full flex flex-col justify-end pb-16 md:pb-24 lg:pb-32">
+      <div className="relative z-10 h-full flex flex-col justify-center pb-16 md:pb-20 lg:pb-24">
         <div className="max-w-[1800px] mx-auto px-6 md:px-12 w-full">
           <div className="grid lg:grid-cols-12 gap-8 items-end">
             <div className="lg:col-span-8 space-y-8">
@@ -63,12 +65,12 @@ export function Hero() {
               </div>
 
               <h1
-                className="font-serif text-5xl md:text-7xl lg:text-8xl xl:text-[9rem] leading-[0.88] tracking-tight text-white animate-in fade-in slide-in-from-bottom-8 duration-1000"
+                className={`${isAr ? "font-arabic" : "font-serif"} text-4xl md:text-5xl lg:text-6xl xl:text-[6rem] ${isAr ? "leading-[1.2]" : "leading-[0.88]"} tracking-tight text-white animate-in fade-in slide-in-from-bottom-8 duration-1000`}
                 style={{ animationDelay: "500ms", animationFillMode: "both" }}
               >
                 {t.hero.title1}
-                <br />
-                <span className="italic text-[#c9a962]">
+                {isAr ? " " : <br />}
+                <span className={`text-[#c9a962] ${isAr ? "" : "italic"}`}>
                   {t.hero.title2}
                 </span>{" "}
                 {t.hero.title3}

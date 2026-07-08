@@ -2,8 +2,6 @@
 
 import { Suspense, useState, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import { useI18n } from "@/lib/i18n-context"
 import { useCart } from "@/context/cart-context"
 import { useFavorites } from "@/context/favorites-context"
@@ -131,7 +129,6 @@ export default function ProductsPage() {
 
   return (
     <main className="min-h-screen">
-      <Header />
       <div className="pt-32 pb-16">
         <div className="max-w-[1800px] mx-auto px-6 md:px-12">
           <div className="text-center mb-16">
@@ -142,7 +139,6 @@ export default function ProductsPage() {
           </Suspense>
         </div>
       </div>
-      <Footer />
     </main>
   )
 }

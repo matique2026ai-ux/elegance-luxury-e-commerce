@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { Heart, ShoppingBag } from "lucide-react"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import { useI18n } from "@/lib/i18n-context"
 import { useCart } from "@/context/cart-context"
 import { useFavorites } from "@/context/favorites-context"
@@ -37,7 +35,6 @@ export default function FemmesPage() {
 
   return (
     <div className="min-h-screen pt-28 pb-24">
-      <Header />
       <div className="max-w-[1800px] mx-auto px-6 md:px-12">
         <div className="text-center mb-16">
           <p className="text-sm tracking-[0.3em] uppercase text-muted-foreground mb-4">{t.featured.shopWomen}</p>
@@ -69,7 +66,6 @@ export default function FemmesPage() {
           ))}
         </div>
       </div>
-      <Footer />
     </div>
   )
 }

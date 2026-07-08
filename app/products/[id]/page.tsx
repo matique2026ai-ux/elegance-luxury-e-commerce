@@ -4,8 +4,6 @@ import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
 import { Heart, ShoppingBag, ChevronLeft } from "lucide-react"
 import Link from "next/link"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import { useI18n } from "@/lib/i18n-context"
 import { useCart } from "@/context/cart-context"
 import { useFavorites } from "@/context/favorites-context"
@@ -42,7 +40,6 @@ export default function ProductDetail() {
 
   return (
     <div className="min-h-screen">
-      <Header />
       <div className="pt-28 pb-24">
         <div className="max-w-[1800px] mx-auto px-6 md:px-12">
           <Link href="/products" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8">
@@ -97,7 +94,6 @@ export default function ProductDetail() {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   )
 }

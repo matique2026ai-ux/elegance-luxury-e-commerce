@@ -2,8 +2,6 @@
 
 import { Heart, ShoppingBag, User, MapPin, LogOut } from "lucide-react"
 import Link from "next/link"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import { useI18n } from "@/lib/i18n-context"
 
 export default function AccountPage() {
@@ -11,7 +9,6 @@ export default function AccountPage() {
 
   return (
     <div className="min-h-screen">
-      <Header />
       <div className="pt-28 pb-24">
         <div className="max-w-[1800px] mx-auto px-6 md:px-12">
           <h1 className="font-serif text-4xl md:text-5xl tracking-tight mb-12">{t.header.account}</h1>
@@ -40,7 +37,6 @@ export default function AccountPage() {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   )
 }

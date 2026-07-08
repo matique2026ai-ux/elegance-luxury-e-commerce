@@ -3,8 +3,6 @@
 import { useState, useEffect } from "react"
 import { Heart, ShoppingBag } from "lucide-react"
 import Link from "next/link"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import { useFavorites } from "@/context/favorites-context"
 import { useCart } from "@/context/cart-context"
 import { useI18n } from "@/lib/i18n-context"
@@ -17,7 +15,6 @@ export default function FavoritesPage() {
 
   return (
     <div className="min-h-screen pt-28 pb-24">
-      <Header />
       <div className="max-w-[1800px] mx-auto px-6 md:px-12">
         <div className="text-center mb-16">
           <h1 className="font-serif text-5xl md:text-7xl tracking-tight mb-6">Favorites</h1>
@@ -52,7 +49,6 @@ export default function FavoritesPage() {
           </div>
         )}
       </div>
-      <Footer />
     </div>
   )
 }

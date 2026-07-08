@@ -1,22 +1,11 @@
-"use client"
-
-import { useState, useEffect } from "react"
 import { Play } from "lucide-react"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
-import { useI18n } from "@/lib/i18n-context"
+import { getPageData } from "@/lib/server-i18n"
 
-export default function HeritagePage() {
-  const { t, lang } = useI18n()
-  const [content, setContent] = useState<{ title: string; subtitle: string; description: string; images: string[] } | null>(null)
-
-  useEffect(() => {
-    fetch(`/api/content?page=heritage&lang=${lang}`).then(r => r.json()).then(setContent)
-  }, [lang])
+export default async function HeritagePage() {
+  const { t, content } = await getPageData('heritage')
 
   return (
     <div className="min-h-screen pt-28">
-      <Header />
       <div className="bg-primary text-primary-foreground py-24 md:py-32">
         <div className="max-w-[1800px] mx-auto px-6 md:px-12">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
@@ -59,7 +48,6 @@ export default function HeritagePage() {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   )
 }

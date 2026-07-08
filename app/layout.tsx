@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { I18nProvider } from "@/lib/i18n-context";
 import { CartProvider } from "@/context/cart-context";
 import { FavoritesProvider } from "@/context/favorites-context";
+import { SiteShell } from "@/components/site-shell";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -66,7 +67,9 @@ export default function RootLayout({
         <I18nProvider>
           <CartProvider>
             <FavoritesProvider>
-              {children}
+              <SiteShell>
+                {children}
+              </SiteShell>
             </FavoritesProvider>
           </CartProvider>
         </I18nProvider>

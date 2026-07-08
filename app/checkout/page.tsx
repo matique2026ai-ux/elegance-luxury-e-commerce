@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import { wilayas } from "@/lib/wilayas"
 import { useI18n } from "@/lib/i18n-context"
 import { useCart } from "@/context/cart-context"
@@ -51,21 +49,18 @@ export default function CheckoutPage() {
   if (items.length === 0 && step !== "done") {
     return (
       <main className="min-h-screen">
-        <Header />
         <div className="pt-32 pb-16 text-center">
           <h1 className="font-serif text-3xl mb-4">{c.emptyCart}</h1>
           <button onClick={() => router.push("/products")} className="border border-primary text-primary px-8 py-3 text-sm tracking-[0.2em] uppercase hover:bg-primary hover:text-primary-foreground transition-all">
             {c.browseProducts}
           </button>
         </div>
-        <Footer />
       </main>
     )
   }
 
   return (
     <main className="min-h-screen">
-      <Header />
       <div className="pt-32 pb-16">
         <div className="max-w-[1200px] mx-auto px-6 md:px-12">
           {step === "done" ? (
@@ -177,7 +172,6 @@ export default function CheckoutPage() {
           )}
         </div>
       </div>
-      <Footer />
     </main>
   )
 }

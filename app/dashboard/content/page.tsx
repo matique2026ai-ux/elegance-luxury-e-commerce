@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Pencil } from "lucide-react"
+import { useI18n } from "@/lib/i18n-context"
 
 interface PageContent {
   page: string
@@ -18,6 +19,8 @@ export default function DashboardContent() {
   const [contentMap, setContentMap] = useState<Record<string, PageContent>>({})
   const [editing, setEditing] = useState<string | null>(null)
   const [form, setForm] = useState({ title: "", subtitle: "", description: "", published: true })
+  const { t } = useI18n()
+  const d = t.dashboard.content
 
   useEffect(() => {
     fetch("/api/content").then(r => r.json()).then((data: PageContent[]) => {
@@ -47,7 +50,7 @@ export default function DashboardContent() {
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
-        <h1 className="font-serif text-3xl md:text-4xl tracking-tight">Content Management</h1>
+        <h1 className="font-serif text-3xl md:text-4xl tracking-tight">{d.heading}</h1>
       </div>
 
       <div className="grid gap-6">
@@ -58,31 +61,31 @@ export default function DashboardContent() {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h2 className="font-serif text-xl capitalize mb-1">{page}</h2>
-                  <p className="text-sm text-muted-foreground">{c?.title || "No title set"}</p>
+                  <p className="text-sm text-muted-foreground">{c?.title || d.noTitle}</p>
                 </div>
                 <button type="button" onClick={() => editPage(page)} className="p-2 hover:bg-secondary transition-colors"><Pencil className="w-4 h-4" /></button>
               </div>
               {editing === page ? (
                 <div className="space-y-4 mt-4 pt-4 border-t border-border">
                   <div>
-                    <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">Title</label>
+                    <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">{d.form.title}</label>
                     <input type="text" value={form.title} onChange={e => setForm(prev => ({ ...prev, title: e.target.value }))} className="w-full bg-secondary/50 border border-border px-4 py-2 text-sm focus:outline-none focus:border-accent" />
                   </div>
                   <div>
-                    <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">Subtitle</label>
+                    <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">{d.form.subtitle}</label>
                     <input type="text" value={form.subtitle} onChange={e => setForm(prev => ({ ...prev, subtitle: e.target.value }))} className="w-full bg-secondary/50 border border-border px-4 py-2 text-sm focus:outline-none focus:border-accent" />
                   </div>
                   <div>
-                    <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">Description</label>
+                    <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">{d.form.description}</label>
                     <textarea value={form.description} onChange={e => setForm(prev => ({ ...prev, description: e.target.value }))} rows={4} className="w-full bg-secondary/50 border border-border px-4 py-2 text-sm focus:outline-none focus:border-accent" />
                   </div>
                   <div className="flex items-center gap-3">
                     <input type="checkbox" id="published" checked={form.published} onChange={e => setForm(prev => ({ ...prev, published: e.target.checked }))} className="w-4 h-4 accent-accent" />
-                    <label htmlFor="published" className="text-sm">Published</label>
+                    <label htmlFor="published" className="text-sm">{d.form.published}</label>
                   </div>
                   <div className="flex gap-3">
-                    <button type="button" onClick={save} className="bg-primary text-primary-foreground px-6 py-2 text-sm tracking-wider uppercase hover:bg-primary/90 transition-colors">Save</button>
-                    <button type="button" onClick={() => setEditing(null)} className="px-6 py-2 text-sm tracking-wider uppercase hover:bg-secondary transition-colors">Cancel</button>
+                    <button type="button" onClick={save} className="bg-primary text-primary-foreground px-6 py-2 text-sm tracking-wider uppercase hover:bg-primary/90 transition-colors">{d.form.save}</button>
+                    <button type="button" onClick={() => setEditing(null)} className="px-6 py-2 text-sm tracking-wider uppercase hover:bg-secondary transition-colors">{d.form.cancel}</button>
                   </div>
                 </div>
               ) : null}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { MapPin, Phone, Clock } from "lucide-react"
+import { Header } from "@/components/header"
 import { useI18n } from "@/lib/i18n-context"
 
 const boutiques = [
@@ -20,6 +21,7 @@ export default function BoutiquesPage() {
 
   return (
     <div className="min-h-screen pt-28">
+      <Header />
       <div className="py-24 md:py-32">
         <div className="max-w-[1800px] mx-auto px-6 md:px-12">
           <div className="text-center mb-16 md:mb-24">

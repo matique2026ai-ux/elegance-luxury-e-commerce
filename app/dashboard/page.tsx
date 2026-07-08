@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Users, Calendar, Mail, ShoppingBag } from "lucide-react"
+import { useI18n } from "@/lib/i18n-context"
 
 interface Stats {
   totalSubscribers: number
@@ -10,15 +11,17 @@ interface Stats {
   totalAppointments: number
 }
 
-const statCards = [
-  { key: "totalAppointments" as const, label: "Appointments", icon: Calendar, color: "text-blue-600 bg-blue-100" },
-  { key: "pendingAppointments" as const, label: "Pending", icon: ShoppingBag, color: "text-amber-600 bg-amber-100" },
-  { key: "unreadMessages" as const, label: "Unread Messages", icon: Mail, color: "text-rose-600 bg-rose-100" },
-  { key: "totalSubscribers" as const, label: "Subscribers", icon: Users, color: "text-emerald-600 bg-emerald-100" },
-]
-
 export default function DashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null)
+  const { t } = useI18n()
+  const d = t.dashboard.overview
+
+  const statCards = [
+    { key: "totalAppointments" as const, label: d.appointments, icon: Calendar, color: "text-blue-600 bg-blue-100" },
+    { key: "pendingAppointments" as const, label: d.pending, icon: ShoppingBag, color: "text-amber-600 bg-amber-100" },
+    { key: "unreadMessages" as const, label: d.unreadMessages, icon: Mail, color: "text-rose-600 bg-rose-100" },
+    { key: "totalSubscribers" as const, label: d.subscribers, icon: Users, color: "text-emerald-600 bg-emerald-100" },
+  ]
 
   useEffect(() => {
     fetch("/api/newsletter")
@@ -41,7 +44,7 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <h1 className="font-serif text-3xl md:text-4xl tracking-tight mb-8">Dashboard Overview</h1>
+      <h1 className="font-serif text-3xl md:text-4xl tracking-tight mb-8">{d.heading}</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         {statCards.map(({ key, label, icon: Icon, color }) => (
@@ -59,40 +62,40 @@ export default function DashboardPage() {
 
       <div className="grid lg:grid-cols-2 gap-8">
         <div className="bg-card border border-border p-6">
-          <h2 className="font-serif text-xl mb-4">Quick Actions</h2>
+          <h2 className="font-serif text-xl mb-4">{d.quickActions}</h2>
           <div className="space-y-3">
             <a href="/dashboard/products" className="block px-4 py-3 bg-secondary/50 hover:bg-secondary transition-colors text-sm">
-              → Manage Products
+              {d.manageProducts}
             </a>
             <a href="/dashboard/appointments" className="block px-4 py-3 bg-secondary/50 hover:bg-secondary transition-colors text-sm">
-              → View Appointments
+              {d.viewAppointments}
             </a>
             <a href="/dashboard/messages" className="block px-4 py-3 bg-secondary/50 hover:bg-secondary transition-colors text-sm">
-              → Check Messages
+              {d.checkMessages}
             </a>
             <a href="/dashboard/subscribers" className="block px-4 py-3 bg-secondary/50 hover:bg-secondary transition-colors text-sm">
-              → View Subscribers
+              {d.viewSubscribers}
             </a>
           </div>
         </div>
 
         <div className="bg-card border border-border p-6">
-          <h2 className="font-serif text-xl mb-4">Store Info</h2>
+          <h2 className="font-serif text-xl mb-4">{d.storeInfo}</h2>
           <div className="space-y-3 text-sm">
             <div className="flex justify-between py-2 border-b border-border">
-              <span className="text-muted-foreground">Store Name</span>
+              <span className="text-muted-foreground">{d.storeName}</span>
               <span className="font-medium">MAISON HERAHIMA</span>
             </div>
             <div className="flex justify-between py-2 border-b border-border">
-              <span className="text-muted-foreground">Status</span>
-              <span className="text-emerald-600 font-medium">● Live</span>
+              <span className="text-muted-foreground">{d.status}</span>
+              <span className="text-emerald-600 font-medium">{d.live}</span>
             </div>
             <div className="flex justify-between py-2 border-b border-border">
-              <span className="text-muted-foreground">Languages</span>
+              <span className="text-muted-foreground">{d.languages}</span>
               <span className="font-medium">EN / FR / AR</span>
             </div>
             <div className="flex justify-between py-2">
-              <span className="text-muted-foreground">Version</span>
+              <span className="text-muted-foreground">{d.version}</span>
               <span className="font-medium">v1.0</span>
             </div>
           </div>

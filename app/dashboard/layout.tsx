@@ -4,19 +4,24 @@ import React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { LayoutDashboard, Package, Calendar, Mail, Users, ShoppingBag, ChevronLeft, FileText } from "lucide-react"
+import { useI18n } from "@/lib/i18n-context"
 
-const sidebarLinks = [
-  { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
-  { href: "/dashboard/orders", label: "Orders", icon: ShoppingBag },
-  { href: "/dashboard/products", label: "Products", icon: Package },
-  { href: "/dashboard/content", label: "Content", icon: FileText },
-  { href: "/dashboard/appointments", label: "Appointments", icon: Calendar },
-  { href: "/dashboard/messages", label: "Messages", icon: Mail },
-  { href: "/dashboard/subscribers", label: "Subscribers", icon: Users },
-]
+const sidebarIcons = {
+  overview: LayoutDashboard,
+  orders: ShoppingBag,
+  products: Package,
+  content: FileText,
+  appointments: Calendar,
+  messages: Mail,
+  subscribers: Users,
+} as const
+
+const sidebarItems = ["overview", "orders", "products", "content", "appointments", "messages", "subscribers"] as const
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const { t } = useI18n()
+  const d = t.dashboard
 
   return (
     <div className="min-h-screen bg-secondary/20 flex">
@@ -26,11 +31,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             MAISON
             <span className="block text-[0.6em] tracking-[0.3em] text-primary-foreground/60">HERAHIMA</span>
           </Link>
-          <p className="text-[10px] tracking-[0.3em] uppercase text-primary-foreground/40 mt-2">Dashboard</p>
+          <p className="text-[10px] tracking-[0.3em] uppercase text-primary-foreground/40 mt-2">{d.nav.dashboard}</p>
         </div>
 
         <nav className="flex-1 p-4 space-y-1">
-          {sidebarLinks.map(({ href, label, icon: Icon }) => {
+          {sidebarItems.map((key) => {
+            const href = key === "overview" ? "/dashboard" : `/dashboard/${key}`
+            const Icon = sidebarIcons[key]
             const active = pathname === href
             return (
               <Link
@@ -41,7 +48,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 }`}
               >
                 <Icon className="w-4 h-4" />
-                {label}
+                {d.nav[key]}
               </Link>
             )
           })}
@@ -53,7 +60,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             className="flex items-center gap-3 px-4 py-3 text-sm tracking-wider text-primary-foreground/70 hover:bg-primary-foreground/10 transition-all duration-200"
           >
             <ChevronLeft className="w-4 h-4" />
-            Back to Site
+            {d.nav.backToSite}
           </Link>
         </div>
       </aside>

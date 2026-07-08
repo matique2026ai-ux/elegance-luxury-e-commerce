@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Play } from "lucide-react"
+import { Header } from "@/components/header"
 import { useI18n } from "@/lib/i18n-context"
 
 export default function HeritagePage() {
@@ -14,6 +15,7 @@ export default function HeritagePage() {
 
   return (
     <div className="min-h-screen pt-28">
+      <Header />
       <div className="bg-primary text-primary-foreground py-24 md:py-32">
         <div className="max-w-[1800px] mx-auto px-6 md:px-12">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">

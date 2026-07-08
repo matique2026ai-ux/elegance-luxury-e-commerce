@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useI18n } from "@/lib/i18n-context"
 
 interface Order {
   id: string
@@ -23,6 +24,8 @@ const statusColors: Record<string, string> = {
 
 export default function DashboardOrders() {
   const [orders, setOrders] = useState<Order[]>([])
+  const { t } = useI18n()
+  const d = t.dashboard.orders
 
   useEffect(() => {
     fetch("/api/orders").then(r => r.json()).then(setOrders)
@@ -30,17 +33,17 @@ export default function DashboardOrders() {
 
   return (
     <div>
-      <h1 className="font-serif text-3xl md:text-4xl tracking-tight mb-8">Orders</h1>
+      <h1 className="font-serif text-3xl md:text-4xl tracking-tight mb-8">{d.heading}</h1>
 
       <div className="space-y-4">
         {orders.length === 0 && (
-          <p className="text-center text-muted-foreground py-12">No orders yet.</p>
+          <p className="text-center text-muted-foreground py-12">{d.noOrders}</p>
         )}
         {orders.map((o) => (
           <div key={o.id} className="bg-card border border-border p-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
               <div>
-                <span className="text-xs text-muted-foreground">Order #{o.id}</span>
+                <span className="text-xs text-muted-foreground">{d.orderPrefix}{o.id}</span>
                 <p className="font-medium">{o.customer.name}</p>
                 <p className="text-sm text-muted-foreground">{o.customer.phone} — {o.customer.wilaya}, {o.customer.commune}</p>
               </div>
@@ -56,10 +59,10 @@ export default function DashboardOrders() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-left text-muted-foreground text-[10px] tracking-[0.2em] uppercase">
-                    <th className="pb-2">Item</th>
-                    <th className="pb-2">Category</th>
-                    <th className="pb-2">Qty</th>
-                    <th className="pb-2 text-right">Price</th>
+                    <th className="pb-2">{d.table.item}</th>
+                    <th className="pb-2">{d.table.category}</th>
+                    <th className="pb-2">{d.table.qty}</th>
+                    <th className="pb-2 text-right">{d.table.price}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -74,11 +77,11 @@ export default function DashboardOrders() {
                 </tbody>
                 <tfoot>
                   <tr className="border-t border-border">
-                    <td colSpan={3} className="py-2 text-right text-muted-foreground">Shipping</td>
+                    <td colSpan={3} className="py-2 text-right text-muted-foreground">{d.shipping}</td>
                     <td className="py-2 text-right">${o.shippingPrice.toLocaleString()}</td>
                   </tr>
                   <tr>
-                    <td colSpan={3} className="py-2 text-right font-medium">Total</td>
+                    <td colSpan={3} className="py-2 text-right font-medium">{d.total}</td>
                     <td className="py-2 text-right font-serif text-lg text-accent">${o.grandTotal.toLocaleString()}</td>
                   </tr>
                 </tfoot>

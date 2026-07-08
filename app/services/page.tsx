@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Package, Truck, RotateCcw, Headphones, type LucideIcon } from "lucide-react"
+import { Header } from "@/components/header"
 import { useI18n } from "@/lib/i18n-context"
 
 const icons: LucideIcon[] = [Truck, Package, RotateCcw, Headphones]
@@ -16,6 +17,7 @@ export default function ServicesPage() {
 
   return (
     <div className="min-h-screen pt-28">
+      <Header />
       <div className="py-24 md:py-32 bg-secondary/20">
         <div className="max-w-[1800px] mx-auto px-6 md:px-12">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Check, X, Trash2 } from "lucide-react"
+import { useI18n } from "@/lib/i18n-context"
 
 interface Appointment {
   id: string
@@ -16,6 +17,8 @@ interface Appointment {
 
 export default function DashboardAppointments() {
   const [appointments, setAppointments] = useState<Appointment[]>([])
+  const { t } = useI18n()
+  const d = t.dashboard.appointments
 
   useEffect(() => {
     fetch("/api/appointment").then(r => r.json()).then(setAppointments)
@@ -28,22 +31,22 @@ export default function DashboardAppointments() {
 
   return (
     <div>
-      <h1 className="font-serif text-3xl md:text-4xl tracking-tight mb-8">Appointments</h1>
+      <h1 className="font-serif text-3xl md:text-4xl tracking-tight mb-8">{d.heading}</h1>
 
       <div className="bg-card border border-border overflow-hidden">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border bg-secondary/50">
-              <th className="text-left px-6 py-4 tracking-[0.1em] uppercase text-muted-foreground font-medium">Client</th>
-              <th className="text-left px-6 py-4 tracking-[0.1em] uppercase text-muted-foreground font-medium">Contact</th>
-              <th className="text-left px-6 py-4 tracking-[0.1em] uppercase text-muted-foreground font-medium">Date</th>
-              <th className="text-left px-6 py-4 tracking-[0.1em] uppercase text-muted-foreground font-medium">Status</th>
-              <th className="text-right px-6 py-4 tracking-[0.1em] uppercase text-muted-foreground font-medium">Actions</th>
+              <th className="text-left px-6 py-4 tracking-[0.1em] uppercase text-muted-foreground font-medium">{d.table.client}</th>
+              <th className="text-left px-6 py-4 tracking-[0.1em] uppercase text-muted-foreground font-medium">{d.table.contact}</th>
+              <th className="text-left px-6 py-4 tracking-[0.1em] uppercase text-muted-foreground font-medium">{d.table.date}</th>
+              <th className="text-left px-6 py-4 tracking-[0.1em] uppercase text-muted-foreground font-medium">{d.table.status}</th>
+              <th className="text-right px-6 py-4 tracking-[0.1em] uppercase text-muted-foreground font-medium">{d.table.actions}</th>
             </tr>
           </thead>
           <tbody>
             {appointments.length === 0 && (
-              <tr><td colSpan={5} className="px-6 py-12 text-center text-muted-foreground">No appointments yet.</td></tr>
+              <tr><td colSpan={5} className="px-6 py-12 text-center text-muted-foreground">{d.noAppointments}</td></tr>
             )}
             {appointments.map((a) => (
               <tr key={a.id} className="border-b border-border last:border-0 hover:bg-secondary/30 transition-colors">
@@ -69,8 +72,8 @@ export default function DashboardAppointments() {
                   <div className="flex items-center justify-end gap-2">
                     {a.status === "pending" && (
                       <>
-                        <button type="button" onClick={() => updateStatus(a.id, "confirmed")} className="p-2 hover:bg-emerald-100 hover:text-emerald-700 transition-colors" aria-label="Confirm"><Check className="w-4 h-4" /></button>
-                        <button type="button" onClick={() => updateStatus(a.id, "cancelled")} className="p-2 hover:bg-rose-100 hover:text-rose-700 transition-colors" aria-label="Cancel"><X className="w-4 h-4" /></button>
+                        <button type="button" onClick={() => updateStatus(a.id, "confirmed")} className="p-2 hover:bg-emerald-100 hover:text-emerald-700 transition-colors" aria-label={d.confirmAria}><Check className="w-4 h-4" /></button>
+                        <button type="button" onClick={() => updateStatus(a.id, "cancelled")} className="p-2 hover:bg-rose-100 hover:text-rose-700 transition-colors" aria-label={d.cancelAria}><X className="w-4 h-4" /></button>
                       </>
                     )}
                   </div>

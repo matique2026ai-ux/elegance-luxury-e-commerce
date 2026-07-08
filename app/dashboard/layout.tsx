@@ -1,8 +1,8 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { LayoutDashboard, Package, Calendar, Mail, Users, ShoppingBag, ChevronLeft, FileText } from "lucide-react"
 import { useI18n } from "@/lib/i18n-context"
 
@@ -20,8 +20,26 @@ const sidebarItems = ["overview", "orders", "products", "content", "appointments
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const router = useRouter()
   const { t } = useI18n()
   const d = t.dashboard
+  const [authed, setAuthed] = useState(false)
+  const [checking, setChecking] = useState(true)
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const ok = localStorage.getItem("dashboard_auth") === "true"
+      if (!ok) {
+        router.replace("/dashboard/login")
+      } else {
+        setAuthed(true)
+      }
+      setChecking(false)
+    }
+  }, [router])
+
+  if (checking) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>
+  if (!authed) return null
 
   return (
     <div className="min-h-screen bg-secondary/20 flex">

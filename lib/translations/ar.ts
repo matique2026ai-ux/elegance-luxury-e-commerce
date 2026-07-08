@@ -15,6 +15,7 @@ export const ar = {
     search: "بحث",
     account: "الحساب",
     cart: "السلة",
+    cartEmpty: "سلتك فارغة",
     switchLang: "تغيير اللغة",
     toggleMenu: "القائمة",
   },

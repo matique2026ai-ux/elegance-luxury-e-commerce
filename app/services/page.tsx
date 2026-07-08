@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Package, Truck, RotateCcw, Headphones, type LucideIcon } from "lucide-react"
 import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 import { useI18n } from "@/lib/i18n-context"
 
 const icons: LucideIcon[] = [Truck, Package, RotateCcw, Headphones]
@@ -69,6 +70,7 @@ export default function ServicesPage() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   )
 }

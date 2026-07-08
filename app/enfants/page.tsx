@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Heart, ShoppingBag } from "lucide-react"
 import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 import { useI18n } from "@/lib/i18n-context"
 import { useCart } from "@/context/cart-context"
 import { useFavorites } from "@/context/favorites-context"
@@ -68,6 +69,7 @@ export default function EnfantsPage() {
           ))}
         </div>
       </div>
+      <Footer />
     </div>
   )
 }

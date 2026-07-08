@@ -15,6 +15,7 @@ export const fr = {
     search: "Rechercher",
     account: "Compte",
     cart: "Panier",
+    cartEmpty: "Votre panier est vide",
     switchLang: "Changer de langue",
     toggleMenu: "Menu",
   },

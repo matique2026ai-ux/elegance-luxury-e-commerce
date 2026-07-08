@@ -15,6 +15,7 @@ export const en = {
     search: "Search",
     account: "Account",
     cart: "Cart",
+    cartEmpty: "Your cart is empty",
     switchLang: "Switch language",
     toggleMenu: "Toggle menu",
   },

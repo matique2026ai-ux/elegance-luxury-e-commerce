@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Menu, X, ShoppingBag, Search, User, Globe } from "lucide-react";
 import { useI18n, type Lang } from "@/lib/i18n-context";
 import { useCart } from "@/context/cart-context";
+import { CartDrawer } from "./cart-drawer";
 
 const languages: { label: string; code: Lang }[] = [
   { label: "EN", code: "en" },
@@ -16,7 +17,7 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const { t, lang, setLang } = useI18n();
-  const { totalItems } = useCart();
+  const { totalItems, toggleCart, openCart } = useCart();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
@@ -69,30 +70,32 @@ export function Header() {
               </div>
               <button
                 type="button"
+                onClick={() => window.location.href = "/products"}
                 className="p-2 min-h-11 min-w-11 flex items-center justify-center hover:text-accent transition-colors duration-300"
                 aria-label={t.header.search}
               >
                 <Search className="w-5 h-5" />
               </button>
-              <button
-                type="button"
+              <Link
+                href="/account"
                 className="p-2 min-h-11 min-w-11 flex items-center justify-center hover:text-accent transition-colors duration-300"
                 aria-label={t.header.account}
               >
                 <User className="w-5 h-5" />
-              </button>
-              <Link
-                href="/checkout"
+              </Link>
+              <button
+                type="button"
+                onClick={toggleCart}
                 className="p-2 min-h-11 min-w-11 flex items-center justify-center hover:text-accent transition-colors duration-300 relative"
                 aria-label={t.header.cart}
               >
                 <ShoppingBag className="w-5 h-5" />
                 {totalItems > 0 && (
-                  <span className="absolute top-1 right-1 w-4 h-4 bg-accent text-accent-foreground text-[10px] flex items-center justify-center">
-                    {totalItems}
+                  <span className="absolute -top-0.5 -right-0.5 bg-accent text-accent-foreground text-[9px] w-4 h-4 flex items-center justify-center tracking-none">
+                    {totalItems > 9 ? "9+" : totalItems}
                   </span>
                 )}
-              </Link>
+              </button>
             </div>
           </div>
 
@@ -165,6 +168,7 @@ export function Header() {
           </div>
         )}
       </nav>
+      <CartDrawer />
     </header>
   );
 }

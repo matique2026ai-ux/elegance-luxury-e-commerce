@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Play } from "lucide-react"
 import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 import { useI18n } from "@/lib/i18n-context"
 
 export default function HeritagePage() {
@@ -58,6 +59,7 @@ export default function HeritagePage() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   )
 }

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { MapPin, Phone, Clock } from "lucide-react"
 import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 import { useI18n } from "@/lib/i18n-context"
 
 const boutiques = [
@@ -66,6 +67,7 @@ export default function BoutiquesPage() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   )
 }

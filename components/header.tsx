@@ -68,14 +68,13 @@ export function Header() {
                   </div>
                 )}
               </div>
-              <button
-                type="button"
-                onClick={() => window.location.href = "/products"}
+              <Link
+                href="/search"
                 className="p-2 min-h-11 min-w-11 flex items-center justify-center hover:text-accent transition-colors duration-300"
                 aria-label={t.header.search}
               >
                 <Search className="w-5 h-5" />
-              </button>
+              </Link>
               <Link
                 href="/account"
                 className="p-2 min-h-11 min-w-11 flex items-center justify-center hover:text-accent transition-colors duration-300"

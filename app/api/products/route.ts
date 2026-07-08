@@ -6,6 +6,10 @@ export async function GET(request: Request) {
   const category = searchParams.get("category")
   const sub = searchParams.get("sub")
   const lang = searchParams.get("lang")
+  const query = searchParams.get("q")
+  if (query) {
+    return NextResponse.json(store.searchProducts(query, lang || undefined))
+  }
   return NextResponse.json(store.getProducts(category || undefined, sub || undefined, lang || undefined))
 }
 

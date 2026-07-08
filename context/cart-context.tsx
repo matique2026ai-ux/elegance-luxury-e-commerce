@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useReducer, useCallback } from "react"
+import React, { createContext, useContext, useReducer, useCallback, useEffect } from "react"
 
 export interface CartItem {
   id: number
@@ -81,8 +81,21 @@ function cartReducer(state: CartState, action: CartAction): CartState {
   }
 }
 
+function loadCart(): CartState {
+  if (typeof window === "undefined") return { items: [], isOpen: false }
+  try {
+    const stored = localStorage.getItem("maison-herahima-cart")
+    if (stored) return JSON.parse(stored)
+  } catch {}
+  return { items: [], isOpen: false }
+}
+
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(cartReducer, { items: [], isOpen: false })
+  const [state, dispatch] = useReducer(cartReducer, undefined, loadCart)
+
+  useEffect(() => {
+    localStorage.setItem("maison-herahima-cart", JSON.stringify(state))
+  }, [state])
 
   const totalItems = state.items.reduce((sum, i) => sum + i.quantity, 0)
   const totalPrice = state.items.reduce((sum, i) => sum + i.price * i.quantity, 0)

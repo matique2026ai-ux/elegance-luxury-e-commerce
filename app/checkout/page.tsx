@@ -109,7 +109,8 @@ export default function CheckoutPage() {
               </div>
 
               <div className="lg:col-span-3 order-1 lg:order-2">
-                <h1 className="font-serif text-3xl md:text-4xl tracking-tight mb-8">{c.heading}</h1>
+                <h1 className="font-serif text-3xl md:text-4xl tracking-tight mb-2">{c.proceed}</h1>
+                <h2 className="font-serif text-xl text-muted-foreground mb-6">{c.heading}</h2>
                 <p className="text-muted-foreground mb-8">{c.subtitle}</p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">

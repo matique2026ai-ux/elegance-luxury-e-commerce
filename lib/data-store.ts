@@ -120,6 +120,14 @@ function rowToOrder(row: any): Order {
 }
 
 class DataStore {
+  searchProducts(query: string, lang?: string) {
+    const db = getDb()
+    const sql = "SELECT * FROM products WHERE name_en LIKE ? OR name_fr LIKE ? OR name_ar LIKE ? ORDER BY id ASC"
+    const p = `%${query}%`
+    const rows = db.prepare(sql).all(p, p, p) as any[]
+    return rows.map(r => rowToProduct(r, lang))
+  }
+
   getProducts(category?: string, sub?: string, lang?: string) {
     const db = getDb()
     let sql = "SELECT * FROM products"

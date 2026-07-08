@@ -51,8 +51,8 @@ export function CartDrawer() {
           ) : (
             <div className="p-4 space-y-3">
               {items.map((item) => (
-                <div key={item.id} className={`flex gap-3 bg-secondary/10 border border-border/80 p-3 ${isRtl ? "flex-row-reverse" : ""}`}>
-                  <div className="w-20 h-24 bg-secondary/10 shrink-0 overflow-hidden">
+                <div key={item.id} className={`flex gap-3 bg-white dark:bg-neutral-800 border border-border/60 shadow-sm p-3 ${isRtl ? "flex-row-reverse" : ""}`}>
+                  <div className="w-20 h-24 bg-neutral-100 dark:bg-neutral-700 shrink-0 overflow-hidden rounded-sm">
                     <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1 min-w-0 flex flex-col justify-between">
@@ -66,7 +66,7 @@ export function CartDrawer() {
                       </button>
                     </div>
                     <div className="flex items-center justify-between mt-2">
-                      <div className="flex items-center border border-border/60">
+                      <div className="flex items-center border border-border/60 bg-background">
                         <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="w-7 h-7 flex items-center justify-center hover:bg-secondary/30 transition-colors">
                           <Minus className="w-3 h-3" />
                         </button>

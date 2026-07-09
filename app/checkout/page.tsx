@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { wilayas } from "@/lib/wilayas"
 import { useI18n } from "@/lib/i18n-context"
 import { useCart } from "@/context/cart-context"
-import { ArrowRight, MapPin, Phone, User, Home } from "lucide-react"
+import { ArrowRight, MapPin, Phone, User, Home, Loader2 } from "lucide-react"
 
 export default function CheckoutPage() {
   const { t } = useI18n()
@@ -19,6 +19,7 @@ export default function CheckoutPage() {
   })
   const [shippingPrice, setShippingPrice] = useState(0)
   const [wilayaSelected, setWilayaSelected] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
     const w = wilayas.find(x => x.code === Number(form.wilayaCode))
@@ -29,6 +30,7 @@ export default function CheckoutPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setSubmitting(true)
     const w = wilayas.find(x => x.code === Number(form.wilayaCode))
     const res = await fetch("/api/orders", {
       method: "POST",
@@ -45,6 +47,7 @@ export default function CheckoutPage() {
       clearCart()
       setStep("done")
     }
+    setSubmitting(false)
   }
 
   if (items.length === 0 && step !== "done") {
@@ -165,9 +168,10 @@ export default function CheckoutPage() {
                     <p className="text-muted-foreground">{c.cashOnDelivery}</p>
                   </div>
 
-                  <button type="submit" disabled={!wilayaSelected} className="w-full bg-primary text-primary-foreground py-4 text-sm tracking-[0.2em] uppercase hover:bg-primary/90 transition-all flex items-center justify-center gap-3 disabled:opacity-40">
+                  <button type="submit" disabled={!wilayaSelected || submitting} className="w-full bg-primary text-primary-foreground py-4 text-sm tracking-[0.2em] uppercase hover:bg-primary/90 transition-all flex items-center justify-center gap-3 disabled:opacity-40 disabled:cursor-not-allowed">
+                    {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
                     {wilayaSelected ? `${c.placeOrder} — ${grandTotal.toLocaleString()} ${t.products.currency}` : c.form.selectWilaya}
-                    <ArrowRight className="w-4 h-4" />
+                    {!submitting && <ArrowRight className="w-4 h-4" />}
                   </button>
                 </form>
               </div>

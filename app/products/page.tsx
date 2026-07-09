@@ -20,7 +20,7 @@ function ProductsContent() {
   const [activeCategory, setActiveCategory] = useState("all")
   const [activeSub, setActiveSub] = useState("all")
   const [products, setProducts] = useState<Product[]>([])
-  const [hoveredId, setHoveredId] = useState<number | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const cat = searchParams.get("category")
@@ -28,7 +28,8 @@ function ProductsContent() {
   }, [searchParams])
 
   useEffect(() => {
-    fetch(`/api/products?lang=${lang}`).then(r => r.ok ? r.json() : []).then(setProducts).catch(() => setProducts([]))
+    setLoading(true)
+    fetch(`/api/products?lang=${lang}`).then(r => r.ok ? r.json() : []).then(setProducts).catch(() => setProducts([])).finally(() => setLoading(false))
   }, [lang])
 
   const categories = [
@@ -87,12 +88,14 @@ function ProductsContent() {
         ))}
       </div>
 
-      {filtered.length === 0 ? (
-        <p className="text-center text-muted-foreground py-12">No products found.</p>
+      {loading ? (
+        <p className="text-center text-muted-foreground py-12">{t.products.loading}</p>
+      ) : filtered.length === 0 ? (
+        <p className="text-center text-muted-foreground py-12">{t.products.empty}</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {filtered.map((product) => (
-            <div key={product.id} className="group" onMouseEnter={() => setHoveredId(product.id)} onMouseLeave={() => setHoveredId(null)}>
+            <div key={product.id} className="group">
               <Link href={`/products/${product.id}`}>
                 <div className="relative overflow-hidden mb-4">
                   <div className="aspect-[5/6] bg-secondary overflow-hidden">
@@ -101,7 +104,7 @@ function ProductsContent() {
                   {product.isNew && (
                     <span className="absolute top-4 left-4 bg-accent text-accent-foreground px-3 py-1 text-[10px] tracking-[0.2em] uppercase">{t.featured.new}</span>
                   )}
-                  <div className={`absolute inset-x-4 bottom-4 flex gap-2 transition-all duration-300 ${hoveredId === product.id ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+                  <div className="absolute inset-x-4 bottom-4 flex gap-2 transition-all duration-300 sm:opacity-0 sm:translate-y-4 sm:group-hover:opacity-100 sm:group-hover:translate-y-0">
                     <button type="button" onClick={(e) => { e.preventDefault(); addItem({ id: product.id, name: product.name, price: product.price, image: product.image, quantity: 1, category: product.category }) }} className="flex-1 bg-background/90 backdrop-blur-sm py-3 flex items-center justify-center gap-2 text-sm tracking-[0.1em] uppercase hover:bg-background transition-colors duration-200 min-h-11">
                       <ShoppingBag className="w-4 h-4" />{t.featured.add}
                     </button>

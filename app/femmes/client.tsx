@@ -11,7 +11,6 @@ interface Product {
 }
 
 export function FemmesClient({ products: initial }: { products: Product[] }) {
-  const [hoveredId, setHoveredId] = useState<number | null>(null)
   const { t } = useI18n()
   const { addItem } = useCart()
   const { isFavorite, toggleFavorite } = useFavorites()
@@ -43,10 +42,10 @@ export function FemmesClient({ products: initial }: { products: Product[] }) {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
           {filtered.map(p => (
-            <div key={p.id} className="group" onMouseEnter={() => setHoveredId(p.id)} onMouseLeave={() => setHoveredId(null)}>
+            <div key={p.id} className="group">
               <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-secondary/20">
                 <img src={p.image} alt={p.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                <div className={`absolute inset-0 bg-black/40 flex items-center justify-center gap-4 transition-opacity duration-300 ${hoveredId === p.id ? "opacity-100" : "opacity-0"}`}>
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center gap-4 transition-opacity duration-300 sm:opacity-0 sm:group-hover:opacity-100">
                   <button onClick={() => addItem({ id: p.id, name: p.name, price: p.price, image: p.image, quantity: 1, category: p.category })} className="bg-white text-black p-3 hover:bg-accent transition-colors"><ShoppingBag className="w-5 h-5" /></button>
                   <button onClick={() => toggleFavorite({ id: p.id, name: p.name, price: p.price, image: p.image, category: p.category })} className="bg-white text-black p-3 hover:bg-accent transition-colors"><Heart className={`w-5 h-5 ${isFavorite(p.id) ? "fill-accent text-accent" : ""}`} /></button>
                 </div>

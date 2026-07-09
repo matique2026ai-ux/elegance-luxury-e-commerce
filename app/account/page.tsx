@@ -16,23 +16,23 @@ export default function AccountPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Link href="/favorites" className="bg-card border border-border p-8 text-center hover:bg-secondary/50 transition-colors group">
               <Heart className="w-8 h-8 mx-auto mb-4 group-hover:text-accent transition-colors" />
-              <h3 className="font-serif text-xl mb-1">Favorites</h3>
-              <p className="text-sm text-muted-foreground">View your wishlist</p>
+              <h3 className="font-serif text-xl mb-1">{t.accountLinks.favorites}</h3>
+              <p className="text-sm text-muted-foreground">{t.accountLinks.viewFavorites}</p>
             </Link>
             <Link href="/checkout" className="bg-card border border-border p-8 text-center hover:bg-secondary/50 transition-colors group">
               <ShoppingBag className="w-8 h-8 mx-auto mb-4 group-hover:text-accent transition-colors" />
-              <h3 className="font-serif text-xl mb-1">Orders</h3>
-              <p className="text-sm text-muted-foreground">View your orders</p>
+              <h3 className="font-serif text-xl mb-1">{t.accountLinks.orders}</h3>
+              <p className="text-sm text-muted-foreground">{t.accountLinks.viewOrders}</p>
             </Link>
             <div className="bg-card border border-border p-8 text-center opacity-50">
               <MapPin className="w-8 h-8 mx-auto mb-4" />
-              <h3 className="font-serif text-xl mb-1">Addresses</h3>
-              <p className="text-sm text-muted-foreground">Manage your addresses</p>
+              <h3 className="font-serif text-xl mb-1">{t.accountLinks.addresses}</h3>
+              <p className="text-sm text-muted-foreground">{t.accountLinks.manageAddresses}</p>
             </div>
             <div className="bg-card border border-border p-8 text-center opacity-50">
               <User className="w-8 h-8 mx-auto mb-4" />
-              <h3 className="font-serif text-xl mb-1">Profile</h3>
-              <p className="text-sm text-muted-foreground">Edit your profile</p>
+              <h3 className="font-serif text-xl mb-1">{t.accountLinks.profile}</h3>
+              <p className="text-sm text-muted-foreground">{t.accountLinks.editProfile}</p>
             </div>
           </div>
         </div>

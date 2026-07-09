@@ -28,12 +28,12 @@ export default function ProductDetail() {
       .finally(() => setLoading(false))
   }, [id, lang])
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>
+  if (loading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">{t.products.loading}</div>
   if (!product) return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
-        <p className="text-muted-foreground mb-4">Product not found</p>
-        <Link href="/products" className="text-sm tracking-wider uppercase underline">Back to products</Link>
+        <p className="text-muted-foreground mb-4">{t.products.notFound}</p>
+        <Link href="/products" className="text-sm tracking-wider uppercase underline">{t.products.backToProducts}</Link>
       </div>
     </div>
   )
@@ -43,7 +43,7 @@ export default function ProductDetail() {
       <div className="pt-28 pb-24">
         <div className="max-w-[1800px] mx-auto px-6 md:px-12">
           <Link href="/products" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8">
-            <ChevronLeft className="w-4 h-4" /> Back
+            <ChevronLeft className="w-4 h-4" /> {t.products.back}
           </Link>
           <div className="grid md:grid-cols-2 gap-12 lg:gap-20">
             <div className="relative aspect-[3/4] bg-secondary/20 overflow-hidden">
@@ -58,11 +58,11 @@ export default function ProductDetail() {
               <p className="text-2xl font-serif">{product.price.toLocaleString()} {t.products.currency}</p>
 
               <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">Stock:</span>
+                <span className="text-sm text-muted-foreground">{t.products.stock}:</span>
                 {product.stock > 0 ? (
-                  <span className="text-sm text-emerald-600 font-medium">{product.stock} available</span>
+                  <span className="text-sm text-emerald-600 font-medium">{product.stock} {t.products.available}</span>
                 ) : (
-                  <span className="text-sm text-destructive font-medium">Out of stock</span>
+                  <span className="text-sm text-destructive font-medium">{t.products.outOfStock}</span>
                 )}
               </div>
 

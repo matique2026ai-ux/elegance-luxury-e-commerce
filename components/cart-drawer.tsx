@@ -1,13 +1,23 @@
 "use client"
 
-import { X, Minus, Plus } from "lucide-react"
+import { X, Minus, Plus, ShoppingBag } from "lucide-react"
 import Link from "next/link"
 import { useCart } from "@/context/cart-context"
 import { useI18n } from "@/lib/i18n-context"
+import { useEffect, useRef } from "react"
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, totalItems, totalPrice, removeItem, updateQuantity } = useCart()
   const { t, lang } = useI18n()
+  const drawerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!isOpen) return
+    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") closeCart() }
+    window.addEventListener("keydown", handler)
+    drawerRef.current?.focus()
+    return () => window.removeEventListener("keydown", handler)
+  }, [isOpen, closeCart])
 
   if (!isOpen) return null
 
@@ -26,7 +36,12 @@ export function CartDrawer() {
     <>
       <div className="fixed inset-0 bg-black/40 z-50 transition-opacity duration-300" onClick={closeCart} />
       <div
-        className={`fixed top-0 h-full w-full max-w-md bg-background z-50 shadow-2xl flex flex-col ${isRtl ? "left-0 border-r border-border/60" : "right-0 border-l border-border/60"}`}
+        ref={drawerRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-label={t.header.cart}
+        className={`fixed top-0 h-full w-full max-w-md bg-background z-50 shadow-2xl flex flex-col outline-none ${isRtl ? "left-0 border-r border-border/60" : "right-0 border-l border-border/60"}`}
         style={{ animation: `${isRtl ? "slideInRtl" : "slideInLtr"} 0.3s ease-out` }}
       >
         <style>{`
@@ -61,7 +76,7 @@ export function CartDrawer() {
                         <p className="text-sm font-medium leading-snug">{item.name}</p>
                         <p className="text-[11px] text-muted-foreground mt-0.5 uppercase tracking-wider">{catKey(item.category)}</p>
                       </div>
-                      <button onClick={() => removeItem(item.id)} className="w-6 h-6 flex items-center justify-center hover:bg-secondary/40 transition-colors shrink-0" aria-label="Remove">
+                      <button onClick={() => removeItem(item.id)} className="w-6 h-6 flex items-center justify-center hover:bg-secondary/40 transition-colors shrink-0"                     aria-label={lang === "ar" ? "إزالة من السلة" : lang === "fr" ? "Retirer du panier" : "Remove from cart"}>
                         <X className="w-3.5 h-3.5 text-muted-foreground/60" />
                       </button>
                     </div>

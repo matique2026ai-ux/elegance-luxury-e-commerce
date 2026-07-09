@@ -89,11 +89,9 @@ export function Header() {
                 aria-label={t.header.cart}
               >
                 <ShoppingBag className="w-5 h-5" />
-                {totalItems > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 bg-accent text-accent-foreground text-[9px] w-4 h-4 flex items-center justify-center tracking-none">
-                    {totalItems > 9 ? "9+" : totalItems}
-                  </span>
-                )}
+                <span className={`absolute -top-0.5 -right-0.5 bg-accent text-accent-foreground text-[9px] w-4 h-4 flex items-center justify-center tracking-none transition-opacity ${totalItems > 0 ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+                  {totalItems > 9 ? "9+" : totalItems}
+                </span>
               </button>
             </div>
           </div>
@@ -137,11 +135,9 @@ export function Header() {
               aria-label={t.header.cart}
             >
               <ShoppingBag className="w-5 h-5" />
-              {totalItems > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 bg-accent text-accent-foreground text-[10px] flex items-center justify-center">
-                  {totalItems}
-                </span>
-              )}
+              <span className={`absolute top-1 right-1 w-4 h-4 bg-accent text-accent-foreground text-[10px] flex items-center justify-center transition-opacity ${totalItems > 0 ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+                {totalItems}
+              </span>
             </Link>
             <button
               type="button"

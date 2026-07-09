@@ -1,6 +1,6 @@
 "use client"
 
-import { X, Minus, Plus, ShoppingBag } from "lucide-react"
+import { X } from "lucide-react"
 import Link from "next/link"
 import { useCart } from "@/context/cart-context"
 import { useI18n } from "@/lib/i18n-context"
@@ -21,76 +21,99 @@ export function CartDrawer() {
 
   if (!isOpen) return null
 
-  const isRtl = lang === "ar"
-
-  const catKey = (cat: string): string => {
-    const map: Record<string, string> = {
-      men: t.products.categories.men,
-      women: t.products.categories.women,
-      children: t.products.categories.children,
-    }
-    return map[cat] || cat
-  }
+  const rmLabel = lang === "ar" ? "إزالة" : lang === "fr" ? "Retirer" : "Remove"
 
   return (
-    <>
-      <div className="fixed inset-0 bg-black/40 z-50 transition-opacity duration-300" onClick={closeCart} />
+    <div style={{ position: "fixed", inset: 0, zIndex: 9999, display: "flex", justifyContent: lang === "ar" ? "flex-start" : "flex-end" }}>
+      <div onClick={closeCart} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.4)" }} />
       <div
         ref={drawerRef}
         tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-label={t.header.cart}
-        className={`fixed top-0 h-full w-full max-w-md bg-background z-50 shadow-2xl flex flex-col outline-none ${isRtl ? "left-0 border-r border-border/60" : "right-0 border-l border-border/60"}`}
-        style={{ animation: `${isRtl ? "slideInRtl" : "slideInLtr"} 0.3s ease-out` }}
+        style={{
+          position: "relative",
+          width: "100%",
+          maxWidth: "420px",
+          height: "100vh",
+          background: "#f7f5f0",
+          display: "flex",
+          flexDirection: "column",
+          zIndex: 10,
+          boxShadow: lang === "ar" ? "4px 0 20px rgba(0,0,0,0.15)" : "-4px 0 20px rgba(0,0,0,0.15)",
+          animation: `${lang === "ar" ? "slideInRtl" : "slideInLtr"} 0.3s ease-out`,
+        }}
       >
         <style>{`
           @keyframes slideInLtr { from { transform: translateX(100%); } to { transform: translateX(0); } }
           @keyframes slideInRtl { from { transform: translateX(-100%); } to { transform: translateX(0); } }
         `}</style>
 
-        <div className="flex items-center justify-between px-5 h-14 shrink-0 border-b border-border">
-          <h2 className="font-serif text-lg">
-            {t.header.cart} <span className="text-muted-foreground text-sm font-sans ml-1">({totalItems})</span>
-          </h2>
-          <button onClick={closeCart} className="w-8 h-8 flex items-center justify-center hover:bg-secondary/30 transition-colors">
-            <X className="w-4 h-4" />
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", borderBottom: "1px solid #d4d0c8" }}>
+          <span style={{ fontFamily: "var(--font-serif, Georgia, serif)", fontSize: "18px" }}>
+            {t.header.cart} <span style={{ color: "#8a8678", fontSize: "14px", fontFamily: "var(--font-sans, sans-serif)" }}>({totalItems})</span>
+          </span>
+          <button onClick={closeCart} style={{ width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", background: "transparent", border: "none", cursor: "pointer" }}>
+            <X style={{ width: 16, height: 16 }} />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto min-h-0">
+        <div style={{ flex: 1, overflow: "auto", padding: "16px" }}>
           {items.length === 0 ? (
-            <div className="flex items-center justify-center h-full px-6">
-              <p className="text-sm text-muted-foreground text-center">{t.header.cartEmpty}</p>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
+              <p style={{ fontSize: "14px", color: "#8a8678", textAlign: "center" }}>{t.header.cartEmpty}</p>
             </div>
           ) : (
-            <div className="p-4 space-y-3">
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
               {items.map((item) => (
-                <div key={item.id} className={`flex gap-3 bg-white dark:bg-neutral-800 border border-border/60 shadow-sm p-3 ${isRtl ? "flex-row-reverse" : ""}`}>
-                  <div className="w-20 h-24 bg-neutral-100 dark:bg-neutral-700 shrink-0 overflow-hidden rounded-sm">
-                    <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                <div
+                  key={item.id}
+                  style={{
+                    display: "flex",
+                    gap: "12px",
+                    background: "#ffffff",
+                    border: "1px solid #d4d0c8",
+                    borderRadius: "4px",
+                    padding: "12px",
+                  }}
+                >
+                  <div style={{ width: 80, height: 96, background: "#ece9e3", flexShrink: 0, overflow: "hidden", borderRadius: "2px" }}>
+                    <img src={item.image} alt={item.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   </div>
-                  <div className="flex-1 min-w-0 flex flex-col justify-between">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium leading-snug">{item.name}</p>
-                        <p className="text-[11px] text-muted-foreground mt-0.5 uppercase tracking-wider">{catKey(item.category)}</p>
+                  <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", gap: "8px" }}>
+                      <div>
+                        <p style={{ fontSize: "14px", fontWeight: 500, color: "#1a1a1a", margin: 0, lineHeight: 1.3 }}>{item.name}</p>
+                        <p style={{ fontSize: "11px", color: "#8a8678", margin: "2px 0 0 0", textTransform: "uppercase", letterSpacing: "0.05em" }}>{item.category}</p>
                       </div>
-                      <button onClick={() => removeItem(item.id)} className="w-6 h-6 flex items-center justify-center hover:bg-secondary/40 transition-colors shrink-0"                     aria-label={lang === "ar" ? "إزالة من السلة" : lang === "fr" ? "Retirer du panier" : "Remove from cart"}>
-                        <X className="w-3.5 h-3.5 text-muted-foreground/60" />
+                      <button
+                        onClick={() => removeItem(item.id)}
+                        style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", background: "transparent", border: "none", cursor: "pointer", flexShrink: 0 }}
+                        aria-label={rmLabel}
+                      >
+                        <X style={{ width: 12, height: 12, color: "#8a8678" }} />
                       </button>
                     </div>
-                    <div className="flex items-center justify-between mt-2">
-                      <div className="flex items-center border border-border/60 bg-background">
-                        <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="w-7 h-7 flex items-center justify-center hover:bg-secondary/30 transition-colors">
-                          <Minus className="w-3 h-3" />
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "8px" }}>
+                      <div style={{ display: "flex", alignItems: "center", border: "1px solid #d4d0c8" }}>
+                        <button
+                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          style={{ width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", background: "transparent", border: "none", cursor: "pointer", borderRight: "1px solid #d4d0c8", fontSize: "14px", color: "#1a1a1a" }}
+                        >
+                          −
                         </button>
-                        <span className="w-8 h-7 flex items-center justify-center text-xs tabular-nums border-x border-border/60">{item.quantity}</span>
-                        <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="w-7 h-7 flex items-center justify-center hover:bg-secondary/30 transition-colors">
-                          <Plus className="w-3 h-3" />
+                        <span style={{ width: 32, height: 28, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", color: "#1a1a1a" }}>{item.quantity}</span>
+                        <button
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          style={{ width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", background: "transparent", border: "none", cursor: "pointer", borderLeft: "1px solid #d4d0c8", fontSize: "14px", color: "#1a1a1a" }}
+                        >
+                          +
                         </button>
                       </div>
-                      <p className="text-sm font-serif font-medium">{(item.price * item.quantity).toLocaleString()} <span className="text-xs text-muted-foreground font-sans">{t.products.currency}</span></p>
+                      <span style={{ fontSize: "14px", fontFamily: "var(--font-serif, Georgia, serif)", fontWeight: 500, color: "#1a1a1a" }}>
+                        {(item.price * item.quantity).toLocaleString()} <span style={{ fontSize: "12px", color: "#8a8678", fontFamily: "var(--font-sans, sans-serif)" }}>{t.products.currency}</span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -99,32 +122,24 @@ export function CartDrawer() {
           )}
         </div>
 
-        <div className="border-t border-border px-5 py-4 shrink-0">
-          {items.length === 0 ? (
+        {items.length > 0 && (
+          <div style={{ borderTop: "1px solid #d4d0c8", padding: "16px 20px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px" }}>
+              <span style={{ fontSize: "13px", color: "#8a8678" }}>{t.checkout.total}</span>
+              <span style={{ fontFamily: "var(--font-serif, Georgia, serif)", fontSize: "18px", fontWeight: 500, color: "#1a1a1a" }}>
+                {totalPrice.toLocaleString()} <span style={{ fontSize: "13px", color: "#8a8678", fontFamily: "var(--font-sans, sans-serif)" }}>{t.products.currency}</span>
+              </span>
+            </div>
             <Link
-              href="/products"
+              href="/checkout"
               onClick={closeCart}
-              className="flex items-center justify-center w-full bg-primary text-primary-foreground h-11 text-sm tracking-wider uppercase hover:bg-primary/90 transition-colors"
+              style={{ display: "block", textAlign: "center", width: "100%", background: "#1a1a1a", color: "#f7f5f0", padding: "12px 0", fontSize: "13px", letterSpacing: "0.1em", textTransform: "uppercase", textDecoration: "none" }}
             >
-              {t.checkout.browseProducts}
+              {t.checkout.proceed}
             </Link>
-          ) : (
-            <>
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-sm text-muted-foreground font-medium">{t.checkout.total}</span>
-                <span className="font-serif text-lg font-medium">{totalPrice.toLocaleString()} <span className="text-sm text-muted-foreground font-sans">{t.products.currency}</span></span>
-              </div>
-              <Link
-                href="/checkout"
-                onClick={closeCart}
-                className="flex items-center justify-center w-full bg-primary text-primary-foreground h-11 text-sm tracking-wider uppercase hover:bg-primary/90 transition-colors"
-              >
-                {t.checkout.proceed}
-              </Link>
-            </>
-          )}
-        </div>
+          </div>
+        )}
       </div>
-    </>
+    </div>
   )
 }

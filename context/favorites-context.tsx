@@ -20,13 +20,14 @@ interface FavoritesContextType {
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined)
 
 export function FavoritesProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = useState<FavoriteItem[]>(() => {
-    if (typeof window === "undefined") return []
+  const [items, setItems] = useState<FavoriteItem[]>([])
+
+  useEffect(() => {
     try {
       const stored = localStorage.getItem("maison-herahima-favorites")
-      return stored ? JSON.parse(stored) : []
-    } catch { return [] }
-  })
+      if (stored) setItems(JSON.parse(stored))
+    } catch {}
+  }, [])
 
   useEffect(() => {
     localStorage.setItem("maison-herahima-favorites", JSON.stringify(items))

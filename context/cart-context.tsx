@@ -21,6 +21,7 @@ type CartAction =
   | { type: "REMOVE_ITEM"; payload: number }
   | { type: "UPDATE_QUANTITY"; payload: { id: number; quantity: number } }
   | { type: "CLEAR_CART" }
+  | { type: "HYDRATE"; payload: CartItem[] }
   | { type: "TOGGLE_CART" }
   | { type: "OPEN_CART" }
   | { type: "CLOSE_CART" }
@@ -70,6 +71,8 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       }
     case "CLEAR_CART":
       return { ...state, items: [] }
+    case "HYDRATE":
+      return { ...state, items: action.payload }
     case "TOGGLE_CART":
       return { ...state, isOpen: !state.isOpen }
     case "OPEN_CART":
@@ -91,7 +94,14 @@ function loadCart(): CartState {
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(cartReducer, undefined, loadCart)
+  const [state, dispatch] = useReducer(cartReducer, { items: [], isOpen: false })
+
+  useEffect(() => {
+    const stored = loadCart()
+    if (stored && stored.items.length > 0) {
+      dispatch({ type: "HYDRATE", payload: stored.items })
+    }
+  }, [])
 
   useEffect(() => {
     localStorage.setItem("maison-herahima-cart", JSON.stringify(state))

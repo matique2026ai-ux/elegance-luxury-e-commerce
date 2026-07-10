@@ -28,12 +28,12 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     if (!status) {
       return NextResponse.json({ error: "Status is required" }, { status: 400 })
     }
-    store.updateOrderStatus(id, status)
+    await store.updateOrderStatus(id, status)
 
     const msg = statusMessages[status]
     const apiKey = process.env.RESEND_API_KEY
     if (apiKey && msg) {
-      const orders = store.getOrders()
+      const orders = await store.getOrders()
       const order = orders.find(o => o.id === id)
       if (order?.customer?.email) {
         fetch("https://api.resend.com/emails", {

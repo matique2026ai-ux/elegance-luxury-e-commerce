@@ -8,7 +8,7 @@ export async function POST(request: Request) {
     if (!items?.length || !customer?.name || !customer?.phone || !customer?.wilaya) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
-    store.addOrder({ items, total, shippingPrice, grandTotal, customer })
+    await store.addOrder({ items, total, shippingPrice, grandTotal, customer })
 
     // Notify admin via Resend if configured
     const apiKey = process.env.RESEND_API_KEY
@@ -48,5 +48,5 @@ export async function POST(request: Request) {
 }
 
 export async function GET() {
-  return NextResponse.json(store.getOrders())
+  return NextResponse.json(await store.getOrders())
 }

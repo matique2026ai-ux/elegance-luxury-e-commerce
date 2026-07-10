@@ -8,7 +8,7 @@ export async function POST(request: Request) {
     if (!name || !email || !message) {
       return NextResponse.json({ error: "Name, email, and message are required" }, { status: 400 })
     }
-    store.addMessage({ name, email, subject, message })
+    await store.addMessage({ name, email, subject, message })
     return NextResponse.json({ success: true, message: "Message received" })
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
@@ -16,5 +16,5 @@ export async function POST(request: Request) {
 }
 
 export async function GET() {
-  return NextResponse.json(store.getMessages())
+  return NextResponse.json(await store.getMessages())
 }

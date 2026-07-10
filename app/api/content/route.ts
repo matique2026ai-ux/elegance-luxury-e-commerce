@@ -5,8 +5,8 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const page = searchParams.get("page")
   const lang = searchParams.get("lang")
-  if (page) return NextResponse.json(store.getContent(page, lang || undefined))
-  return NextResponse.json(store.getAllContent(lang || undefined))
+  if (page) return NextResponse.json(await store.getContent(page, lang || undefined))
+  return NextResponse.json(await store.getAllContent(lang || undefined))
 }
 
 export async function POST(request: Request) {
@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     if (!body.page) {
       return NextResponse.json({ error: "Page is required" }, { status: 400 })
     }
-    store.updateContent(body.page, body)
+    await store.updateContent(body.page, body)
     return NextResponse.json({ success: true })
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })

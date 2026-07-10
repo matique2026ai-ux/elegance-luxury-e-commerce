@@ -10,6 +10,6 @@ export const metadata = {
 export default async function HommesPage() {
   const cookieStore = await cookies()
   const lang = cookieStore.get('lang')?.value || 'en'
-  const products = store.getProducts("men", undefined, lang)
+  const products = await store.getProducts("men", undefined, lang)
   return <HommesClient products={JSON.parse(JSON.stringify(products))} />
 }

@@ -8,9 +8,9 @@ export async function GET(request: Request) {
   const lang = searchParams.get("lang")
   const query = searchParams.get("q")
   if (query) {
-    return NextResponse.json(store.searchProducts(query, lang || undefined))
+    return NextResponse.json(await store.searchProducts(query, lang || undefined))
   }
-  return NextResponse.json(store.getProducts(category || undefined, sub || undefined, lang || undefined))
+  return NextResponse.json(await store.getProducts(category || undefined, sub || undefined, lang || undefined))
 }
 
 export async function POST(request: Request) {
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     if (!body.name || !body.category || !body.price) {
       return NextResponse.json({ error: "Name, category, and price are required" }, { status: 400 })
     }
-    const product = store.addProduct(body)
+    const product = await store.addProduct(body)
     return NextResponse.json(product, { status: 201 })
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })

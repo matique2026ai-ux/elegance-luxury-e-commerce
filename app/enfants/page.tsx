@@ -10,6 +10,6 @@ export const metadata = {
 export default async function EnfantsPage() {
   const cookieStore = await cookies()
   const lang = cookieStore.get('lang')?.value || 'en'
-  const products = store.getProducts("children", undefined, lang)
+  const products = await store.getProducts("children", undefined, lang)
   return <EnfantsClient products={JSON.parse(JSON.stringify(products))} />
 }

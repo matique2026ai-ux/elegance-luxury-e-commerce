@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: "Invalid email" }, { status: 400 })
     }
-    const added = store.addSubscriber(email)
+    const added = await store.addSubscriber(email)
     if (!added) {
       return NextResponse.json({ error: "Already subscribed" }, { status: 409 })
     }
@@ -18,5 +18,5 @@ export async function POST(request: Request) {
 }
 
 export async function GET() {
-  return NextResponse.json(store.getSubscribers())
+  return NextResponse.json(await store.getSubscribers())
 }

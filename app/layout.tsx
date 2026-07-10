@@ -1,8 +1,9 @@
 import React from "react"
 import type { Metadata, Viewport } from "next";
+import { cookies } from "next/headers";
 import { DM_Sans, Playfair_Display, Noto_Kufi_Arabic } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import { I18nProvider } from "@/lib/i18n-context";
+import { I18nProvider, type Lang } from "@/lib/i18n-context";
 import { CartProvider } from "@/context/cart-context";
 import { FavoritesProvider } from "@/context/favorites-context";
 import { SiteShell } from "@/components/site-shell";
@@ -54,17 +55,21 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies()
+  const savedLang = cookieStore.get("lang")?.value as Lang | undefined
+  const initialLang: Lang = savedLang === "fr" || savedLang === "ar" ? savedLang : "en"
+
   return (
-    <html lang="en" className="bg-background" suppressHydrationWarning>
+    <html lang={initialLang} dir={initialLang === "ar" ? "rtl" : "ltr"} className="bg-background" suppressHydrationWarning>
       <body
         className={`${dmSans.variable} ${playfair.variable} ${notoKufi.variable} font-sans antialiased`}
       >
-        <I18nProvider>
+        <I18nProvider initialLang={initialLang}>
           <CartProvider>
             <FavoritesProvider>
               <SiteShell>

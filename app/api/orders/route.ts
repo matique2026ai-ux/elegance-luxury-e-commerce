@@ -40,8 +40,10 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: true, message: "Order placed successfully" })
-  } catch {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+  } catch (e: any) {
+    const msg = e?.message || "Internal server error"
+    const status = msg.includes("stock") || msg.includes("not found") ? 409 : 500
+    return NextResponse.json({ error: msg }, { status })
   }
 }
 

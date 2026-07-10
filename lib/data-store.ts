@@ -274,10 +274,20 @@ class DataStore {
   }
 
   addOrder(data: Omit<Order, "id" | "createdAt" | "status">) {
+    const db = getDb()
     const id = crypto.randomUUID()
-    getDb().prepare(
-      "INSERT INTO orders (id, items, total, shippingPrice, grandTotal, customer) VALUES (?, ?, ?, ?, ?, ?)"
-    ).run(id, JSON.stringify(data.items), data.total, data.shippingPrice, data.grandTotal, JSON.stringify(data.customer))
+    const tx = db.transaction(() => {
+      for (const item of data.items) {
+        const product = db.prepare("SELECT stock FROM products WHERE id = ?").get(item.id) as { stock: number } | undefined
+        if (!product) throw new Error(`Product ${item.id} not found`)
+        if (product.stock < item.quantity) throw new Error(`Insufficient stock for product ${item.id}`)
+        db.prepare("UPDATE products SET stock = stock - ? WHERE id = ?").run(item.quantity, item.id)
+      }
+      db.prepare(
+        "INSERT INTO orders (id, items, total, shippingPrice, grandTotal, customer) VALUES (?, ?, ?, ?, ?, ?)"
+      ).run(id, JSON.stringify(data.items), data.total, data.shippingPrice, data.grandTotal, JSON.stringify(data.customer))
+    })
+    tx()
   }
 
   updateOrderStatus(id: string, status: Order["status"]) {

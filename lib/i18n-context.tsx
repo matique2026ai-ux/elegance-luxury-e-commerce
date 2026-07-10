@@ -19,13 +19,14 @@ interface I18nContextType {
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined)
 
-export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("en")
+export function I18nProvider({ children, initialLang = "en" }: { children: React.ReactNode; initialLang?: Lang }) {
+  const [lang, setLangState] = useState<Lang>(initialLang)
 
   const setLang = useCallback((newLang: Lang) => {
     setLangState(newLang)
     if (typeof window !== "undefined") {
       localStorage.setItem("lang", newLang)
+      document.cookie = `lang=${newLang};path=/;max-age=31536000`
       document.documentElement.lang = newLang
       document.documentElement.dir = newLang === "ar" ? "rtl" : "ltr"
     }
@@ -33,7 +34,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const saved = localStorage.getItem("lang") as Lang | null
-    if (saved && translations[saved]) {
+    if (saved && translations[saved] && saved !== initialLang) {
       setLang(saved)
     }
   }, [setLang])

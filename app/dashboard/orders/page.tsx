@@ -31,6 +31,15 @@ export default function DashboardOrders() {
     fetch("/api/orders").then(r => r.json()).then(setOrders)
   }, [])
 
+  async function updateStatus(id: string, status: string) {
+    await fetch(`/api/orders/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status }),
+    })
+    setOrders(prev => prev.map(o => o.id === id ? { ...o, status: status as Order["status"] } : o))
+  }
+
   return (
     <div>
       <h1 className="font-serif text-3xl md:text-4xl tracking-tight mb-8">{d.heading}</h1>
@@ -48,9 +57,17 @@ export default function DashboardOrders() {
                 <p className="text-sm text-muted-foreground">{o.customer.phone} — {o.customer.wilaya}, {o.customer.commune}</p>
               </div>
               <div className="flex items-center gap-4">
-                <span className={`inline-block px-3 py-1 text-[10px] tracking-[0.1em] uppercase ${statusColors[o.status]}`}>
-                  {o.status}
-                </span>
+                <select
+                  value={o.status}
+                  onChange={e => updateStatus(o.id, e.target.value)}
+                  className={"text-[10px] tracking-[0.1em] uppercase px-3 py-1 border border-border bg-background cursor-pointer " + statusColors[o.status]}
+                >
+                  <option value="pending">pending</option>
+                  <option value="confirmed">confirmed</option>
+                  <option value="shipped">shipped</option>
+                  <option value="delivered">delivered</option>
+                  <option value="cancelled">cancelled</option>
+                </select>
                 <span className="font-serif text-xl text-accent">{o.grandTotal.toLocaleString()} DZD</span>
               </div>
             </div>

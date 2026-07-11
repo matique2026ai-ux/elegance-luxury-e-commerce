@@ -2,32 +2,42 @@
 
 ## Current Status
 - Full multi-language Next.js e-commerce (EN/FR/AR)
-- SQLite (better-sqlite3) with products, content, users, orders, appointments, messages, subscribers
+- Supabase PostgreSQL with products, content, users, orders, appointments, messages, subscribers
 - Admin dashboard with password auth (herahma2026)
 - Cart, favorites, user auth contexts
 - RTL support for Arabic
 
-## The Cart Drawer Problem (PRIORITY)
-The cart drawer (`components/cart-drawer.tsx`) renders products but they're **invisible** because:
-- `bg-card` has the SAME color as `bg-background` (the drawer panel), so cards blend in
-- `border-border/60` is too subtle
-- **Fix applied**: use `bg-secondary/10 border-border/80` for visible contrast — but user hasn't confirmed this works yet
+## Email Configuration
+The app can send emails via either SMTP or Resend.
+Set ONE of these in Vercel env vars:
 
-## Other Known Issues
-1. **Checkout page**: `heading: "Delivery Information"` used as page H1 — confusing, should be "Checkout"
-2. **Server stability**: Dev server doesn't survive shell tool timeouts — user must run `npm run dev` manually
-3. **No search functionality**: Missing search page
-4. **No SEO metadata**: Dynamic `<title>` and `<meta>` per page
-5. **Some pages still client-side**: hommes, femmes, enfants, products, checkout, favorites, account use `useEffect` + API fetch instead of direct DB call
+### Option 1: SMTP (recommended for Gmail/Outlook)
+- `SMTP_HOST` — e.g., smtp.gmail.com
+- `SMTP_PORT` — 587 (default)
+- `SMTP_SECURE` — "true" for 465, "false" for 587
+- `SMTP_USER` — your full email
+- `SMTP_PASS` — app password (enable 2FA, generate app-specific password)
+- `SMTP_FROM` — sender address (optional, defaults to SMTP_USER)
 
-## Translations keys added recently
-- `checkout.selectWilaya` — "— Select your wilaya —" / "— Sélectionnez votre wilaya —" / "— اختر ولايتك —"
-- `checkout.proceed` — "Checkout" / "Commander" / "الدفع"
+### Option 2: Resend
+- `RESEND_API_KEY` — Resend API key
 
-## Build
+## Features
+- User registration/login with SHA-256 hashed passwords
+- Forgot password with 6-digit reset code (15 min expiry, stored in password_resets table)
+- Order confirmation email when customer places order
+- Status update emails (confirmed/shipped/delivered/cancelled)
+
+## API Endpoints
+- `POST /api/auth/register` — create account
+- `POST /api/auth/login` — sign in
+- `GET /api/auth/user` — check session
+- `POST /api/auth/logout/user` — sign out
+- `PUT /api/auth/profile` — update name
+- `POST /api/auth/forgot-password` — request reset code
+- `POST /api/auth/reset-password` — reset with code
+
+## Deploy
+- Vercel: https://herahima.vercel.app
 - `npm run build` succeeds with 0 errors
-- Run with `npm run dev` or `npm start`
-
-## Git
-- Remote: `https://github.com/matique2026ai-ux/elegance-luxury-e-commerce`
-- Latest commit: fd70e31
+- Supabase project: sfufsmiphykebgumpsqm (eu-west-3 Paris)

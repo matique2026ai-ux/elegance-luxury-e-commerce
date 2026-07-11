@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { store, type Order } from "@/lib/data-store"
+import { sendEmail } from "@/lib/email"
 
 const statusMessages: Record<string, { subject: string; body: string }> = {
   confirmed: {
@@ -31,25 +32,19 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     await store.updateOrderStatus(id, status)
 
     const msg = statusMessages[status]
-    const apiKey = process.env.RESEND_API_KEY
-    if (apiKey && msg) {
+    if (msg) {
       const orders = await store.getOrders()
       const order = orders.find(o => o.id === id)
       if (order?.customer?.email) {
-        fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json" },
-          body: JSON.stringify({
-            from: "MAISON HERAHIMA <onboarding@resend.dev>",
-            to: [order.customer.email],
-            subject: msg.subject,
-            html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-              <h2 style="color:#1a1a1a">${msg.subject}</h2>
-              <p style="color:#666">${msg.body}</p>
-              <p style="color:#666;font-size:14px">Order: ${id}</p>
-            </div>`
-          }),
-        }).catch(() => {})
+        sendEmail({
+          to: order.customer.email,
+          subject: msg.subject,
+          html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+            <h2 style="color:#1a1a1a">${msg.subject}</h2>
+            <p style="color:#666">${msg.body}</p>
+            <p style="color:#666;font-size:14px">Order: ${id}</p>
+          </div>`
+        })
       }
     }
 

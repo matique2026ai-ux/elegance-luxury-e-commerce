@@ -47,6 +47,12 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET() {
-  return NextResponse.json(await store.getOrders())
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url)
+  const email = searchParams.get("email")
+  const orders = await store.getOrders()
+  if (email) {
+    return NextResponse.json(orders.filter(o => o.customer.email?.toLowerCase() === email.toLowerCase()))
+  }
+  return NextResponse.json(orders)
 }

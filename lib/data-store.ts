@@ -53,6 +53,7 @@ class DataStore {
   async getUserByEmail(email: string) { return db.getUserByEmail(email) }
   async getUserById(id: number) { return db.getUserById(id) }
 
+  async updateUserName(email: string, name: string) { await db.updateUserName(email, name) }
   async getStats() { return db.getStats() }
 }
 

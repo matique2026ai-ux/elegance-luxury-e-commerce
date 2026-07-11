@@ -217,6 +217,10 @@ export async function getUserById(id: number): Promise<UserRow | null> {
   return row
 }
 
+export async function updateUserName(email: string, name: string) {
+  await supabase.from("users").update({ name }).eq("email", email)
+}
+
 export async function getStats() {
   await seed()
   const { count: totalSubscribers } = await supabase.from("subscribers").select("*", { count: "exact", head: true })

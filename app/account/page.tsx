@@ -1,9 +1,28 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Heart, ShoppingBag, User, MapPin, LogOut, Mail, Lock, Loader2 } from "lucide-react"
+import { Heart, ShoppingBag, User, LogOut, Mail, Lock, Loader2, Package, Edit2, Check } from "lucide-react"
 import Link from "next/link"
 import { useI18n } from "@/lib/i18n-context"
+
+interface Order {
+  id: string
+  items: { id: number; name: string; price: number; quantity: number; category: string }[]
+  total: number
+  shippingPrice: number
+  grandTotal: number
+  customer: { name: string; phone: string; wilaya: string; commune: string; address: string; email?: string }
+  createdAt: string
+  status: "pending" | "confirmed" | "shipped" | "delivered" | "cancelled"
+}
+
+const statusColors: Record<string, string> = {
+  pending: "bg-amber-100 text-amber-700",
+  confirmed: "bg-blue-100 text-blue-700",
+  shipped: "bg-purple-100 text-purple-700",
+  delivered: "bg-emerald-100 text-emerald-700",
+  cancelled: "bg-rose-100 text-rose-700",
+}
 
 export default function AccountPage() {
   const { t } = useI18n()
@@ -13,13 +32,31 @@ export default function AccountPage() {
   const [form, setForm] = useState({ name: "", email: "", password: "" })
   const [error, setError] = useState("")
   const [submitting, setSubmitting] = useState(false)
+  const [orders, setOrders] = useState<Order[]>([])
+  const [ordersLoading, setOrdersLoading] = useState(false)
+  const [editingName, setEditingName] = useState(false)
+  const [newName, setNewName] = useState("")
 
   useEffect(() => {
     fetch("/api/auth/user")
       .then(r => r.ok ? r.json() : null)
-      .then(data => { if (data?.authed) setUser({ name: data.name, email: "" }) })
+      .then(data => {
+        if (data?.authed) {
+          setUser({ name: data.name, email: data.email || "" })
+          setNewName(data.name)
+        }
+      })
       .finally(() => setLoading(false))
   }, [])
+
+  useEffect(() => {
+    if (!user?.email) return
+    setOrdersLoading(true)
+    fetch(`/api/orders?email=${encodeURIComponent(user.email)}`)
+      .then(r => r.json())
+      .then(setOrders)
+      .finally(() => setOrdersLoading(false))
+  }, [user?.email])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -35,6 +72,7 @@ export default function AccountPage() {
       const data = await res.json()
       if (res.ok) {
         setUser(data.user)
+        setNewName(data.user.name)
         setForm({ name: "", email: "", password: "" })
       } else {
         setError(data.error || "Something went wrong")
@@ -49,6 +87,20 @@ export default function AccountPage() {
   async function handleLogout() {
     await fetch("/api/auth/logout/user", { method: "POST" })
     setUser(null)
+    setOrders([])
+  }
+
+  async function saveName() {
+    if (!newName.trim() || newName.trim().length < 2) return
+    const res = await fetch("/api/auth/profile", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: newName.trim() }),
+    })
+    if (res.ok) {
+      setUser(prev => prev ? { ...prev, name: newName.trim() } : null)
+      setEditingName(false)
+    }
   }
 
   if (loading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>
@@ -57,27 +109,78 @@ export default function AccountPage() {
     return (
       <div className="min-h-screen">
         <div className="pt-28 pb-24">
-          <div className="max-w-[1800px] mx-auto px-6 md:px-12">
-            <div className="flex items-center justify-between mb-12">
+          <div className="max-w-[1200px] mx-auto px-6 md:px-12">
+            <div className="flex items-start justify-between mb-12">
               <div>
-                <h1 className="font-serif text-4xl md:text-5xl tracking-tight mb-2">{t.header.account}</h1>
-                <p className="text-muted-foreground">Welcome, {user.name}</p>
+                <h1 className="font-serif text-4xl md:text-5xl tracking-tight mb-4">{t.header.account}</h1>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3">
+                    {editingName ? (
+                      <div className="flex items-center gap-2">
+                        <input type="text" value={newName} onChange={e => setNewName(e.target.value)} className="bg-secondary/50 border border-border px-3 py-1 text-sm focus:outline-none focus:border-accent" autoFocus />
+                        <button onClick={saveName} className="p-1 hover:text-accent"><Check className="w-4 h-4" /></button>
+                        <button onClick={() => { setEditingName(false); setNewName(user.name) }} className="p-1 hover:text-muted-foreground"><LogOut className="w-4 h-4 rotate-90" /></button>
+                      </div>
+                    ) : (
+                      <>
+                        <span className="text-muted-foreground">{user.name}</span>
+                        <button onClick={() => setEditingName(true)} className="p-1 hover:text-accent"><Edit2 className="w-3 h-3" /></button>
+                      </>
+                    )}
+                  </div>
+                  <p className="text-sm text-muted-foreground">{user.email}</p>
+                </div>
               </div>
               <button onClick={handleLogout} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-destructive transition-colors">
                 <LogOut className="w-4 h-4" /> Sign Out
               </button>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <Link href="/favorites" className="bg-card border border-border p-8 text-center hover:bg-secondary/50 transition-colors group">
-                <Heart className="w-8 h-8 mx-auto mb-4 group-hover:text-accent transition-colors" />
-                <h3 className="font-serif text-xl mb-1">{t.accountLinks.favorites}</h3>
-                <p className="text-sm text-muted-foreground">{t.accountLinks.viewFavorites}</p>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+              <Link href="/favorites" className="bg-card border border-border p-6 text-center hover:bg-secondary/50 transition-colors group">
+                <Heart className="w-8 h-8 mx-auto mb-3 group-hover:text-accent transition-colors" />
+                <h3 className="font-serif text-lg mb-1">{t.accountLinks.favorites}</h3>
+                <p className="text-xs text-muted-foreground">{t.accountLinks.viewFavorites}</p>
               </Link>
-              <Link href="/checkout" className="bg-card border border-border p-8 text-center hover:bg-secondary/50 transition-colors group">
-                <ShoppingBag className="w-8 h-8 mx-auto mb-4 group-hover:text-accent transition-colors" />
-                <h3 className="font-serif text-xl mb-1">{t.accountLinks.orders}</h3>
-                <p className="text-sm text-muted-foreground">{t.accountLinks.viewOrders}</p>
+              <Link href="/products" className="bg-card border border-border p-6 text-center hover:bg-secondary/50 transition-colors group">
+                <ShoppingBag className="w-8 h-8 mx-auto mb-3 group-hover:text-accent transition-colors" />
+                <h3 className="font-serif text-lg mb-1">Continue Shopping</h3>
+                <p className="text-xs text-muted-foreground">Browse our collection</p>
               </Link>
+            </div>
+
+            <div>
+              <h2 className="font-serif text-2xl mb-6 flex items-center gap-3">
+                <Package className="w-5 h-5" /> My Orders
+              </h2>
+              {ordersLoading ? (
+                <p className="text-muted-foreground">Loading orders...</p>
+              ) : orders.length === 0 ? (
+                <div className="bg-card border border-border p-8 text-center">
+                  <p className="text-muted-foreground mb-4">No orders yet</p>
+                  <Link href="/products" className="text-sm tracking-wider uppercase underline">Start Shopping</Link>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {orders.map((o) => (
+                    <div key={o.id} className="bg-card border border-border p-6">
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-3">
+                        <div>
+                          <span className="text-xs text-muted-foreground">Order #{o.id.slice(0, 8)}</span>
+                          <span className={`ml-3 inline-block px-2 py-0.5 text-[10px] tracking-[0.1em] uppercase ${statusColors[o.status] || "bg-secondary text-muted-foreground"}`}>{o.status}</span>
+                        </div>
+                        <span className="font-serif text-lg">{o.grandTotal.toLocaleString()} DZD</span>
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        {o.items.map((item, i) => (
+                          <span key={i}>{item.name} x{item.quantity}{i < o.items.length - 1 ? ", " : ""}</span>
+                        ))}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-2">Deliver to: {o.customer.wilaya}, {o.customer.commune}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -18,6 +18,7 @@ export async function POST(request: Request) {
     const response = NextResponse.json({ user: { id: user.id, name: user.name, email: user.email } })
     response.cookies.set("user_token", token, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: 60 * 60 * 24 * 30 })
     response.cookies.set("user_name", user.name, { secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: 60 * 60 * 24 * 30 })
+    response.cookies.set("user_email", user.email, { secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: 60 * 60 * 24 * 30 })
     return response
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })

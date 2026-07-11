@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, ShoppingBag, Search, User, Globe } from "lucide-react";
+import { Menu, X, ShoppingBag, Search, User, Globe, LogOut } from "lucide-react";
 import { useI18n, type Lang } from "@/lib/i18n-context";
 import { useCart } from "@/context/cart-context";
 import { CartDrawer } from "./cart-drawer";
@@ -16,8 +16,15 @@ const languages: { label: string; code: Lang }[] = [
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [userName, setUserName] = useState<string | null>(null);
   const { t, lang, setLang } = useI18n();
   const { totalItems, toggleCart, openCart } = useCart();
+
+  useEffect(() => {
+    fetch("/api/auth/user")
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data?.authed) setUserName(data.name) })
+  }, [])
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
@@ -77,10 +84,11 @@ export function Header() {
               </Link>
               <Link
                 href="/account"
-                className="p-2 min-h-11 min-w-11 flex items-center justify-center hover:text-accent transition-colors duration-300"
+                className="p-2 min-h-11 min-w-11 flex items-center gap-2 hover:text-accent transition-colors duration-300"
                 aria-label={t.header.account}
               >
                 <User className="w-5 h-5" />
+                {userName && <span className="text-xs tracking-wider hidden lg:block">{userName}</span>}
               </Link>
               <button
                 type="button"

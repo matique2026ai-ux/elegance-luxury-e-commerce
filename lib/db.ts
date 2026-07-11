@@ -20,6 +20,7 @@ export interface SubscriberRow { id: number; email: string; date: string }
 export interface AppointmentRow { id: number; name: string; email: string; phone?: string; date?: string; message?: string; createdAt: string; status: string }
 export interface ContactRow { id: number; name: string; email: string; subject?: string; message: string; createdAt: string; read: number }
 export interface UserRow { id: number; name: string; email: string; password: string; createdAt: string }
+export interface PasswordResetRow { id: number; email: string; code: string; expires_at: string; used: number; created_at: string }
 export interface OrderRow { id: string; items: string; total: number; shippingPrice: number; grandTotal: number; customer: string; createdAt: string; status: string }
 
 async function seed() {
@@ -219,6 +220,28 @@ export async function getUserById(id: number): Promise<UserRow | null> {
 
 export async function updateUserName(email: string, name: string) {
   await supabase.from("users").update({ name }).eq("email", email)
+}
+
+export async function createResetCode(email: string, code: string, expiresAt: string) {
+  await supabase.from("password_resets").insert({ email, code, expires_at: expiresAt })
+}
+
+export async function verifyResetCode(email: string, code: string): Promise<boolean> {
+  const { data } = await supabase
+    .from("password_resets")
+    .select("id")
+    .eq("email", email)
+    .eq("code", code)
+    .eq("used", 0)
+    .gte("expires_at", new Date().toISOString())
+    .single()
+  if (!data) return false
+  await supabase.from("password_resets").update({ used: 1 }).eq("id", data.id)
+  return true
+}
+
+export async function updatePassword(email: string, newHash: string) {
+  await supabase.from("users").update({ password: newHash }).eq("email", email)
 }
 
 export async function getStats() {

@@ -54,6 +54,9 @@ class DataStore {
   async getUserById(id: number) { return db.getUserById(id) }
 
   async updateUserName(email: string, name: string) { await db.updateUserName(email, name) }
+  async createResetCode(email: string, code: string, expiresAt: string) { await db.createResetCode(email, code, expiresAt) }
+  async verifyResetCode(email: string, code: string) { return db.verifyResetCode(email, code) }
+  async updatePassword(email: string, newHash: string) { await db.updatePassword(email, newHash) }
   async getStats() { return db.getStats() }
 }
 

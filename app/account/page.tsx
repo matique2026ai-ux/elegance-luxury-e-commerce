@@ -28,9 +28,10 @@ export default function AccountPage() {
   const { t } = useI18n()
   const [user, setUser] = useState<{ name: string; email: string } | null>(null)
   const [loading, setLoading] = useState(true)
-  const [mode, setMode] = useState<"login" | "register">("login")
-  const [form, setForm] = useState({ name: "", email: "", password: "" })
+  const [mode, setMode] = useState<"login" | "register" | "forgot">("login")
+  const [form, setForm] = useState({ name: "", email: "", password: "", code: "" })
   const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [orders, setOrders] = useState<Order[]>([])
   const [ordersLoading, setOrdersLoading] = useState(false)
@@ -61,21 +62,52 @@ export default function AccountPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError("")
+    setSuccess("")
     setSubmitting(true)
-    const endpoint = mode === "login" ? "/api/auth/login" : "/api/auth/register"
     try {
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(mode === "login" ? { email: form.email, password: form.password } : form),
-      })
-      const data = await res.json()
-      if (res.ok) {
-        setUser(data.user)
-        setNewName(data.user.name)
-        setForm({ name: "", email: "", password: "" })
+      if (mode === "forgot") {
+        if (!form.code) {
+          const res = await fetch("/api/auth/forgot-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: form.email }),
+          })
+          const data = await res.json()
+          if (res.ok) {
+            setForm(prev => ({ ...prev, code: data.code || "sent" }))
+          } else {
+            setError(data.error || "Something went wrong")
+          }
+        } else {
+          const res = await fetch("/api/auth/reset-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: form.email, code: form.code, password: form.password }),
+          })
+          const data = await res.json()
+          if (res.ok) {
+            setMode("login")
+            setForm({ name: "", email: form.email, password: "", code: "" })
+            setSuccess("Password updated! Sign in with your new password.")
+          } else {
+            setError(data.error || "Something went wrong")
+          }
+        }
       } else {
-        setError(data.error || "Something went wrong")
+        const endpoint = mode === "login" ? "/api/auth/login" : "/api/auth/register"
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(mode === "login" ? { email: form.email, password: form.password } : form),
+        })
+        const data = await res.json()
+        if (res.ok) {
+          setUser(data.user)
+          setNewName(data.user.name)
+          setForm({ name: "", email: "", password: "", code: "" })
+        } else {
+          setError(data.error || "Something went wrong")
+        }
       }
     } catch {
       setError("Network error")
@@ -194,38 +226,82 @@ export default function AccountPage() {
         <div className="max-w-md mx-auto px-6">
           <h1 className="font-serif text-4xl md:text-5xl tracking-tight mb-2 text-center">{t.header.account}</h1>
           <div className="flex justify-center gap-4 mb-8">
-            <button onClick={() => setMode("login")} className={`px-6 py-2 text-sm tracking-wider uppercase transition-colors ${mode === "login" ? "bg-primary text-primary-foreground" : "border border-border hover:bg-secondary"}`}>Sign In</button>
-            <button onClick={() => setMode("register")} className={`px-6 py-2 text-sm tracking-wider uppercase transition-colors ${mode === "register" ? "bg-primary text-primary-foreground" : "border border-border hover:bg-secondary"}`}>Register</button>
+            {mode === "forgot" ? (
+              <button onClick={() => setMode("login")} className="px-6 py-2 text-sm tracking-wider uppercase border border-border hover:bg-secondary transition-colors">← Back to Sign In</button>
+            ) : (
+              <>
+                <button onClick={() => setMode("login")} className={`px-6 py-2 text-sm tracking-wider uppercase transition-colors ${mode === "login" ? "bg-primary text-primary-foreground" : "border border-border hover:bg-secondary"}`}>Sign In</button>
+                <button onClick={() => setMode("register")} className={`px-6 py-2 text-sm tracking-wider uppercase transition-colors ${mode === "register" ? "bg-primary text-primary-foreground" : "border border-border hover:bg-secondary"}`}>Register</button>
+              </>
+            )}
           </div>
           <form onSubmit={handleSubmit} className="bg-card border border-border p-8 space-y-4">
+            {success && <p className="text-sm text-emerald-600 bg-emerald-50 p-3">{success}</p>}
             {error && <p className="text-sm text-destructive bg-destructive/10 p-3">{error}</p>}
-            {mode === "register" && (
-              <div>
-                <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">Name</label>
-                <div className="flex border border-border">
-                  <span className="flex items-center px-4 bg-secondary/50 border-r border-border"><User className="w-4 h-4 text-muted-foreground" /></span>
-                  <input type="text" required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="flex-1 px-4 py-3 bg-transparent focus:outline-none text-sm" placeholder="Your name" />
+            {mode === "forgot" ? (
+              <>
+                <p className="text-sm text-muted-foreground">Enter your email and a reset code will be sent.</p>
+                <div>
+                  <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">Email</label>
+                  <div className="flex border border-border">
+                    <span className="flex items-center px-4 bg-secondary/50 border-r border-border"><Mail className="w-4 h-4 text-muted-foreground" /></span>
+                    <input type="email" required value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} className="flex-1 px-4 py-3 bg-transparent focus:outline-none text-sm" placeholder="email@example.com" />
+                  </div>
                 </div>
-              </div>
+                {form.code !== "" && (
+                  <>
+                    <div>
+                      <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">Reset Code</label>
+                      <input type="text" required value={form.code} onChange={e => setForm({ ...form, code: e.target.value })} className="w-full bg-secondary/50 border border-border px-4 py-3 text-sm focus:outline-none focus:border-accent" placeholder="000000" />
+                    </div>
+                    <div>
+                      <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">New Password</label>
+                      <div className="flex border border-border">
+                        <span className="flex items-center px-4 bg-secondary/50 border-r border-border"><Lock className="w-4 h-4 text-muted-foreground" /></span>
+                        <input type="password" required value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} className="flex-1 px-4 py-3 bg-transparent focus:outline-none text-sm" placeholder="Min 6 characters" minLength={6} />
+                      </div>
+                    </div>
+                  </>
+                )}
+                <button type="submit" disabled={submitting} className="w-full bg-primary text-primary-foreground py-3 text-sm tracking-wider uppercase hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
+                  {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {form.code ? "Reset Password" : "Send Reset Code"}
+                </button>
+              </>
+            ) : (
+              <>
+                {mode === "register" && (
+                  <div>
+                    <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">Name</label>
+                    <div className="flex border border-border">
+                      <span className="flex items-center px-4 bg-secondary/50 border-r border-border"><User className="w-4 h-4 text-muted-foreground" /></span>
+                      <input type="text" required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="flex-1 px-4 py-3 bg-transparent focus:outline-none text-sm" placeholder="Your name" />
+                    </div>
+                  </div>
+                )}
+                <div>
+                  <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">Email</label>
+                  <div className="flex border border-border">
+                    <span className="flex items-center px-4 bg-secondary/50 border-r border-border"><Mail className="w-4 h-4 text-muted-foreground" /></span>
+                    <input type="email" required value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} className="flex-1 px-4 py-3 bg-transparent focus:outline-none text-sm" placeholder="email@example.com" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">Password</label>
+                  <div className="flex border border-border">
+                    <span className="flex items-center px-4 bg-secondary/50 border-r border-border"><Lock className="w-4 h-4 text-muted-foreground" /></span>
+                    <input type="password" required value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} className="flex-1 px-4 py-3 bg-transparent focus:outline-none text-sm" placeholder="Min 6 characters" minLength={6} />
+                  </div>
+                </div>
+                {mode === "login" && (
+                  <button type="button" onClick={() => setMode("forgot")} className="text-xs text-muted-foreground hover:text-accent transition-colors underline">Forgot password?</button>
+                )}
+                <button type="submit" disabled={submitting} className="w-full bg-primary text-primary-foreground py-3 text-sm tracking-wider uppercase hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
+                  {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {mode === "login" ? "Sign In" : "Create Account"}
+                </button>
+              </>
             )}
-            <div>
-              <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">Email</label>
-              <div className="flex border border-border">
-                <span className="flex items-center px-4 bg-secondary/50 border-r border-border"><Mail className="w-4 h-4 text-muted-foreground" /></span>
-                <input type="email" required value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} className="flex-1 px-4 py-3 bg-transparent focus:outline-none text-sm" placeholder="email@example.com" />
-              </div>
-            </div>
-            <div>
-              <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">Password</label>
-              <div className="flex border border-border">
-                <span className="flex items-center px-4 bg-secondary/50 border-r border-border"><Lock className="w-4 h-4 text-muted-foreground" /></span>
-                <input type="password" required value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} className="flex-1 px-4 py-3 bg-transparent focus:outline-none text-sm" placeholder="Min 6 characters" minLength={6} />
-              </div>
-            </div>
-            <button type="submit" disabled={submitting} className="w-full bg-primary text-primary-foreground py-3 text-sm tracking-wider uppercase hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
-              {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
-              {mode === "login" ? "Sign In" : "Create Account"}
-            </button>
           </form>
         </div>
       </div>

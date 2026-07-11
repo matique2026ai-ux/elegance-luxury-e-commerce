@@ -13,7 +13,7 @@ export async function getPageData(page: string) {
   const lang = cookieStore.get('lang')?.value || 'en'
   const t = all[lang] || en
 
-  const row = getPageContent(page)
+  const row = await getPageContent(page)
 
   let content: { title: string; subtitle: string; description: string; images: string[] } | null = null
   if (row) {

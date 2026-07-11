@@ -20,3 +20,15 @@ export async function POST(request: Request) {
 export async function GET() {
   return NextResponse.json(await store.getSubscribers())
 }
+
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get("id")
+    if (!id) return NextResponse.json({ error: "ID is required" }, { status: 400 })
+    await store.deleteSubscriber(id)
+    return NextResponse.json({ success: true })
+  } catch {
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+  }
+}

@@ -14,11 +14,19 @@ interface PageContent {
 }
 
 const pages = ["heritage", "services", "boutiques"]
+const langs = ["en", "fr", "ar"] as const
+
+const emptyForm = {
+  title_en: "", title_fr: "", title_ar: "",
+  subtitle_en: "", subtitle_fr: "", subtitle_ar: "",
+  description_en: "", description_fr: "", description_ar: "",
+  published: true,
+}
 
 export default function DashboardContent() {
   const [contentMap, setContentMap] = useState<Record<string, PageContent>>({})
   const [editing, setEditing] = useState<string | null>(null)
-  const [form, setForm] = useState({ title: "", subtitle: "", description: "", published: true })
+  const [form, setForm] = useState(emptyForm)
   const { t } = useI18n()
   const d = t.dashboard.content
 
@@ -32,18 +40,39 @@ export default function DashboardContent() {
 
   function editPage(page: string) {
     const c = contentMap[page]
-    setForm({ title: c?.title || "", subtitle: c?.subtitle || "", description: c?.description || "", published: c?.published ?? true })
+    setForm({
+      title_en: c?.title || "", title_fr: c?.title || "", title_ar: c?.title || "",
+      subtitle_en: c?.subtitle || "", subtitle_fr: c?.subtitle || "", subtitle_ar: c?.subtitle || "",
+      description_en: c?.description || "", description_fr: c?.description || "", description_ar: c?.description || "",
+      published: c?.published ?? true,
+    })
     setEditing(page)
   }
 
   async function save() {
     if (!editing) return
+    const body = {
+      page: editing,
+      title: form.title_en,
+      title_fr: form.title_fr,
+      title_ar: form.title_ar,
+      subtitle: form.subtitle_en,
+      subtitle_fr: form.subtitle_fr,
+      subtitle_ar: form.subtitle_ar,
+      description: form.description_en,
+      description_fr: form.description_fr,
+      description_ar: form.description_ar,
+      published: form.published ? 1 : 0,
+    }
     await fetch("/api/content", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ page: editing, ...form }),
+      body: JSON.stringify(body),
     })
-    setContentMap(prev => ({ ...prev, [editing]: { ...prev[editing], ...form, page: editing, images: prev[editing]?.images || [] } }))
+    setContentMap(prev => ({
+      ...prev,
+      [editing]: { ...prev[editing], title: form.title_en, subtitle: form.subtitle_en, description: form.description_en, published: form.published, page: editing, images: prev[editing]?.images || [] }
+    }))
     setEditing(null)
   }
 
@@ -66,18 +95,30 @@ export default function DashboardContent() {
                 <button type="button" onClick={() => editPage(page)} className="p-2 hover:bg-secondary transition-colors"><Pencil className="w-4 h-4" /></button>
               </div>
               {editing === page ? (
-                <div className="space-y-4 mt-4 pt-4 border-t border-border">
-                  <div>
-                    <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">{d.form.title}</label>
-                    <input type="text" value={form.title} onChange={e => setForm(prev => ({ ...prev, title: e.target.value }))} className="w-full bg-secondary/50 border border-border px-4 py-2 text-sm focus:outline-none focus:border-accent" />
+                <div className="space-y-6 mt-4 pt-4 border-t border-border">
+                  <div className="grid grid-cols-3 gap-4">
+                    {langs.map(lang => (
+                      <div key={lang}>
+                        <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">{d.form.title} ({lang.toUpperCase()})</label>
+                        <input type="text" value={form[`title_${lang}` as keyof typeof form] as string} onChange={e => setForm(prev => ({ ...prev, [`title_${lang}`]: e.target.value }))} className="w-full bg-secondary/50 border border-border px-4 py-2 text-sm focus:outline-none focus:border-accent" />
+                      </div>
+                    ))}
                   </div>
-                  <div>
-                    <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">{d.form.subtitle}</label>
-                    <input type="text" value={form.subtitle} onChange={e => setForm(prev => ({ ...prev, subtitle: e.target.value }))} className="w-full bg-secondary/50 border border-border px-4 py-2 text-sm focus:outline-none focus:border-accent" />
+                  <div className="grid grid-cols-3 gap-4">
+                    {langs.map(lang => (
+                      <div key={lang}>
+                        <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">{d.form.subtitle} ({lang.toUpperCase()})</label>
+                        <input type="text" value={form[`subtitle_${lang}` as keyof typeof form] as string} onChange={e => setForm(prev => ({ ...prev, [`subtitle_${lang}`]: e.target.value }))} className="w-full bg-secondary/50 border border-border px-4 py-2 text-sm focus:outline-none focus:border-accent" />
+                      </div>
+                    ))}
                   </div>
-                  <div>
-                    <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">{d.form.description}</label>
-                    <textarea value={form.description} onChange={e => setForm(prev => ({ ...prev, description: e.target.value }))} rows={4} className="w-full bg-secondary/50 border border-border px-4 py-2 text-sm focus:outline-none focus:border-accent" />
+                  <div className="grid grid-cols-3 gap-4">
+                    {langs.map(lang => (
+                      <div key={lang}>
+                        <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">{d.form.description} ({lang.toUpperCase()})</label>
+                        <textarea value={form[`description_${lang}` as keyof typeof form] as string} onChange={e => setForm(prev => ({ ...prev, [`description_${lang}`]: e.target.value }))} rows={4} className="w-full bg-secondary/50 border border-border px-4 py-2 text-sm focus:outline-none focus:border-accent" />
+                      </div>
+                    ))}
                   </div>
                   <div className="flex items-center gap-3">
                     <input type="checkbox" id="published" checked={form.published} onChange={e => setForm(prev => ({ ...prev, published: e.target.checked }))} className="w-4 h-4 accent-accent" />

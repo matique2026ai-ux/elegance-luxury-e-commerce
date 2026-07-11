@@ -386,7 +386,6 @@ export const fr = {
         item: "Article",
         category: "Catégorie",
         qty: "Qté",
-        selectWilaya: "— Sélectionnez votre wilaya —",
         price: "Prix",
       },
       shipping: "Livraison",

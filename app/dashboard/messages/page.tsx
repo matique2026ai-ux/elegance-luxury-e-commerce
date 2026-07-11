@@ -28,6 +28,11 @@ export default function DashboardMessages() {
     setMessages(prev => prev.map(m => m.id === id ? { ...m, read: true } : m))
   }
 
+  async function remove(id: string) {
+    await fetch(`/api/contact?id=${id}`, { method: "DELETE" })
+    setMessages(prev => prev.filter(m => m.id !== id))
+  }
+
   return (
     <div>
       <h1 className="font-serif text-3xl md:text-4xl tracking-tight mb-8">{d.heading}</h1>
@@ -55,7 +60,7 @@ export default function DashboardMessages() {
                     <MailOpen className="w-4 h-4" />
                   </button>
                 )}
-                <button type="button" className="p-2 hover:bg-destructive/10 hover:text-destructive transition-colors" aria-label={d.deleteAria}>
+                <button type="button" onClick={() => remove(msg.id)} className="p-2 hover:bg-destructive/10 hover:text-destructive transition-colors" aria-label={d.deleteAria}>
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>

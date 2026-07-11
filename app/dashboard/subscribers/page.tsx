@@ -19,6 +19,11 @@ export default function DashboardSubscribers() {
     fetch("/api/newsletter").then(r => r.json()).then(setSubscribers)
   }, [])
 
+  async function remove(id: string) {
+    await fetch(`/api/newsletter?id=${id}`, { method: "DELETE" })
+    setSubscribers(prev => prev.filter(s => s.id !== id))
+  }
+
   return (
     <div>
       <h1 className="font-serif text-3xl md:text-4xl tracking-tight mb-8">{d.heading}</h1>
@@ -41,7 +46,7 @@ export default function DashboardSubscribers() {
                 <td className="px-6 py-4 font-medium">{s.email}</td>
                 <td className="px-6 py-4 text-muted-foreground">{new Date(s.date).toLocaleDateString()}</td>
                 <td className="px-6 py-4 text-right">
-                  <button type="button" className="p-2 hover:bg-destructive/10 hover:text-destructive transition-colors" aria-label={d.deleteAria}>
+                  <button type="button" onClick={() => remove(s.id)} className="p-2 hover:bg-destructive/10 hover:text-destructive transition-colors" aria-label={d.deleteAria}>
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </td>

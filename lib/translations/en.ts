@@ -402,7 +402,6 @@ export const en = {
         item: "Item",
         category: "Category",
         qty: "Qty",
-        selectWilaya: "— Select your wilaya —",
         price: "Price",
       },
       shipping: "Shipping",

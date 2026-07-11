@@ -8,7 +8,7 @@ interface Product {
   id: number; name: string; category: string; sub: string; price: number; stock: number; image: string; isNew: boolean
 }
 
-const emptyForm = { name: "", category: "men" as const, sub: "Clothing", price: 0, stock: 0, image: "", isNew: false }
+const emptyForm = { name_en: "", name_fr: "", name_ar: "", category: "men" as const, sub: "Clothing", price: 0, stock: 0, image: "", isNew: false }
 
 export default function DashboardProducts() {
   const [products, setProducts] = useState<Product[]>([])
@@ -21,13 +21,13 @@ export default function DashboardProducts() {
   useEffect(() => { fetch("/api/products").then(r => r.json()).then(setProducts) }, [])
 
   function openAdd() { setForm(emptyForm); setEditingId(null); setShowForm(true) }
-  function openEdit(p: Product) { setForm({ name: p.name, category: p.category as typeof form.category, sub: p.sub, price: p.price, stock: p.stock, image: p.image, isNew: p.isNew }); setEditingId(p.id); setShowForm(true) }
+  function openEdit(p: Product) { setForm({ name_en: p.name, name_fr: p.name, name_ar: p.name, category: p.category as typeof form.category, sub: p.sub, price: p.price, stock: p.stock, image: p.image, isNew: p.isNew }); setEditingId(p.id); setShowForm(true) }
 
   async function save() {
     const body = {
-      name_en: form.name,
-      name_fr: form.name,
-      name_ar: form.name,
+      name_en: form.name_en,
+      name_fr: form.name_fr,
+      name_ar: form.name_ar,
       category: form.category,
       sub_en: form.sub,
       sub_fr: form.sub,
@@ -40,7 +40,7 @@ export default function DashboardProducts() {
     if (editingId) {
       const res = await fetch(`/api/products/${editingId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
       if (!res.ok) return alert((await res.json()).error || "Failed to update")
-      setProducts(prev => prev.map(p => p.id === editingId ? { ...p, name: form.name, category: form.category, sub: form.sub, price: form.price, stock: form.stock, image: form.image, isNew: form.isNew } : p))
+      setProducts(prev => prev.map(p => p.id === editingId ? { ...p, name: form.name_en, category: form.category, sub: form.sub, price: form.price, stock: form.stock, image: form.image, isNew: form.isNew } : p))
     } else {
       const res = await fetch("/api/products", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
       if (!res.ok) return alert((await res.json()).error || "Failed to add")
@@ -72,9 +72,19 @@ export default function DashboardProducts() {
               <button type="button" onClick={() => setShowForm(false)}><X className="w-5 h-5" /></button>
             </div>
             <div className="space-y-4">
-              <div>
-                <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">{d.form.name}</label>
-                <input type="text" value={form.name} onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))} className="w-full bg-secondary/50 border border-border px-4 py-2 text-sm focus:outline-none focus:border-accent" />
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">{d.form.name} (EN)</label>
+                  <input type="text" value={form.name_en} onChange={e => setForm(prev => ({ ...prev, name_en: e.target.value }))} className="w-full bg-secondary/50 border border-border px-4 py-2 text-sm focus:outline-none focus:border-accent" />
+                </div>
+                <div>
+                  <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">{d.form.name} (FR)</label>
+                  <input type="text" value={form.name_fr} onChange={e => setForm(prev => ({ ...prev, name_fr: e.target.value }))} className="w-full bg-secondary/50 border border-border px-4 py-2 text-sm focus:outline-none focus:border-accent" />
+                </div>
+                <div>
+                  <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">{d.form.name} (AR)</label>
+                  <input type="text" value={form.name_ar} onChange={e => setForm(prev => ({ ...prev, name_ar: e.target.value }))} className="w-full bg-secondary/50 border border-border px-4 py-2 text-sm focus:outline-none focus:border-accent" />
+                </div>
               </div>
               <div>
                 <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">{d.form.category}</label>

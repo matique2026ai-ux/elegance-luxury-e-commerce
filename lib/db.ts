@@ -1,5 +1,7 @@
 import { supabase } from "./supabase"
 
+let seeded = false
+
 export interface ProductRow {
   id: number; name_en: string; name_fr?: string; name_ar?: string;
   category: "men" | "women" | "children";
@@ -21,8 +23,9 @@ export interface UserRow { id: number; name: string; email: string; password: st
 export interface OrderRow { id: string; items: string; total: number; shippingPrice: number; grandTotal: number; customer: string; createdAt: string; status: string }
 
 async function seed() {
+  if (seeded) return
   const { count } = await supabase.from("products").select("*", { count: "exact", head: true })
-  if (count && count > 0) return
+  if (count && count > 0) { seeded = true; return }
 
   const products = [
     {name_en:"Wool Tailored Suit",name_fr:"Costume en Laine Sur Mesure",name_ar:"بدلة صوف مفصلة",category:"men",sub_en:"Clothing",sub_fr:"Vêtements",sub_ar:"ملابس",price:3200,stock:10,image:"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&h=600&fit=crop",isNew:1},

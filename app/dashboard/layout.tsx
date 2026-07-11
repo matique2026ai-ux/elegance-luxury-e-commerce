@@ -40,8 +40,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   if (pathname === "/dashboard/login") return <>{children}</>
-  if (checking) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>
-  if (!authed) return null
+  if (checking || !authed) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>
 
   return (
     <div className="min-h-screen bg-secondary/20 flex">

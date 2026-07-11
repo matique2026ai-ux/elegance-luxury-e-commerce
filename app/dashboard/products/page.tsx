@@ -24,10 +24,23 @@ export default function DashboardProducts() {
   function openEdit(p: Product) { setForm({ name: p.name, category: p.category as typeof form.category, sub: p.sub, price: p.price, stock: p.stock, image: p.image, isNew: p.isNew }); setEditingId(p.id); setShowForm(true) }
 
   async function save() {
+    const body = {
+      name_en: form.name,
+      name_fr: form.name,
+      name_ar: form.name,
+      category: form.category,
+      sub_en: form.sub,
+      sub_fr: form.sub,
+      sub_ar: form.sub,
+      price: form.price,
+      stock: form.stock,
+      image: form.image,
+      isNew: form.isNew ? 1 : 0,
+    }
     if (editingId) {
-      await fetch(`/api/products/${editingId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) })
+      await fetch(`/api/products/${editingId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
     } else {
-      await fetch("/api/products", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) })
+      await fetch("/api/products", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
     }
     setShowForm(false)
     fetch("/api/products").then(r => r.json()).then(setProducts)

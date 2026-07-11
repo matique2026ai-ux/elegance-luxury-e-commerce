@@ -37,16 +37,17 @@ export default function DashboardProducts() {
       image: form.image,
       isNew: form.isNew ? 1 : 0,
     }
-    const res = editingId
-      ? await fetch(`/api/products/${editingId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
-      : await fetch("/api/products", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
-    if (!res.ok) {
-      const err = await res.json()
-      alert(err.error || "Failed to save product")
-      return
+    if (editingId) {
+      const res = await fetch(`/api/products/${editingId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      if (!res.ok) return alert((await res.json()).error || "Failed to update")
+      setProducts(prev => prev.map(p => p.id === editingId ? { ...p, name: form.name, category: form.category, sub: form.sub, price: form.price, stock: form.stock, image: form.image, isNew: form.isNew } : p))
+    } else {
+      const res = await fetch("/api/products", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      if (!res.ok) return alert((await res.json()).error || "Failed to add")
+      const created = await res.json()
+      setProducts(prev => [...prev, created])
     }
     setShowForm(false)
-    fetch("/api/products").then(r => r.json()).then(setProducts)
   }
 
   async function remove(id: number) {

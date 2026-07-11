@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Plus, Pencil, Trash2, X } from "lucide-react"
+import { Plus, Pencil, Trash2, X, Upload } from "lucide-react"
 import { useI18n } from "@/lib/i18n-context"
 
 interface Product {
@@ -86,7 +86,27 @@ export default function DashboardProducts() {
               </div>
               <div>
                 <label className="block text-xs tracking-wider uppercase text-muted-foreground mb-1">{d.form.imageUrl}</label>
-                <input type="text" value={form.image} onChange={e => setForm(prev => ({ ...prev, image: e.target.value }))} className="w-full bg-secondary/50 border border-border px-4 py-2 text-sm focus:outline-none focus:border-accent" />
+                <div className="flex gap-3 items-start">
+                  <div className="flex-1">
+                    <input type="text" value={form.image} onChange={e => setForm(prev => ({ ...prev, image: e.target.value }))} placeholder="https://..." className="w-full bg-secondary/50 border border-border px-4 py-2 text-sm focus:outline-none focus:border-accent mb-2" />
+                    <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer hover:text-accent transition-colors">
+                      <Upload className="w-4 h-4" />
+                      <span>Upload from computer</span>
+                      <input type="file" accept="image/*" className="hidden" onChange={async e => {
+                        const file = e.target.files?.[0]
+                        if (!file) return
+                        const reader = new FileReader()
+                        reader.onload = () => setForm(prev => ({ ...prev, image: reader.result as string }))
+                        reader.readAsDataURL(file)
+                      }} />
+                    </label>
+                  </div>
+                  {form.image && (
+                    <div className="w-16 h-16 border border-border overflow-hidden shrink-0 bg-secondary/30">
+                      <img src={form.image} alt="preview" className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="flex items-center gap-3">
                 <input type="checkbox" id="isNew" checked={form.isNew} onChange={e => setForm(prev => ({ ...prev, isNew: e.target.checked }))} className="w-4 h-4 accent-accent" />

@@ -7,7 +7,9 @@ async function ensureDb(): Promise<SqlJsDatabase> {
   if (db) return db
   if (!ready) {
     ready = (async () => {
-      const SQL = await initSqlJs()
+      const SQL = await initSqlJs({
+        locateFile: (file) => 'https://unpkg.com/sql.js@1.11.0/dist/' + file
+      })
       db = new SQL.Database()
       db.run("PRAGMA foreign_keys = ON")
       db.run("PRAGMA journal_mode = MEMORY")

@@ -10,6 +10,6 @@ export const metadata = {
 export default async function FemmesPage() {
   const cookieStore = await cookies()
   const lang = cookieStore.get('lang')?.value || 'en'
-  const products = await store.getProducts("women", undefined, lang)
+  const products = store.getProducts("women", undefined, lang)
   return <FemmesClient products={JSON.parse(JSON.stringify(products))} />
 }

@@ -292,6 +292,13 @@ export const ar = {
       subscribers: "المشتركين",
       backToSite: "العودة للموقع",
     },
+    login: {
+      heading: "لوحة التحكم",
+      enterPassword: "أدخل كلمة المرور للمتابعة",
+      password: "كلمة المرور",
+      incorrect: "كلمة المرور خاطئة",
+      signIn: "تسجيل الدخول",
+    },
     overview: {
       heading: "نظرة عامة على لوحة التحكم",
       appointments: "المواعيد",
@@ -368,11 +375,18 @@ export const ar = {
       heading: "الطلبات",
       noOrders: "لا توجد طلبات بعد.",
       orderPrefix: "طلب #",
+      statusLabels: {
+        pending: "قيد الانتظار",
+        confirmed: "مؤكد",
+        shipped: "تم الشحن",
+        delivered: "تم التوصيل",
+        cancelled: "ملغي",
+      },
       table: {
         item: "المنتج",
         category: "الفئة",
-      qty: "العدد",
-      selectWilaya: "— اختر ولايتك —",
+        qty: "العدد",
+        selectWilaya: "— اختر ولايتك —",
         price: "السعر",
       },
       shipping: "الشحن",
@@ -381,6 +395,11 @@ export const ar = {
     appointments: {
       heading: "المواعيد",
       noAppointments: "لا توجد مواعيد بعد.",
+      statusLabels: {
+        pending: "قيد الانتظار",
+        confirmed: "مؤكد",
+        cancelled: "ملغي",
+      },
       table: {
         client: "العميل",
         contact: "جهة الاتصال",

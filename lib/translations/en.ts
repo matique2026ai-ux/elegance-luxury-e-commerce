@@ -308,6 +308,13 @@ export const en = {
       subscribers: "Subscribers",
       backToSite: "Back to Site",
     },
+    login: {
+      heading: "Dashboard",
+      enterPassword: "Enter password to continue",
+      password: "Password",
+      incorrect: "Incorrect password",
+      signIn: "Sign In",
+    },
     overview: {
       heading: "Dashboard Overview",
       appointments: "Appointments",
@@ -384,11 +391,18 @@ export const en = {
       heading: "Orders",
       noOrders: "No orders yet.",
       orderPrefix: "Order #",
+      statusLabels: {
+        pending: "Pending",
+        confirmed: "Confirmed",
+        shipped: "Shipped",
+        delivered: "Delivered",
+        cancelled: "Cancelled",
+      },
       table: {
         item: "Item",
         category: "Category",
-      qty: "Qty",
-      selectWilaya: "— Select your wilaya —",
+        qty: "Qty",
+        selectWilaya: "— Select your wilaya —",
         price: "Price",
       },
       shipping: "Shipping",
@@ -397,6 +411,11 @@ export const en = {
     appointments: {
       heading: "Appointments",
       noAppointments: "No appointments yet.",
+      statusLabels: {
+        pending: "Pending",
+        confirmed: "Confirmed",
+        cancelled: "Cancelled",
+      },
       table: {
         client: "Client",
         contact: "Contact",

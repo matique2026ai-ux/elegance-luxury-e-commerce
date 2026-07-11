@@ -57,17 +57,17 @@ export default function DashboardOrders() {
                 <p className="text-sm text-muted-foreground">{o.customer.phone} — {o.customer.wilaya}, {o.customer.commune}</p>
               </div>
               <div className="flex items-center gap-4">
-                <select
-                  value={o.status}
-                  onChange={e => updateStatus(o.id, e.target.value)}
-                  className={"text-[10px] tracking-[0.1em] uppercase px-3 py-1 border border-border bg-background cursor-pointer " + statusColors[o.status]}
-                >
-                  <option value="pending">pending</option>
-                  <option value="confirmed">confirmed</option>
-                  <option value="shipped">shipped</option>
-                  <option value="delivered">delivered</option>
-                  <option value="cancelled">cancelled</option>
-                </select>
+                  <select
+                    value={o.status}
+                    onChange={e => updateStatus(o.id, e.target.value)}
+                    className={"text-[10px] tracking-[0.1em] uppercase px-3 py-1 border border-border bg-background cursor-pointer " + statusColors[o.status]}
+                  >
+                    <option value="pending">{d.statusLabels.pending}</option>
+                    <option value="confirmed">{d.statusLabels.confirmed}</option>
+                    <option value="shipped">{d.statusLabels.shipped}</option>
+                    <option value="delivered">{d.statusLabels.delivered}</option>
+                    <option value="cancelled">{d.statusLabels.cancelled}</option>
+                  </select>
                 <span className="font-serif text-xl text-accent">{o.grandTotal.toLocaleString()} DZD</span>
               </div>
             </div>

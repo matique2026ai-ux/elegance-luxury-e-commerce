@@ -292,6 +292,13 @@ export const fr = {
       subscribers: "Abonnés",
       backToSite: "Retour au site",
     },
+    login: {
+      heading: "Tableau de bord",
+      enterPassword: "Entrez le mot de passe",
+      password: "Mot de passe",
+      incorrect: "Mot de passe incorrect",
+      signIn: "Connexion",
+    },
     overview: {
       heading: "Aperçu du tableau de bord",
       appointments: "Rendez-vous",
@@ -368,11 +375,18 @@ export const fr = {
       heading: "Commandes",
       noOrders: "Aucune commande.",
       orderPrefix: "Commande #",
+      statusLabels: {
+        pending: "En attente",
+        confirmed: "Confirmée",
+        shipped: "Expédiée",
+        delivered: "Livrée",
+        cancelled: "Annulée",
+      },
       table: {
         item: "Article",
         category: "Catégorie",
-      qty: "Qté",
-      selectWilaya: "— Sélectionnez votre wilaya —",
+        qty: "Qté",
+        selectWilaya: "— Sélectionnez votre wilaya —",
         price: "Prix",
       },
       shipping: "Livraison",
@@ -381,6 +395,11 @@ export const fr = {
     appointments: {
       heading: "Rendez-vous",
       noAppointments: "Aucun rendez-vous.",
+      statusLabels: {
+        pending: "En attente",
+        confirmed: "Confirmé",
+        cancelled: "Annulé",
+      },
       table: {
         client: "Client",
         contact: "Contact",

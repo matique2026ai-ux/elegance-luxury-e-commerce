@@ -65,7 +65,7 @@ export default function DashboardAppointments() {
                     a.status === "cancelled" ? "bg-rose-100 text-rose-700" :
                     "bg-amber-100 text-amber-700"
                   }`}>
-                    {a.status}
+                    {d.statusLabels[a.status as keyof typeof d.statusLabels] || a.status}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right">

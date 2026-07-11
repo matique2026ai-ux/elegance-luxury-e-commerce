@@ -39,6 +39,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     router.push("/dashboard/login")
   }
 
+  if (pathname === "/dashboard/login") return <>{children}</>
   if (checking) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>
   if (!authed) return null
 

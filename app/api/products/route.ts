@@ -16,7 +16,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    if (!body.name || !body.category || !body.price) {
+    if (!body.name_en || !body.category || body.price === undefined) {
       return NextResponse.json({ error: "Name, category, and price are required" }, { status: 400 })
     }
     const product = await store.addProduct(body)

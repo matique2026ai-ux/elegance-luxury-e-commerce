@@ -37,10 +37,13 @@ export default function DashboardProducts() {
       image: form.image,
       isNew: form.isNew ? 1 : 0,
     }
-    if (editingId) {
-      await fetch(`/api/products/${editingId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
-    } else {
-      await fetch("/api/products", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+    const res = editingId
+      ? await fetch(`/api/products/${editingId}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      : await fetch("/api/products", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+    if (!res.ok) {
+      const err = await res.json()
+      alert(err.error || "Failed to save product")
+      return
     }
     setShowForm(false)
     fetch("/api/products").then(r => r.json()).then(setProducts)

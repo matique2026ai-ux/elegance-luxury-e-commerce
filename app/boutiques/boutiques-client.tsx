@@ -5,8 +5,6 @@ import { MapPin, Phone, Clock, ArrowLeft } from "lucide-react"
 
 const boutiques = [
   { id: 1, city: "Paris", address: "24 Place Vendôme, 75001", phone: "+33 1 42 60 00 00", hours: "10h - 19h", image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Boutique%20Paris-Ds9XeWSdUztVjHSz6JYUMoW4pz7kHM.png", flagship: true },
-  { id: 2, city: "Monaco", address: "Avenue des Beaux-Arts, 98000", phone: "+377 93 30 00 00", hours: "10h - 18h", image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Boutique%20Monaco-UMlZbOKxKTYVz5vcsOlhuEY6t3rJSU.png", flagship: false },
-  { id: 3, city: "Milan", address: "Via Montenapoleone 8, 20121", phone: "+39 02 7600 0000", hours: "10h - 19h", image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Boutique%20Milan-Uvge4HScV50lCdtXKDlrWW2bmwUi5M.png", flagship: false },
 ]
 
 interface Props {
@@ -23,9 +21,8 @@ interface Props {
 export default function BoutiquesClient({ translations: t, content }: Props) {
   const [selected, setSelected] = useState<number | null>(null)
 
-  const selectedBoutique = boutiques.find(b => b.id === selected)
-
-  if (selectedBoutique) {
+  if (selected) {
+    const b = boutiques[0]
     return (
       <div className="min-h-screen pt-28">
         <div className="py-24 md:py-32">
@@ -35,24 +32,24 @@ export default function BoutiquesClient({ translations: t, content }: Props) {
               <span className="tracking-wider uppercase">{t.label}</span>
             </button>
             <div className="aspect-[4/5] relative overflow-hidden mb-8 bg-secondary/20">
-              <img src={selectedBoutique.image} alt={selectedBoutique.city} className="w-full h-full object-cover" />
-              {selectedBoutique.flagship && (
+              <img src={b.image} alt={b.city} className="w-full h-full object-cover" />
+              {b.flagship && (
                 <div className="absolute top-4 left-4 bg-accent text-accent-foreground text-xs px-3 py-1 tracking-wider uppercase">{t.flagship}</div>
               )}
             </div>
-            <h2 className="font-serif text-4xl md:text-5xl mb-6">{selectedBoutique.city}</h2>
+            <h2 className="font-serif text-4xl md:text-5xl mb-6">{b.city}</h2>
             <div className="space-y-4 text-muted-foreground">
               <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 mt-0.5 shrink-0 text-foreground" />
-                <span className="text-lg">{selectedBoutique.address}</span>
+                <span className="text-lg">{b.address}</span>
               </div>
               <div className="flex items-start gap-3">
                 <Phone className="w-5 h-5 mt-0.5 shrink-0 text-foreground" />
-                <span className="text-lg">{selectedBoutique.phone}</span>
+                <span className="text-lg">{b.phone}</span>
               </div>
               <div className="flex items-start gap-3">
                 <Clock className="w-5 h-5 mt-0.5 shrink-0 text-foreground" />
-                <span className="text-lg">{selectedBoutique.hours}</span>
+                <span className="text-lg">{b.hours}</span>
               </div>
             </div>
           </div>
@@ -61,6 +58,7 @@ export default function BoutiquesClient({ translations: t, content }: Props) {
     )
   }
 
+  const b = boutiques[0]
   return (
     <div className="min-h-screen pt-28">
       <div className="py-24 md:py-32">
@@ -76,35 +74,31 @@ export default function BoutiquesClient({ translations: t, content }: Props) {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {boutiques.map(b => (
-              <button key={b.id} onClick={() => setSelected(b.id)} className="text-left group cursor-pointer">
-                <div className="aspect-[4/5] relative overflow-hidden mb-6 bg-secondary/20">
-                  <img src={b.image} alt={b.city} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                  {b.flagship && (
-                    <div className="absolute top-4 left-4 bg-accent text-accent-foreground text-xs px-3 py-1 tracking-wider uppercase">
-                      {t.flagship}
-                    </div>
-                  )}
+          <button onClick={() => setSelected(b.id)} className="text-left group cursor-pointer max-w-lg mx-auto block">
+            <div className="aspect-[4/5] relative overflow-hidden mb-6 bg-secondary/20">
+              <img src={b.image} alt={b.city} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              {b.flagship && (
+                <div className="absolute top-4 left-4 bg-accent text-accent-foreground text-xs px-3 py-1 tracking-wider uppercase">
+                  {t.flagship}
                 </div>
-                <div className="space-y-3">
-                  <h3 className="font-serif text-2xl">{b.city}</h3>
-                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <MapPin className="w-4 h-4 mt-0.5 shrink-0" />
-                    <span>{b.address}</span>
-                  </div>
-                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <Phone className="w-4 h-4 mt-0.5 shrink-0" />
-                    <span>{b.phone}</span>
-                  </div>
-                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <Clock className="w-4 h-4 mt-0.5 shrink-0" />
-                    <span>{b.hours}</span>
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
+              )}
+            </div>
+            <div className="space-y-3">
+              <h3 className="font-serif text-2xl">{b.city}</h3>
+              <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                <MapPin className="w-4 h-4 mt-0.5 shrink-0" />
+                <span>{b.address}</span>
+              </div>
+              <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                <Phone className="w-4 h-4 mt-0.5 shrink-0" />
+                <span>{b.phone}</span>
+              </div>
+              <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                <Clock className="w-4 h-4 mt-0.5 shrink-0" />
+                <span>{b.hours}</span>
+              </div>
+            </div>
+          </button>
         </div>
       </div>
     </div>

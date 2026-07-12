@@ -3,12 +3,12 @@ import * as db from "./db"
 export interface Subscriber { id: number; email: string; date: string }
 export interface Appointment { id: number; name: string; email: string; phone?: string; date?: string; message?: string; createdAt: string; status: string }
 export interface ContactMessage { id: number; name: string; email: string; subject?: string; message: string; createdAt: string; read: boolean }
-export interface Product { id: number; name: string; name_fr?: string; name_ar?: string; category: "men" | "women" | "children"; sub: string; sub_fr?: string; sub_ar?: string; price: number; stock: number; image: string; isNew: boolean }
+export interface Product { id: number; name: string; name_fr?: string; name_ar?: string; category: "men" | "women" | "children"; sub: string; subKey: string; sub_fr?: string; sub_ar?: string; price: number; stock: number; image: string; isNew: boolean }
 export interface PageContent { page: string; title: string; subtitle: string; description: string; images: string[]; published: boolean }
 export interface Order { id: string; items: { id: number; name: string; price: number; quantity: number; category: string }[]; total: number; shippingPrice: number; grandTotal: number; customer: { name: string; phone: string; wilaya: string; commune: string; address: string }; createdAt: string; status: string }
 
 function mapProduct(row: db.ProductRow, lang?: string): Product {
-  return { id: row.id, name: lang === "fr" ? (row.name_fr || row.name_en) : lang === "ar" ? (row.name_ar || row.name_en) : row.name_en, name_fr: row.name_fr, name_ar: row.name_ar, category: row.category, sub: lang === "fr" ? (row.sub_fr || row.sub_en) : lang === "ar" ? (row.sub_ar || row.sub_en) : row.sub_en, sub_fr: row.sub_fr, sub_ar: row.sub_ar, price: row.price, stock: row.stock, image: row.image, isNew: row.isNew === 1 }
+  return { id: row.id, name: lang === "fr" ? (row.name_fr || row.name_en) : lang === "ar" ? (row.name_ar || row.name_en) : row.name_en, name_fr: row.name_fr, name_ar: row.name_ar, category: row.category, sub: lang === "fr" ? (row.sub_fr || row.sub_en) : lang === "ar" ? (row.sub_ar || row.sub_en) : row.sub_en, subKey: row.sub_en, sub_fr: row.sub_fr, sub_ar: row.sub_ar, price: row.price, stock: row.stock, image: row.image, isNew: row.isNew === 1 }
 }
 
 function mapContent(row: db.PageContentRow, lang?: string): PageContent {

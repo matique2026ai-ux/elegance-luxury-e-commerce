@@ -9,7 +9,7 @@ import { ShoppingBag, Heart } from "lucide-react"
 import Link from "next/link"
 
 interface Product {
-  id: number; name: string; category: string; sub: string; price: number; image: string; isNew: boolean
+  id: number; name: string; category: string; sub: string; subKey: string; price: number; image: string; isNew: boolean
 }
 
 function ProductsContent() {
@@ -49,7 +49,7 @@ function ProductsContent() {
 
   const filtered = products.filter(p => {
     const catMatch = activeCategory === "all" || p.category === activeCategory
-    const subMatch = activeSub === "all" || p.sub === activeSub
+    const subMatch = activeSub === "all" || p.subKey === activeSub
     return catMatch && subMatch
   })
 

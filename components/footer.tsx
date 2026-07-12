@@ -60,9 +60,9 @@ export function Footer() {
             <h3 className="text-sm tracking-[0.2em] uppercase">{t.footer.collections}</h3>
             <ul className="space-y-3 text-sm text-primary-foreground/70">
               <li><Link href="/femmes" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.hauteCouture}</Link></li>
-              <li><Link href="/products?search=jewelry" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.fineJewelry}</Link></li>
+              <li><Link href="/search?q=jewelry" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.fineJewelry}</Link></li>
               <li><Link href="/hommes" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.leatherGoods}</Link></li>
-              <li><Link href="/products?search=fragrance" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.fragrances}</Link></li>
+              <li><Link href="/search?q=fragrance" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.fragrances}</Link></li>
               <li><Link href="/products" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.accessories}</Link></li>
             </ul>
           </div>

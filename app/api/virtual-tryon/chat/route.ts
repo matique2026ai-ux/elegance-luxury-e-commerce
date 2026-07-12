@@ -27,7 +27,8 @@ export async function POST(req: NextRequest) {
 
     if (!res.ok) {
       console.error("Mistral API error:", JSON.stringify(data))
-      return NextResponse.json({ error: data.error?.message || "API error" }, { status: res.status })
+      const msg = data.error?.message || data.error || `HTTP ${res.status}`
+      return NextResponse.json({ error: `Mistral: ${msg}` }, { status: res.status })
     }
 
     return NextResponse.json(data)

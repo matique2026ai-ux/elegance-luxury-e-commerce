@@ -70,20 +70,16 @@ export default function VirtualTryonPage() {
     if (isNearBottom) container.scrollTop = container.scrollHeight
   }, [chatMessages])
 
+  const speakRef = useRef(speak)
+  speakRef.current = speak
+
   useEffect(() => {
-    if (!autoSpeak) return
+    if (!autoSpeak || !chatContainerRef.current) return
     const last = chatMessages[chatMessages.length - 1]
-    if (last?.role === "assistant" && !chatLoading) {
-      const idx = chatMessages.length - 1
-      window.speechSynthesis.cancel()
-      const utterance = new SpeechSynthesisUtterance(last.content)
-      utterance.lang = lang === "ar" ? "ar-SA" : lang === "fr" ? "fr-FR" : "en-US"
-      utterance.onend = () => setSpeakingId(null)
-      utterance.onerror = () => setSpeakingId(null)
-      setSpeakingId(idx)
-      window.speechSynthesis.speak(utterance)
+    if (last?.role === "assistant" && !chatLoading && last.content) {
+      speakRef.current(last.content, chatMessages.length - 1)
     }
-  }, [chatMessages, chatLoading, autoSpeak, lang])
+  }, [chatMessages, chatLoading, autoSpeak])
 
   useEffect(() => {
     if (product && chatMessages.length === 0) {
@@ -136,11 +132,14 @@ export default function VirtualTryonPage() {
   }
 
   function speak(text: string, msgIndex: number) {
+    if (!window.speechSynthesis) return
     window.speechSynthesis.cancel()
     const utterance = new SpeechSynthesisUtterance(text)
-    utterance.lang = lang === "ar" ? "ar-SA" : lang === "fr" ? "fr-FR" : "en-US"
+    const langCode = lang === "ar" ? "ar-SA" : lang === "fr" ? "fr-FR" : "en-US"
+    utterance.lang = langCode
+    utterance.rate = 0.9
     utterance.onend = () => setSpeakingId(null)
-    utterance.onerror = () => setSpeakingId(null)
+    utterance.onerror = (e) => { setSpeakingId(null); console.error("Speech error:", e) }
     setSpeakingId(msgIndex)
     window.speechSynthesis.speak(utterance)
   }

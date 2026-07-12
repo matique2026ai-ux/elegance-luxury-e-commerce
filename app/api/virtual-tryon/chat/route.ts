@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages } = await req.json()
+    const { messages, lang } = await req.json()
+
+    const languageNames: Record<string, string> = { en: "English", fr: "French", ar: "Arabic" }
+    const langName = languageNames[lang as string] || "English"
 
     const res = await fetch("https://api.mistral.ai/v1/chat/completions", {
       method: "POST",
@@ -15,7 +18,14 @@ export async function POST(req: NextRequest) {
         messages: [
           {
             role: "system",
-            content: "You are a helpful AI fashion stylist assistant for MAISON HERAHIMA, a luxury fashion brand. Help customers choose sizes, colors, styles, and provide fashion advice. Be friendly, knowledgeable, and concise. Respond in the same language the customer uses.",
+            content: `You are a helpful AI fashion stylist assistant for MAISON HERAHIMA, a luxury fashion boutique in Algeria. Help customers choose sizes, colors, styles, and provide fashion advice. Be friendly, knowledgeable, and concise.
+
+LANGUAGE RULES (strictly follow):
+- Site language is ${langName}
+- You MUST ONLY respond in ${langName}
+- If the customer writes in any other language, still respond ONLY in ${langName}
+- NEVER use Persian, Turkish, German, or any language other than ${langName}
+- Available languages: English, French, Arabic only`,
           },
           ...messages,
         ],

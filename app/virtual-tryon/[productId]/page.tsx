@@ -101,6 +101,7 @@ export default function VirtualTryonPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: [...chatMessages, { role: "user", content: userMsg }].map(m => ({ role: m.role, content: m.content })),
+          lang,
         }),
       })
       const data = await res.json()

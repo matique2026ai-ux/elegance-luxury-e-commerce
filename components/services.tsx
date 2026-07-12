@@ -1,9 +1,9 @@
 "use client";
 
-import { Package, Truck, RotateCcw, Headphones, type LucideIcon } from "lucide-react";
+import { Package, Truck, RotateCcw, Headphones, Shirt, Gift, CreditCard, Video, Star, DollarSign, type LucideIcon } from "lucide-react";
 import { useI18n } from "@/lib/i18n-context";
 
-const icons: LucideIcon[] = [Truck, Package, RotateCcw, Headphones];
+const icons: LucideIcon[] = [Truck, Package, RotateCcw, Headphones, Shirt, Gift, CreditCard, Video, Star, DollarSign];
 
 export function Services() {
   const { t } = useI18n();
@@ -18,7 +18,7 @@ export function Services() {
                 <div className="aspect-[3/4] relative overflow-hidden" style={{ boxShadow: "rgba(14, 63, 126, 0.04) 0px 0px 0px 1px, rgba(42, 51, 69, 0.04) 0px 1px 1px -0.5px, rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px, rgba(42, 51, 70, 0.04) 0px 6px 6px -3px, rgba(14, 63, 126, 0.04) 0px 12px 12px -6px, rgba(14, 63, 126, 0.04) 0px 24px 24px -12px" }}>
                   <img
                     src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Emballage%20Luxe%203-O7x3bwTICrWOx8qXrukiyPtc260H9T.png"
-                    alt={t.services.altPackaging}
+                    alt={t.services.label}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -39,7 +39,7 @@ export function Services() {
                 <div className="aspect-[3/4] relative overflow-hidden" style={{ boxShadow: "rgba(14, 63, 126, 0.04) 0px 0px 0px 1px, rgba(42, 51, 69, 0.04) 0px 1px 1px -0.5px, rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px, rgba(42, 51, 70, 0.04) 0px 6px 6px -3px, rgba(14, 63, 126, 0.04) 0px 12px 12px -6px, rgba(14, 63, 126, 0.04) 0px 24px 24px -12px" }}>
                   <img
                     src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Livraison%20Luxe%201-j8zso7zcVQvNSvPmorDLIZLHTObiYW.png"
-                    alt={t.services.altDelivery}
+                    alt={t.services.label}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -64,6 +64,7 @@ export function Services() {
             <div className="space-y-8">
               {t.services.items.map((service, index) => {
                 const Icon = icons[index];
+                if (!Icon) return null;
                 return (
                   <div
                     key={index}
@@ -78,9 +79,9 @@ export function Services() {
                       <p className="text-muted-foreground leading-relaxed">
                         {service.desc}
                       </p>
-                      <p className="text-sm text-muted-foreground/70 italic">
-                        {service.detail}
-                      </p>
+                      {service.detail && (
+                        <p className="text-sm text-muted-foreground/70 italic">{service.detail}</p>
+                      )}
                     </div>
                   </div>
                 );

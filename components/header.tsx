@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X, ShoppingBag, Search, User, Globe, LogOut } from "lucide-react";
 import { useI18n, type Lang } from "@/lib/i18n-context";
 import { useCart } from "@/context/cart-context";
@@ -31,12 +32,7 @@ export function Header() {
       <nav className="max-w-[1800px] mx-auto px-6 md:px-12">
         <div className="flex items-center justify-between h-16 md:h-20">
           <Link href="/" className="flex-shrink-0">
-            <h1 className="font-serif text-xl md:text-2xl tracking-[0.15em] text-foreground">
-              {t.brand.name}
-              <span className="block text-center text-[0.6em] tracking-[0.3em] text-muted-foreground">
-                {t.brand.surname}
-              </span>
-            </h1>
+            <Image src="/logo.png" alt="MAISON HERAHIMA" width={160} height={50} className="h-10 md:h-12 w-auto" priority />
           </Link>
 
           <div className="hidden md:flex items-center gap-8">

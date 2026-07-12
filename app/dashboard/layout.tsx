@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import { LayoutDashboard, Package, Calendar, Mail, Users, ShoppingBag, ChevronLeft, FileText, LogOut, Globe, Menu, X, UserCircle, BarChart3, Clock, Tag, Star, Settings as SettingsIcon } from "lucide-react"
 import { useI18n } from "@/lib/i18n-context"
@@ -58,9 +59,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       )}
       <aside className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-primary text-primary-foreground flex flex-col shrink-0 transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
         <div className="p-6 border-b border-primary-foreground/20 flex items-center justify-between">
-          <Link href="/" className="font-serif text-lg tracking-[0.15em]">
-            MAISON
-            <span className="block text-[0.6em] tracking-[0.3em] text-primary-foreground/60">HERAHIMA</span>
+          <Link href="/">
+            <Image src="/logo.png" alt="MAISON HERAHIMA" width={140} height={44} className="h-10 w-auto brightness-0 invert" priority />
           </Link>
           <button onClick={closeSidebar} className="lg:hidden p-1 hover:text-primary-foreground/60"><X className="w-5 h-5" /></button>
         </div>

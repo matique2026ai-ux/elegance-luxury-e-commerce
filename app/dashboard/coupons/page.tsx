@@ -25,10 +25,11 @@ export default function CouponsPage() {
   useEffect(load, [])
 
   async function add() {
-    await fetch("/api/coupons", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
+    const res = await fetch("/api/coupons", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
       code: form.code, discountType: form.discountType, discountValue: Number(form.discountValue),
       minOrder: Number(form.minOrder), maxUses: Number(form.maxUses), expiresAt: form.expiresAt, active: form.active ? 1 : 0,
     })})
+    if (!res.ok) { const err = await res.json(); alert(err.error || "Failed to add coupon"); return }
     setShowForm(false)
     setForm({ code: "", discountType: "percentage", discountValue: "", minOrder: "0", maxUses: "0", expiresAt: "", active: true })
     load()

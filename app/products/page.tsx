@@ -25,6 +25,8 @@ function ProductsContent() {
   useEffect(() => {
     const cat = searchParams.get("category")
     if (cat) setActiveCategory(cat)
+    const sub = searchParams.get("sub")
+    if (sub) setActiveSub(sub)
   }, [searchParams])
 
   useEffect(() => {

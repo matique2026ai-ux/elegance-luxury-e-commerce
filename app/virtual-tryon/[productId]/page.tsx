@@ -54,16 +54,17 @@ export default function VirtualTryonPage() {
   const [chatLoading, setChatLoading] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
   const chatEndRef = useRef<HTMLDivElement>(null)
+  const chatContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     fetch(`/api/products/${productId}?lang=${lang}`).then(r => r.ok ? r.json() : null).then(setProduct)
   }, [productId, lang])
 
   useEffect(() => {
-    if (chatEndRef.current) {
-      const container = chatEndRef.current.closest('.chat-scroll')
-      if (container) container.scrollTop = container.scrollHeight
-    }
+    const container = chatContainerRef.current
+    if (!container) return
+    const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 80
+    if (isNearBottom) container.scrollTop = container.scrollHeight
   }, [chatMessages])
 
   useEffect(() => {
@@ -257,7 +258,7 @@ export default function VirtualTryonPage() {
             <div className="p-4 border-b border-border">
               <h2 className="font-serif text-lg flex items-center gap-2"><Sparkles className="w-4 h-4 text-accent" />{vt.aiAgent}</h2>
             </div>
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 chat-scroll">
+            <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 space-y-4">
               {chatMessages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                   <div className={`max-w-[90%] p-3 text-sm leading-relaxed ${msg.role === "user" ? "bg-accent text-accent-foreground rounded-l-xl rounded-tr-xl" : "bg-secondary/20 rounded-r-xl rounded-tl-xl"}`}>

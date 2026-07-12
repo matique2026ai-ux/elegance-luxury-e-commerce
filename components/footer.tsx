@@ -70,11 +70,11 @@ export function Footer() {
           <div className="space-y-6">
             <h3 className="text-sm tracking-[0.2em] uppercase">{t.footer.house}</h3>
             <ul className="space-y-3 text-sm text-primary-foreground/70">
-              <li><Link href="/heritage" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.story}</Link></li>
-              <li><Link href="/heritage" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.craftsmanship}</Link></li>
-              <li><Link href="/heritage" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.commitments}</Link></li>
-              <li><Link href="/services" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.careers}</Link></li>
-              <li><Link href="/services" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.press}</Link></li>
+              <li><Link href="/story" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.story}</Link></li>
+              <li><Link href="/craftsmanship" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.craftsmanship}</Link></li>
+              <li><Link href="/commitments" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.commitments}</Link></li>
+              <li><Link href="/careers" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.careers}</Link></li>
+              <li><Link href="/press" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.press}</Link></li>
             </ul>
           </div>
 
@@ -93,9 +93,9 @@ export function Footer() {
         <div className="py-6 border-t border-primary-foreground/20 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-primary-foreground/50">
           <p>© 2026 {t.brand.name} {t.brand.surname}. {t.footer.rights}</p>
           <div className="flex flex-wrap justify-center gap-6">
-            <Link href="/services" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.legal}</Link>
-            <Link href="/services" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.privacy}</Link>
-            <Link href="/services" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.cookies}</Link>
+            <Link href="/legal" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.legal}</Link>
+            <Link href="/privacy-policy" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.privacy}</Link>
+            <Link href="/cookies" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.cookies}</Link>
           </div>
         </div>
       </div>

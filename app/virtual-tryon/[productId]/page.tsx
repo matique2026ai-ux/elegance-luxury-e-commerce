@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import { useParams } from "next/navigation"
-import { Sparkles, Send, RefreshCw, Shirt, User, Ruler, Palette, ShoppingBag, Heart, Check, Camera } from "lucide-react"
+import { Sparkles, Send, RefreshCw, Shirt, User, Ruler, Palette, ShoppingBag, Heart, Check, Camera, Mic, Volume2 } from "lucide-react"
 import { useI18n } from "@/lib/i18n-context"
 import { useCart } from "@/context/cart-context"
 import { useFavorites } from "@/context/favorites-context"
@@ -52,6 +52,8 @@ export default function VirtualTryonPage() {
   const [chatMessages, setChatMessages] = useState<ChatMsg[]>([])
   const [chatInput, setChatInput] = useState("")
   const [chatLoading, setChatLoading] = useState(false)
+  const [listening, setListening] = useState(false)
+  const [speakingId, setSpeakingId] = useState<number | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
   const chatEndRef = useRef<HTMLDivElement>(null)
   const chatContainerRef = useRef<HTMLDivElement>(null)
@@ -115,6 +117,32 @@ export default function VirtualTryonPage() {
       setChatMessages(prev => [...prev, { role: "assistant", content: "Sorry, I'm having trouble connecting." }])
     }
     setChatLoading(false)
+  }
+
+  function speak(text: string, msgIndex: number) {
+    window.speechSynthesis.cancel()
+    const utterance = new SpeechSynthesisUtterance(text)
+    utterance.lang = lang === "ar" ? "ar-SA" : lang === "fr" ? "fr-FR" : "en-US"
+    utterance.onend = () => setSpeakingId(null)
+    utterance.onerror = () => setSpeakingId(null)
+    setSpeakingId(msgIndex)
+    window.speechSynthesis.speak(utterance)
+  }
+
+  function startListening() {
+    const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition
+    if (!SpeechRecognition) return
+    const recognition = new SpeechRecognition()
+    recognition.lang = lang === "ar" ? "ar-SA" : lang === "fr" ? "fr-FR" : "en-US"
+    recognition.interimResults = false
+    recognition.onresult = (e: any) => {
+      setChatInput(e.results[0][0].transcript)
+      setListening(false)
+    }
+    recognition.onerror = () => setListening(false)
+    recognition.onend = () => setListening(false)
+    setListening(true)
+    recognition.start()
   }
 
   if (!product) {
@@ -262,7 +290,14 @@ export default function VirtualTryonPage() {
               {chatMessages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                   <div className={`max-w-[90%] p-3 text-sm leading-relaxed ${msg.role === "user" ? "bg-accent text-accent-foreground rounded-l-xl rounded-tr-xl" : "bg-secondary/20 rounded-r-xl rounded-tl-xl"}`}>
-                    {msg.content}
+                    <div className="flex items-start gap-2">
+                      <span className="flex-1">{msg.content}</span>
+                      {msg.role === "assistant" && (
+                        <button onClick={() => speak(msg.content, i)} className={`mt-0.5 shrink-0 transition-colors ${speakingId === i ? "text-accent" : "text-muted-foreground hover:text-accent"}`}>
+                          <Volume2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -276,6 +311,11 @@ export default function VirtualTryonPage() {
             <form onSubmit={e => { e.preventDefault(); handleChatSend() }} className="p-4 border-t border-border flex gap-2">
               <input value={chatInput} onChange={e => setChatInput(e.target.value)} placeholder={vt.chatPlaceholder}
                 className="flex-1 px-4 py-2.5 bg-secondary/10 border border-border focus:border-accent outline-none text-sm" />
+              <button type="button" onClick={startListening}
+                className={`px-3 border transition-colors ${listening ? "border-accent bg-accent/10 text-accent" : "border-border hover:border-accent text-muted-foreground hover:text-accent"}`}
+                title={vt.mic || "Voice input"}>
+                <Mic className={`w-4 h-4 ${listening ? "animate-pulse" : ""}`} />
+              </button>
               <button type="submit" disabled={!chatInput.trim() || chatLoading}
                 className="px-4 bg-accent text-accent-foreground hover:opacity-90 transition-opacity disabled:opacity-50">
                 <Send className="w-4 h-4" />

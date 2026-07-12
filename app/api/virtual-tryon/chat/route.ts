@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
         Authorization: `Bearer ${process.env.MISTRAL_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "mistral-large-latest",
+        model: "mistral-small-latest",
         messages: [
           {
             role: "system",
@@ -24,8 +24,15 @@ export async function POST(req: NextRequest) {
     })
 
     const data = await res.json()
+
+    if (!res.ok) {
+      console.error("Mistral API error:", JSON.stringify(data))
+      return NextResponse.json({ error: data.error?.message || "API error" }, { status: res.status })
+    }
+
     return NextResponse.json(data)
   } catch (error) {
+    console.error("Chat error:", error)
     return NextResponse.json({ error: "Failed to get AI response" }, { status: 500 })
   }
 }

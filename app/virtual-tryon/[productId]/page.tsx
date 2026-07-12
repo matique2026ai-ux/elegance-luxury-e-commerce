@@ -104,7 +104,7 @@ export default function VirtualTryonPage() {
         }),
       })
       const data = await res.json()
-      const reply = data.choices?.[0]?.message?.content || "I'm sorry, I couldn't process that."
+      const reply = data.choices?.[0]?.message?.content || data.error || "I'm sorry, I couldn't process that."
       setChatMessages(prev => [...prev, { role: "assistant", content: reply }])
     } catch {
       setChatMessages(prev => [...prev, { role: "assistant", content: "Sorry, I'm having trouble connecting." }])

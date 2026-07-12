@@ -4,18 +4,10 @@ import { useState } from "react"
 import { ChevronDown } from "lucide-react"
 import { useI18n } from "@/lib/i18n-context"
 
-const faqs = [
-  { q: "Comment passer une commande ?", a: "Parcourez notre collection, sélectionnez vos pièces et ajoutez-les à votre panier. Suivez le processus de commande pour finaliser votre achat." },
-  { q: "Quels sont les délais de livraison ?", a: "Nous livrons dans le monde entier sous 2 à 5 jours ouvrés. Chaque commande est expédiée avec un service de livraison en voiture blanche." },
-  { q: "Puis-je retourner un article ?", a: "Oui, vous disposez de 30 jours pour retourner tout article dans son état d'origine. Les retours sont gratuits." },
-  { q: "Comment entretenir mes pièces ?", a: "Chaque pièce est accompagnée d'un guide d'entretien. Nous offrons également un service d'entretien à vie dans notre atelier." },
-  { q: "Proposez-vous des services de personnalisation ?", a: "Oui, notre atelier propose des services de personnalisation exclusifs. Contactez notre équipe pour en savoir plus." },
-  { q: "Comment puis-je contacter le service client ?", a: "Vous pouvez nous joindre par email à contact@herahima.com ou par téléphone au +33 1 42 60 00 00." },
-]
-
 export default function FAQPage() {
   const { t } = useI18n()
   const [open, setOpen] = useState<number | null>(null)
+  const faqs = t.faqPage.items as { q: string; a: string }[]
 
   return (
     <div className="min-h-screen pt-28">

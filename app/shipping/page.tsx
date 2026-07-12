@@ -3,17 +3,11 @@
 import { Package, Truck, RotateCcw, Globe, Shield, Clock } from "lucide-react"
 import { useI18n } from "@/lib/i18n-context"
 
-const items = [
-  { icon: Truck, title: "Livraison Offerte", desc: "Service de livraison en voiture blanche pour toutes les commandes. Livraison mondiale en 2 à 5 jours ouvrés." },
-  { icon: Package, title: "Emballage de Luxe", desc: "Chaque pièce arrive dans notre présentation signature, prête à offrir, avec des matériaux écologiques." },
-  { icon: RotateCcw, title: "Retours Gratuits", desc: "Vous disposez de 30 jours pour retourner tout article dans son état d'origine. Retours gratuits." },
-  { icon: Globe, title: "Livraison Internationale", desc: "Nous livrons dans plus de 150 pays à travers le monde avec un service de suivi personnalisé." },
-  { icon: Shield, title: "Garantie Authenticité", desc: "Chaque pièce est accompagnée d'un certificat d'authenticité et d'une garantie internationale." },
-  { icon: Clock, title: "Suivi en Temps Réel", desc: "Recevez des notifications à chaque étape de la livraison, de l'expédition à la réception." },
-]
+const iconList = [Truck, Package, RotateCcw, Globe, Shield, Clock]
 
 export default function ShippingPage() {
   const { t } = useI18n()
+  const items = t.shippingPage.items as { title: string; desc: string }[]
 
   return (
     <div className="min-h-screen pt-28">
@@ -26,7 +20,7 @@ export default function ShippingPage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {items.map((item, i) => {
-              const Icon = item.icon
+              const Icon = iconList[i]
               return (
                 <div key={i} className="p-8 border border-border hover:bg-secondary/10 transition-colors">
                   <Icon className="w-8 h-8 mb-4 text-accent" />

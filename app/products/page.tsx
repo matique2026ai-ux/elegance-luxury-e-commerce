@@ -41,7 +41,6 @@ function ProductsContent() {
     { id: "children", label: t.products.categories.children },
   ]
 
-  const subKeys = [...new Set(products.map(p => p.subKey))]
   const subLabelsMap: Record<string, string> = {
     Clothing: t.products.categories.clothing,
     Shoes: t.products.categories.shoes,
@@ -54,6 +53,9 @@ function ProductsContent() {
     const subMatch = activeSub === "all" || p.subKey === activeSub
     return catMatch && subMatch
   })
+
+  const categoryFiltered = activeCategory === "all" ? products : products.filter(p => p.category === activeCategory)
+  const visibleSubKeys = [...new Set(categoryFiltered.map(p => p.subKey))]
 
   return (
     <>
@@ -75,7 +77,7 @@ function ProductsContent() {
 
       <div className="flex flex-wrap justify-center gap-2 mb-12">
         <button onClick={() => setActiveSub("all")} className={`px-4 py-2 text-xs tracking-[0.15em] uppercase transition-all duration-200 ${activeSub === "all" ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"}`}>{t.products.categories.all}</button>
-        {subKeys.map(sk => (
+        {visibleSubKeys.map(sk => (
           <button key={sk} onClick={() => setActiveSub(sk)} className={`px-4 py-2 text-xs tracking-[0.15em] uppercase transition-all duration-200 ${activeSub === sk ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"}`}>{subLabelsMap[sk] || sk}</button>
         ))}
       </div>

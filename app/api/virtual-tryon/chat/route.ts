@@ -2,10 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages, lang } = await req.json()
-
-    const languageNames: Record<string, string> = { en: "English", fr: "French", ar: "Arabic" }
-    const langName = languageNames[lang as string] || "English"
+    const { messages } = await req.json()
 
     const res = await fetch("https://api.mistral.ai/v1/chat/completions", {
       method: "POST",
@@ -23,9 +20,11 @@ export async function POST(req: NextRequest) {
 STRICT RULES:
 - Keep responses SHORT and CONCISE (max 3 sentences, no long paragraphs)
 - No greetings or introductions. Answer directly.
-- LANGUAGE: Respond ONLY in ${langName}. Never use any other language.
-- Available languages: English, French, Arabic only
-- Never use Persian, Turkish, or any other language.`,
+- CRITICAL: Identify the language the customer wrote in and ALWAYS respond in that exact same language.
+- If customer writes in French → respond in French
+- If customer writes in Arabic → respond in Arabic  
+- If customer writes in English → respond in English
+- Never switch languages. Never use Persian, Turkish, or any other language.`,
           },
           ...messages,
         ],

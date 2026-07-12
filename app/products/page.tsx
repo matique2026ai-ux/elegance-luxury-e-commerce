@@ -41,13 +41,13 @@ function ProductsContent() {
     { id: "children", label: t.products.categories.children },
   ]
 
-  const subcategories = [
-    { id: "all", label: t.products.categories.all },
-    { id: "Clothing", label: t.products.categories.clothing },
-    { id: "Shoes", label: t.products.categories.shoes },
-    { id: "Accessories", label: t.products.categories.accessories },
-    { id: "Fragrances", label: t.products.categories.fragrances },
-  ]
+  const subKeys = [...new Set(products.map(p => p.subKey))]
+  const subLabelsMap: Record<string, string> = {
+    Clothing: t.products.categories.clothing,
+    Shoes: t.products.categories.shoes,
+    Accessories: t.products.categories.accessories,
+    Fragrances: t.products.categories.fragrances,
+  }
 
   const filtered = products.filter(p => {
     const catMatch = activeCategory === "all" || p.category === activeCategory
@@ -74,19 +74,9 @@ function ProductsContent() {
       </div>
 
       <div className="flex flex-wrap justify-center gap-2 mb-12">
-        {subcategories.map((sub) => (
-          <button
-            key={sub.id}
-            type="button"
-            onClick={() => setActiveSub(sub.id)}
-            className={`px-4 py-2 text-xs tracking-[0.15em] uppercase transition-all duration-200 ${
-              activeSub === sub.id
-                ? "text-accent border-b-2 border-accent"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            {sub.label}
-          </button>
+        <button onClick={() => setActiveSub("all")} className={`px-4 py-2 text-xs tracking-[0.15em] uppercase transition-all duration-200 ${activeSub === "all" ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"}`}>{t.products.categories.all}</button>
+        {subKeys.map(sk => (
+          <button key={sk} onClick={() => setActiveSub(sk)} className={`px-4 py-2 text-xs tracking-[0.15em] uppercase transition-all duration-200 ${activeSub === sk ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"}`}>{subLabelsMap[sk] || sk}</button>
         ))}
       </div>
 

@@ -7,7 +7,7 @@ import { useCart } from "@/context/cart-context"
 import { useFavorites } from "@/context/favorites-context"
 
 interface Product {
-  id: number; name: string; category: string; sub: string; price: number; image: string; isNew: boolean
+  id: number; name: string; category: string; sub: string; subKey: string; price: number; image: string; isNew: boolean
 }
 
 export function HommesClient({ products: initial }: { products: Product[] }) {
@@ -15,7 +15,7 @@ export function HommesClient({ products: initial }: { products: Product[] }) {
   const { addItem } = useCart()
   const { isFavorite, toggleFavorite } = useFavorites()
 
-  const subs = [...new Set(initial.map(p => p.sub))]
+  const subKeys = [...new Set(initial.map(p => p.subKey))]
   const [activeSub, setActiveSub] = useState<string>("all")
 
   const subLabels: Record<string, string> = {
@@ -25,7 +25,7 @@ export function HommesClient({ products: initial }: { products: Product[] }) {
     Fragrances: t.products.categories.fragrances,
   }
 
-  const filtered = activeSub === "all" ? initial : initial.filter(p => p.sub === activeSub)
+  const filtered = activeSub === "all" ? initial : initial.filter(p => p.subKey === activeSub)
 
   return (
     <div className="min-h-screen pt-28 pb-24">
@@ -35,8 +35,8 @@ export function HommesClient({ products: initial }: { products: Product[] }) {
           <h1 className="font-serif text-5xl md:text-7xl tracking-tight mb-6">{t.header.men}</h1>
           <div className="flex flex-wrap justify-center gap-3">
             <button onClick={() => setActiveSub("all")} className={`px-6 py-2 text-sm tracking-wider uppercase transition-colors ${activeSub === "all" ? "bg-primary text-primary-foreground" : "bg-secondary/50 hover:bg-secondary"}`}>{t.products.categories.all}</button>
-            {subs.map(s => (
-              <button key={s} onClick={() => setActiveSub(s)} className={`px-6 py-2 text-sm tracking-wider uppercase transition-colors ${activeSub === s ? "bg-primary text-primary-foreground" : "bg-secondary/50 hover:bg-secondary"}`}>{subLabels[s] || s}</button>
+            {subKeys.map(sk => (
+              <button key={sk} onClick={() => setActiveSub(sk)} className={`px-6 py-2 text-sm tracking-wider uppercase transition-colors ${activeSub === sk ? "bg-primary text-primary-foreground" : "bg-secondary/50 hover:bg-secondary"}`}>{subLabels[sk] || sk}</button>
             ))}
           </div>
         </div>
@@ -52,7 +52,7 @@ export function HommesClient({ products: initial }: { products: Product[] }) {
                 {p.isNew && <span className="absolute top-4 left-4 bg-accent text-accent-foreground text-xs px-3 py-1 tracking-wider uppercase">{t.featured.new}</span>}
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground tracking-wider uppercase">{subLabels[p.sub] || p.sub}</p>
+                <p className="text-xs text-muted-foreground tracking-wider uppercase">{subLabels[p.subKey] || p.sub}</p>
                 <h3 className="font-serif text-lg">{p.name}</h3>
                 <p className="font-medium">{p.price.toLocaleString()} {t.products.currency}</p>
               </div>

@@ -54,6 +54,7 @@ export default function VirtualTryonPage() {
   const [chatLoading, setChatLoading] = useState(false)
   const [listening, setListening] = useState(false)
   const [speakingId, setSpeakingId] = useState<number | null>(null)
+  const [autoSpeak, setAutoSpeak] = useState(true)
   const fileRef = useRef<HTMLInputElement>(null)
   const chatEndRef = useRef<HTMLDivElement>(null)
   const chatContainerRef = useRef<HTMLDivElement>(null)
@@ -68,6 +69,21 @@ export default function VirtualTryonPage() {
     const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 80
     if (isNearBottom) container.scrollTop = container.scrollHeight
   }, [chatMessages])
+
+  useEffect(() => {
+    if (!autoSpeak) return
+    const last = chatMessages[chatMessages.length - 1]
+    if (last?.role === "assistant" && !chatLoading) {
+      const idx = chatMessages.length - 1
+      window.speechSynthesis.cancel()
+      const utterance = new SpeechSynthesisUtterance(last.content)
+      utterance.lang = lang === "ar" ? "ar-SA" : lang === "fr" ? "fr-FR" : "en-US"
+      utterance.onend = () => setSpeakingId(null)
+      utterance.onerror = () => setSpeakingId(null)
+      setSpeakingId(idx)
+      window.speechSynthesis.speak(utterance)
+    }
+  }, [chatMessages, chatLoading, autoSpeak, lang])
 
   useEffect(() => {
     if (product && chatMessages.length === 0) {
@@ -283,8 +299,12 @@ export default function VirtualTryonPage() {
 
           {/* AI Chat */}
           <div className="lg:col-span-1 border border-border bg-background flex flex-col h-[600px]">
-            <div className="p-4 border-b border-border">
+            <div className="p-4 border-b border-border flex items-center justify-between">
               <h2 className="font-serif text-lg flex items-center gap-2"><Sparkles className="w-4 h-4 text-accent" />{vt.aiAgent}</h2>
+              <button onClick={() => setAutoSpeak(!autoSpeak)} className={`text-xs flex items-center gap-1.5 px-2.5 py-1 rounded-full border transition-colors ${autoSpeak ? "border-accent bg-accent/10 text-accent" : "border-border text-muted-foreground"}`}>
+                <Volume2 className="w-3 h-3" />
+                {autoSpeak ? "ON" : "OFF"}
+              </button>
             </div>
             <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 space-y-4">
               {chatMessages.map((msg, i) => (

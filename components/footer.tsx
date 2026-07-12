@@ -81,11 +81,11 @@ export function Footer() {
           <div className="space-y-6">
             <h3 className="text-sm tracking-[0.2em] uppercase">{t.footer.support}</h3>
             <ul className="space-y-3 text-sm text-primary-foreground/70">
-              <li><Link href="/services" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.contact}</Link></li>
-              <li><Link href="/services" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.faq}</Link></li>
-              <li><Link href="/checkout" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.shipping}</Link></li>
-              <li><Link href="/services" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.care}</Link></li>
-              <li><Link href="/services" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.bookAppointment}</Link></li>
+              <li><Link href="/contact" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.contact}</Link></li>
+              <li><Link href="/faq" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.faq}</Link></li>
+              <li><Link href="/shipping" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.shipping}</Link></li>
+              <li><Link href="/care-guide" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.care}</Link></li>
+              <li><Link href="/appointment" className="hover:text-primary-foreground transition-colors duration-300">{t.footer.bookAppointment}</Link></li>
             </ul>
           </div>
         </div>

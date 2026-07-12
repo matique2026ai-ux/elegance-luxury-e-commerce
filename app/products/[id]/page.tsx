@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
-import { Heart, ShoppingBag, ChevronLeft } from "lucide-react"
+import { Heart, ShoppingBag, ChevronLeft, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { useI18n } from "@/lib/i18n-context"
 import { useCart } from "@/context/cart-context"
 import { useFavorites } from "@/context/favorites-context"
 
 interface Product {
-  id: number; name: string; category: string; sub: string; price: number; stock: number; image: string; isNew: boolean
+  id: number; name: string; category: string; sub: string; subKey: string; price: number; stock: number; image: string; isNew: boolean; sizes?: string[]; colors?: { name: string; hex: string }[]
 }
 
 export default function ProductDetail() {
@@ -82,6 +82,12 @@ export default function ProductDetail() {
                 >
                   <ShoppingBag className="w-5 h-5" /> {t.featured.add}
                 </button>
+                <Link
+                  href={`/virtual-tryon/${product.id}`}
+                  className="flex-1 border border-accent text-accent py-4 text-sm tracking-wider uppercase hover:bg-accent hover:text-accent-foreground transition-colors flex items-center justify-center gap-3"
+                >
+                  <Sparkles className="w-5 h-5" /> {t.header.boutiques}
+                </Link>
                 <button
                   onClick={() => toggleFavorite({ id: product.id, name: product.name, price: product.price, image: product.image, category: product.category })}
                   className="w-14 h-14 border border-border flex items-center justify-center hover:bg-secondary transition-colors"

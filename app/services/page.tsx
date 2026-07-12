@@ -1,7 +1,7 @@
-import { Package, Truck, RotateCcw, Headphones, type LucideIcon } from "lucide-react"
+import { Shirt, Truck, Gift, CreditCard, Video, Package, Star, Headphones, DollarSign, type LucideIcon } from "lucide-react"
 import { getPageData } from "@/lib/server-i18n"
 
-const icons: LucideIcon[] = [Truck, Package, RotateCcw, Headphones]
+const icons: LucideIcon[] = [Shirt, Truck, Gift, CreditCard, Video, Package, Star, Headphones, DollarSign]
 
 export default async function ServicesPage() {
   const { t, content } = await getPageData('services')
@@ -24,7 +24,7 @@ export default async function ServicesPage() {
                 </div>
                 <div className="space-y-4 lg:space-y-6 pt-12">
                   <div className="bg-card p-6 lg:p-8 shadow-elegant">
-                    <p className="font-serif text-4xl mb-2">150+</p>
+                    <p className="font-serif text-4xl mb-2">4</p>
                     <p className="text-sm text-muted-foreground">{t.services.countries}</p>
                   </div>
                   <div className="aspect-[3/4] relative overflow-hidden shadow-elegant">
@@ -40,7 +40,7 @@ export default async function ServicesPage() {
                 <p className="text-muted-foreground text-lg leading-relaxed">{content?.description || t.services.desc}</p>
               </div>
               <div className="space-y-6">
-                {t.services.items.map((item: { title: string; desc: string; detail: string; }, i: number) => {
+                {t.services.items.map((item: { title: string; desc: string; }, i: number) => {
                   const Icon = icons[i]
                   return (
                     <div key={i} className="flex gap-6">

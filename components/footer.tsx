@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useI18n } from "@/lib/i18n-context";
 
 export function Footer() {
@@ -12,12 +13,7 @@ export function Footer() {
         <div className="py-16 md:py-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-8">
           <div className="lg:col-span-1 space-y-6">
             <Link href="/">
-              <h2 className="font-serif text-2xl tracking-[0.15em]">
-                {t.brand.name}
-                <span className="block text-[0.6em] tracking-[0.3em] text-primary-foreground/60">
-                  {t.brand.surname}
-                </span>
-              </h2>
+              <Image src="/logo.png" alt="MAISON HERAHIMA" width={180} height={56} className="h-14 w-auto brightness-0 invert" priority />
             </Link>
             <p className="text-primary-foreground/70 text-sm leading-relaxed max-w-xs">
               {t.brand.desc}

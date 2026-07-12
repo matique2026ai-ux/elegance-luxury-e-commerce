@@ -25,6 +25,7 @@ export async function PATCH(request: Request) {
     const { id } = body
     if (!id) return NextResponse.json({ error: "ID is required" }, { status: 400 })
     await store.markAsRead(id)
+    await store.logActivity("update", "message", String(id), `Marked message #${id} as read`)
     return NextResponse.json({ success: true })
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
@@ -37,6 +38,7 @@ export async function DELETE(request: Request) {
     const id = searchParams.get("id")
     if (!id) return NextResponse.json({ error: "ID is required" }, { status: 400 })
     await store.deleteMessage(id)
+    await store.logActivity("delete", "message", String(id), `Deleted message #${id}`)
     return NextResponse.json({ success: true })
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })

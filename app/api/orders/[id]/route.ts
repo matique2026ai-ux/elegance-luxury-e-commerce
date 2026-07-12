@@ -30,6 +30,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       return NextResponse.json({ error: "Status is required" }, { status: 400 })
     }
     await store.updateOrderStatus(id, status)
+    await store.logActivity("update", "order", id, `Order ${id} status changed to ${status}`)
 
     const msg = statusMessages[status]
     if (msg) {

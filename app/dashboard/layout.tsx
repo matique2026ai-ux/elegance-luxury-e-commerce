@@ -3,20 +3,26 @@
 import React, { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { LayoutDashboard, Package, Calendar, Mail, Users, ShoppingBag, ChevronLeft, FileText, LogOut, Globe } from "lucide-react"
+import { LayoutDashboard, Package, Calendar, Mail, Users, ShoppingBag, ChevronLeft, FileText, LogOut, Globe, Menu, X, UserCircle, BarChart3, Clock, Tag, Star, Settings as SettingsIcon } from "lucide-react"
 import { useI18n } from "@/lib/i18n-context"
 
 const sidebarIcons = {
   overview: LayoutDashboard,
+  analytics: BarChart3,
   orders: ShoppingBag,
   products: Package,
   content: FileText,
   appointments: Calendar,
   messages: Mail,
   subscribers: Users,
+  users: UserCircle,
+  activity: Clock,
+  coupons: Tag,
+  reviews: Star,
+  settings: SettingsIcon,
 } as const
 
-const sidebarItems = ["overview", "orders", "products", "content", "appointments", "messages", "subscribers"] as const
+const sidebarItems = ["overview", "analytics", "orders", "products", "content", "appointments", "messages", "subscribers", "users", "activity", "coupons", "reviews", "settings"] as const
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -25,6 +31,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const d = t.dashboard
   const [authed, setAuthed] = useState(false)
   const [checking, setChecking] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
     fetch("/api/auth").then(r => {
@@ -39,21 +46,26 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     router.push("/dashboard/login")
   }
 
+  function closeSidebar() { setSidebarOpen(false) }
+
   if (pathname === "/dashboard/login") return <>{children}</>
   if (checking || !authed) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>
 
   return (
     <div className="min-h-screen bg-secondary/20 flex">
-      <aside className="w-64 bg-primary text-primary-foreground flex flex-col shrink-0">
-        <div className="p-6 border-b border-primary-foreground/20">
+      {sidebarOpen && (
+        <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={closeSidebar} />
+      )}
+      <aside className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-primary text-primary-foreground flex flex-col shrink-0 transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
+        <div className="p-6 border-b border-primary-foreground/20 flex items-center justify-between">
           <Link href="/" className="font-serif text-lg tracking-[0.15em]">
             MAISON
             <span className="block text-[0.6em] tracking-[0.3em] text-primary-foreground/60">HERAHIMA</span>
           </Link>
-          <p className="text-[10px] tracking-[0.3em] uppercase text-primary-foreground/40 mt-2">{d.nav.dashboard}</p>
+          <button onClick={closeSidebar} className="lg:hidden p-1 hover:text-primary-foreground/60"><X className="w-5 h-5" /></button>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {sidebarItems.map((key) => {
             const href = key === "overview" ? "/dashboard" : `/dashboard/${key}`
             const Icon = sidebarIcons[key]
@@ -62,6 +74,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Link
                 key={href}
                 href={href}
+                onClick={closeSidebar}
                 className={`flex items-center gap-3 px-4 py-3 text-sm tracking-wider transition-all duration-200 ${
                   active ? "bg-accent text-accent-foreground" : "text-primary-foreground/70 hover:bg-primary-foreground/10"
                 }`}
@@ -84,13 +97,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
           <Link
             href="/"
+            onClick={closeSidebar}
             className="flex items-center gap-3 px-4 py-3 text-sm tracking-wider text-primary-foreground/70 hover:bg-primary-foreground/10 transition-all duration-200"
           >
             <ChevronLeft className="w-4 h-4" />
             {d.nav.backToSite}
           </Link>
           <button
-            onClick={handleLogout}
+            onClick={() => { handleLogout(); closeSidebar() }}
             className="flex items-center gap-3 px-4 py-3 w-full text-sm tracking-wider text-primary-foreground/70 hover:bg-primary-foreground/10 transition-all duration-200"
           >
             <LogOut className="w-4 h-4" />
@@ -99,8 +113,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
       </aside>
 
-      <main className="flex-1 overflow-auto">
-        <div className="p-8">{children}</div>
+      <main className="flex-1 min-w-0 overflow-auto">
+        <div className="sticky top-0 z-30 lg:hidden bg-background/80 backdrop-blur-md border-b border-border flex items-center gap-3 px-4 h-12">
+          <button onClick={() => setSidebarOpen(true)} className="p-1 hover:text-accent"><Menu className="w-5 h-5" /></button>
+          <span className="text-xs tracking-wider uppercase text-muted-foreground">MAISON HERAHIMA / {d.nav.dashboard}</span>
+        </div>
+        <div className="p-4 md:p-8">{children}</div>
       </main>
     </div>
   )

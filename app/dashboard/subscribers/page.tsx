@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Trash2 } from "lucide-react"
+import { Trash2, Download } from "lucide-react"
 import { useI18n } from "@/lib/i18n-context"
 
 interface Subscriber {
@@ -26,7 +26,10 @@ export default function DashboardSubscribers() {
 
   return (
     <div>
-      <h1 className="font-serif text-3xl md:text-4xl tracking-tight mb-8">{d.heading}</h1>
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="font-serif text-3xl md:text-4xl tracking-tight">{d.heading}</h1>
+        <a href="/api/export?type=subscribers" className="p-2 hover:bg-secondary/50 transition-colors border border-border flex items-center gap-2 text-sm" download><Download className="w-4 h-4" /> CSV</a>
+      </div>
 
       <div className="bg-card border border-border overflow-hidden">
         <table className="w-full text-sm">

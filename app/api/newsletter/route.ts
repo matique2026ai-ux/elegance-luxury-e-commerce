@@ -27,6 +27,7 @@ export async function DELETE(request: Request) {
     const id = searchParams.get("id")
     if (!id) return NextResponse.json({ error: "ID is required" }, { status: 400 })
     await store.deleteSubscriber(id)
+    await store.logActivity("delete", "subscriber", String(id), `Deleted subscriber #${id}`)
     return NextResponse.json({ success: true })
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })

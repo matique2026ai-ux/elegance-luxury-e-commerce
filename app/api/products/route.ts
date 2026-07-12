@@ -20,6 +20,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Name, category, and price are required" }, { status: 400 })
     }
     const product = await store.addProduct(body)
+    await store.logActivity("create", "product", String(product.id), `Created product "${product.name}"`)
     return NextResponse.json(product, { status: 201 })
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })

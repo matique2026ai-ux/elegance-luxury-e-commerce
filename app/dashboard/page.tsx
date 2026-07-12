@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Users, Calendar, Mail, ShoppingBag } from "lucide-react"
+import { Users, Calendar, Mail, ShoppingBag, Package, AlertCircle } from "lucide-react"
 import { useI18n } from "@/lib/i18n-context"
 
 interface Stats {
@@ -9,6 +9,8 @@ interface Stats {
   pendingAppointments: number
   unreadMessages: number
   totalAppointments: number
+  totalOrders: number
+  pendingOrders: number
 }
 
 export default function DashboardPage() {
@@ -16,46 +18,30 @@ export default function DashboardPage() {
   const { t } = useI18n()
   const d = t.dashboard.overview
 
+  useEffect(() => {
+    fetch("/api/stats").then(r => r.json()).then(setStats).catch(() => {})
+  }, [])
+
   const statCards = [
+    { key: "totalOrders" as const, label: d.totalOrders || "Total Orders", icon: ShoppingBag, color: "text-indigo-600 bg-indigo-100" },
+    { key: "pendingOrders" as const, label: d.pendingOrders || "Pending Orders", icon: AlertCircle, color: "text-amber-600 bg-amber-100" },
     { key: "totalAppointments" as const, label: d.appointments, icon: Calendar, color: "text-blue-600 bg-blue-100" },
-    { key: "pendingAppointments" as const, label: d.pending, icon: ShoppingBag, color: "text-amber-600 bg-amber-100" },
-    { key: "unreadMessages" as const, label: d.unreadMessages, icon: Mail, color: "text-rose-600 bg-rose-100" },
+    { key: "unreadMessages" as const, label: d.unreadMessages || "Unread Messages", icon: Mail, color: "text-rose-600 bg-rose-100" },
     { key: "totalSubscribers" as const, label: d.subscribers, icon: Users, color: "text-emerald-600 bg-emerald-100" },
   ]
-
-  useEffect(() => {
-    fetch("/api/newsletter")
-      .then(r => r.json())
-      .then((subs) => {
-        setStats({
-          totalSubscribers: subs.length,
-          pendingAppointments: 0,
-          unreadMessages: 0,
-          totalAppointments: 0,
-        })
-      })
-    fetch("/api/appointment").then(r => r.json()).then((apps) => {
-      setStats(prev => prev ? { ...prev, pendingAppointments: apps.filter((a: any) => a.status === "pending").length, totalAppointments: apps.length } : prev)
-    })
-    fetch("/api/contact").then(r => r.json()).then((msgs) => {
-      setStats(prev => prev ? { ...prev, unreadMessages: msgs.filter((m: any) => !m.read).length } : prev)
-    })
-  }, [])
 
   return (
     <div>
       <h1 className="font-serif text-3xl md:text-4xl tracking-tight mb-8">{d.heading}</h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-12">
         {statCards.map(({ key, label, icon: Icon, color }) => (
-          <div key={key} className="bg-card p-6 border border-border">
-            <div className="flex items-center justify-between mb-4">
-              <div className={`w-12 h-12 flex items-center justify-center ${color}`}>
-                <Icon className="w-6 h-6" />
-              </div>
+          <div key={key} className="bg-card p-5 border border-border">
+            <div className={`w-10 h-10 flex items-center justify-center ${color}`}>
+              <Icon className="w-5 h-5" />
             </div>
-            <p className="text-3xl font-serif">{stats?.[key] ?? "—"}</p>
-            <p className="text-sm text-muted-foreground mt-1">{label}</p>
+            <p className="text-2xl font-serif mt-3">{stats?.[key] ?? "—"}</p>
+            <p className="text-xs text-muted-foreground mt-1">{label}</p>
           </div>
         ))}
       </div>
@@ -64,6 +50,9 @@ export default function DashboardPage() {
         <div className="bg-card border border-border p-6">
           <h2 className="font-serif text-xl mb-4">{d.quickActions}</h2>
           <div className="space-y-3">
+            <a href="/dashboard/orders" className="block px-4 py-3 bg-secondary/50 hover:bg-secondary transition-colors text-sm">
+              {d.viewOrders || "→ View Orders"}
+            </a>
             <a href="/dashboard/products" className="block px-4 py-3 bg-secondary/50 hover:bg-secondary transition-colors text-sm">
               {d.manageProducts}
             </a>
@@ -96,7 +85,7 @@ export default function DashboardPage() {
             </div>
             <div className="flex justify-between py-2">
               <span className="text-muted-foreground">{d.version}</span>
-              <span className="font-medium">v1.0</span>
+              <span className="font-medium">v2.0</span>
             </div>
           </div>
         </div>

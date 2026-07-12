@@ -57,7 +57,25 @@ class DataStore {
   async createResetCode(email: string, code: string, expiresAt: string) { await db.createResetCode(email, code, expiresAt) }
   async verifyResetCode(email: string, code: string) { return db.verifyResetCode(email, code) }
   async updatePassword(email: string, newHash: string) { await db.updatePassword(email, newHash) }
+  async getAllUsers() { return db.getAllUsers() }
+  async deleteUser(id: number) { await db.deleteUser(id) }
   async getStats() { return db.getStats() }
+  async logActivity(action: string, entityType: string, entityId: string, description: string, adminName?: string) { return db.logActivity(action, entityType, entityId, description, adminName) }
+  async getActivityLog() { return db.getActivityLog() }
+  async clearActivityLog() { await db.clearActivityLog() }
+  async getCoupons() { return db.getCoupons() }
+  async addCoupon(data: any) { return db.addCoupon(data) }
+  async updateCoupon(id: number, data: any) { await db.updateCoupon(id, data) }
+  async deleteCoupon(id: number) { await db.deleteCoupon(id) }
+  async validateCoupon(code: string, total: number) { return db.validateCoupon(code, total) }
+  async useCoupon(code: string) { await db.useCoupon(code) }
+  async getReviews(productId?: number) { return db.getReviews(productId) }
+  async addReview(data: any) { return db.addReview(data) }
+  async approveReview(id: number) { await db.approveReview(id) }
+  async deleteReview(id: number) { await db.deleteReview(id) }
+  async getSettings() { return db.getSettings() }
+  async updateSettings(data: any) { await db.updateSettings(data) }
+  async getRevenueAnalytics() { return db.getRevenueAnalytics() }
 }
 
 export const store = new DataStore()

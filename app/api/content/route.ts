@@ -16,6 +16,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Page is required" }, { status: 400 })
     }
     await store.updateContent(body.page, body)
+    await store.logActivity("update", "content", body.page, `Updated content for "${body.page}"`)
     return NextResponse.json({ success: true })
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })

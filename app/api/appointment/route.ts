@@ -27,6 +27,7 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: "ID and status are required" }, { status: 400 })
     }
     await store.updateAppointmentStatus(id, status)
+    await store.logActivity("update", "appointment", String(id), `Appointment #${id} status changed to ${status}`)
     return NextResponse.json({ success: true })
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
@@ -39,6 +40,7 @@ export async function DELETE(request: Request) {
     const id = searchParams.get("id")
     if (!id) return NextResponse.json({ error: "ID is required" }, { status: 400 })
     await store.deleteAppointment(id)
+    await store.logActivity("delete", "appointment", String(id), `Deleted appointment #${id}`)
     return NextResponse.json({ success: true })
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })

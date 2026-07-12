@@ -218,6 +218,16 @@ export async function getUserById(id: number): Promise<UserRow | null> {
   return row
 }
 
+export async function getAllUsers(): Promise<UserRow[]> {
+  await seed()
+  const { data: rows } = await supabase.from("users").select("*").order("id", { ascending: false })
+  return rows || []
+}
+
+export async function deleteUser(id: number) {
+  await supabase.from("users").delete().eq("id", id)
+}
+
 export async function updateUserName(email: string, name: string) {
   await supabase.from("users").update({ name }).eq("email", email)
 }
@@ -242,6 +252,176 @@ export async function verifyResetCode(email: string, code: string): Promise<bool
 
 export async function updatePassword(email: string, newHash: string) {
   await supabase.from("users").update({ password: newHash }).eq("email", email)
+}
+
+// --- Generic JSON collection helpers (store arrays in page_content.description) ---
+async function getCollection(name: string): Promise<any[]> {
+  const { data } = await supabase.from("page_content").select("description").eq("page", `_${name}`).maybeSingle()
+  if (!data?.description) return []
+  try { return JSON.parse(data.description) } catch { return [] }
+}
+
+async function saveCollection(name: string, items: any[]) {
+  const desc = JSON.stringify(items)
+  const { data: existing } = await supabase.from("page_content").select("page").eq("page", `_${name}`).maybeSingle()
+  if (existing) {
+    await supabase.from("page_content").update({ description: desc }).eq("page", `_${name}`)
+  } else {
+    await supabase.from("page_content").insert({ page: `_${name}`, title: '', subtitle: '', description: desc, images: '[]', published: 1 })
+  }
+}
+
+// --- Activity Log ---
+export interface ActivityLogEntry { id: number; action: string; entityType: string; entityId: string; description: string; adminName: string; createdAt: string }
+
+export async function logActivity(action: string, entityType: string, entityId: string, description: string, adminName: string = "Admin") {
+  const logs = await getCollection("activity_log")
+  const entry: ActivityLogEntry = { id: Date.now(), action, entityType, entityId, description, adminName, createdAt: new Date().toISOString() }
+  logs.unshift(entry)
+  if (logs.length > 500) logs.length = 500
+  await saveCollection("activity_log", logs)
+  return entry
+}
+
+export async function getActivityLog(): Promise<ActivityLogEntry[]> {
+  return getCollection("activity_log")
+}
+
+export async function clearActivityLog() {
+  await saveCollection("activity_log", [])
+}
+
+// --- Coupons ---
+export interface CouponRow { id: number; code: string; discountType: "percentage" | "fixed"; discountValue: number; minOrder: number; maxUses: number; usedCount: number; expiresAt: string; active: number; createdAt: string }
+
+export async function getCoupons(): Promise<CouponRow[]> {
+  return getCollection("coupons")
+}
+
+export async function addCoupon(data: Omit<CouponRow, "id" | "usedCount" | "createdAt">) {
+  const coupons = await getCollection("coupons")
+  if (coupons.some((c: CouponRow) => c.code.toUpperCase() === data.code.toUpperCase())) return false
+  const coupon: CouponRow = { ...data, id: Date.now(), usedCount: 0, createdAt: new Date().toISOString() }
+  coupons.push(coupon)
+  await saveCollection("coupons", coupons)
+  return true
+}
+
+export async function updateCoupon(id: number, data: Partial<CouponRow>) {
+  const coupons = await getCollection("coupons")
+  const idx = coupons.findIndex((c: CouponRow) => c.id === id)
+  if (idx === -1) return
+  coupons[idx] = { ...coupons[idx], ...data }
+  await saveCollection("coupons", coupons)
+}
+
+export async function deleteCoupon(id: number) {
+  const coupons = await getCollection("coupons")
+  await saveCollection("coupons", coupons.filter((c: CouponRow) => c.id !== id))
+}
+
+export async function validateCoupon(code: string, orderTotal: number): Promise<{ valid: boolean; discount?: number; message?: string }> {
+  const coupons = await getCollection("coupons")
+  const coupon = coupons.find((c: CouponRow) => c.code.toUpperCase() === code.toUpperCase() && c.active === 1)
+  if (!coupon) return { valid: false, message: "Invalid coupon code" }
+  if (coupon.expiresAt && new Date(coupon.expiresAt) < new Date()) return { valid: false, message: "Coupon has expired" }
+  if (coupon.maxUses > 0 && coupon.usedCount >= coupon.maxUses) return { valid: false, message: "Coupon has reached max uses" }
+  if (orderTotal < coupon.minOrder) return { valid: false, message: `Minimum order amount is $${coupon.minOrder}` }
+  const discount = coupon.discountType === "percentage" ? (orderTotal * coupon.discountValue) / 100 : coupon.discountValue
+  return { valid: true, discount: Math.min(discount, orderTotal) }
+}
+
+export async function useCoupon(code: string) {
+  const coupons = await getCollection("coupons")
+  const idx = coupons.findIndex((c: CouponRow) => c.code.toUpperCase() === code.toUpperCase())
+  if (idx !== -1) {
+    coupons[idx].usedCount++
+    await saveCollection("coupons", coupons)
+  }
+}
+
+// --- Reviews ---
+export interface ReviewRow { id: number; productId: number; userName: string; userEmail: string; rating: number; comment: string; approved: number; createdAt: string }
+
+export async function getReviews(productId?: number): Promise<ReviewRow[]> {
+  const reviews = await getCollection("reviews")
+  if (productId) return reviews.filter((r: ReviewRow) => r.productId === productId)
+  return reviews
+}
+
+export async function addReview(data: Omit<ReviewRow, "id" | "approved" | "createdAt">) {
+  const reviews = await getCollection("reviews")
+  const review: ReviewRow = { ...data, id: Date.now(), approved: 0, createdAt: new Date().toISOString() }
+  reviews.unshift(review)
+  await saveCollection("reviews", reviews)
+  return review
+}
+
+export async function approveReview(id: number) {
+  const reviews = await getCollection("reviews")
+  const idx = reviews.findIndex((r: ReviewRow) => r.id === id)
+  if (idx !== -1) { reviews[idx].approved = 1; await saveCollection("reviews", reviews) }
+}
+
+export async function deleteReview(id: number) {
+  const reviews = await getCollection("reviews")
+  await saveCollection("reviews", reviews.filter((r: ReviewRow) => r.id !== id))
+}
+
+// --- Settings ---
+export interface SettingsRow { storeName: string; currency: string; emailNotifications: number; defaultLanguage: string; maintenanceMode: number }
+
+export async function getSettings(): Promise<SettingsRow> {
+  const items = await getCollection("settings")
+  if (items.length === 0) return { storeName: "MAISON HERAHIMA", currency: "DZD", emailNotifications: 0, defaultLanguage: "en", maintenanceMode: 0 }
+  return items[0]
+}
+
+export async function updateSettings(data: Partial<SettingsRow>) {
+  let settings = await getCollection("settings")
+  if (settings.length === 0) settings = [{ storeName: "MAISON HERAHIMA", currency: "DZD", emailNotifications: 0, defaultLanguage: "en", maintenanceMode: 0 }]
+  Object.assign(settings[0], data)
+  await saveCollection("settings", settings)
+}
+
+// --- Analytics (derived from orders) ---
+export async function getRevenueAnalytics() {
+  await seed()
+  const orders = await getOrders()
+  const now = new Date()
+  const thisMonth = now.getMonth()
+  const thisYear = now.getFullYear()
+
+  const totalRevenue = orders.reduce((s, o) => s + o.grandTotal, 0)
+  const totalOrders = orders.length
+  const avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0
+
+  const monthlyRevenue: { month: string; revenue: number; orders: number }[] = []
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+  for (let m = 0; m < 12; m++) {
+    const monthOrders = orders.filter(o => {
+      const d = new Date(o.createdAt)
+      return d.getMonth() === m && d.getFullYear() === thisYear
+    })
+    monthlyRevenue.push({ month: months[m], revenue: monthOrders.reduce((s, o) => s + o.grandTotal, 0), orders: monthOrders.length })
+  }
+
+  const recentOrders = orders.slice(0, 5)
+
+  const ordersByStatus = {
+    pending: orders.filter(o => o.status === "pending").length,
+    confirmed: orders.filter(o => o.status === "confirmed").length,
+    shipped: orders.filter(o => o.status === "shipped").length,
+    delivered: orders.filter(o => o.status === "delivered").length,
+    cancelled: orders.filter(o => o.status === "cancelled").length,
+  }
+
+  const ordersToday = orders.filter(o => {
+    const d = new Date(o.createdAt)
+    return d.getDate() === now.getDate() && d.getMonth() === thisMonth && d.getFullYear() === thisYear
+  })
+
+  return { totalRevenue, totalOrders, avgOrderValue, monthlyRevenue, recentOrders, ordersByStatus, ordersToday: ordersToday.length, revenueToday: ordersToday.reduce((s, o) => s + o.grandTotal, 0) }
 }
 
 export async function getStats() {

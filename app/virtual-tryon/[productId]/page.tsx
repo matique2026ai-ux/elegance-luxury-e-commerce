@@ -60,7 +60,10 @@ export default function VirtualTryonPage() {
   }, [productId, lang])
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    if (chatEndRef.current) {
+      const container = chatEndRef.current.closest('.chat-scroll')
+      if (container) container.scrollTop = container.scrollHeight
+    }
   }, [chatMessages])
 
   useEffect(() => {
@@ -254,7 +257,7 @@ export default function VirtualTryonPage() {
             <div className="p-4 border-b border-border">
               <h2 className="font-serif text-lg flex items-center gap-2"><Sparkles className="w-4 h-4 text-accent" />{vt.aiAgent}</h2>
             </div>
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 chat-scroll">
               {chatMessages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                   <div className={`max-w-[90%] p-3 text-sm leading-relaxed ${msg.role === "user" ? "bg-accent text-accent-foreground rounded-l-xl rounded-tr-xl" : "bg-secondary/20 rounded-r-xl rounded-tl-xl"}`}>
